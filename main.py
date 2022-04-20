@@ -2,12 +2,16 @@ import pygame, sys
 pygame.init()
 
 # Create screen
-size = (1000, 1000)
+size = (1000,1000)
 screen = pygame.display.set_mode(size)
+
+width = screen.get_width()
+height = screen.get_height()
 
 # Create colors
 black = (0,0,0)
 white = (255,255,255)
+grey  = (100,100,100)
 
 # Create fonts
 title_font = pygame.font.Font('ARCADECLASSIC.TTF', 100)
@@ -33,15 +37,27 @@ title_string = 'ARCADE      MACHINE'
 
 while True:
 	for event in pygame.event.get():
-		print(event)
+		#print(event)
 	
 		if event.type == pygame.QUIT:
 			sys.exit()
+		
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			print('Mouse button pressed')
 	
 	# SCREEN ELEMENTS :
 
 	#	- Background:
 	screen.fill(black)
+
+	mouse = pygame.mouse.get_pos()
+
+	#	- Buttons:
+	#		- Tetris
+	if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40:
+		pygame.draw.rect(screen,white,[width/2,height/2,140,40])
+	else:
+		pygame.draw.rect(screen,grey,[width/2,height/2,140,40])
 
 	#	- Title:
 	title = title_font.render(title_string, True, white)
