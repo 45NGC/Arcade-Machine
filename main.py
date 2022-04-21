@@ -20,13 +20,13 @@ title_font = pygame.font.Font('fonts\\ARCADECLASSIC.TTF', 100)
 buttons_font = pygame.font.Font('fonts\\Ode to Idle Gaming.ttf', 30)
 
 # Create Strings
-title_string = 'ARCADE      MACHINE'
-tetris_string = 'TETRIS'
-snake_string = 'SNAKE'
-pong_string = 'PONG'
-connect4_string = 'CONNECT 4'
-reaction_string = 'REACTION'
-infection_string = 'INFECTION'
+title_string 		= 'ARCADE      MACHINE'
+tetris_string 		= '   TETRIS'
+snake_string 		= '    SNAKE'
+pong_string 		= '     PONG'
+connect4_string 	= 'CONNECT 4'
+reaction_string 	= ' REACTION'
+infection_string 	= 'INFECTION'
 
 # Functions
 def draw_button(x_axis, y_axis, text, active):
