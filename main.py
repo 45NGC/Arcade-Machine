@@ -10,16 +10,40 @@ height = screen.get_height()
 
 # Create colors
 black = (0,0,0)
+grey = (90,90,90)
 white = (255,255,255)
-grey  = (100,100,100)
+yellow = (255,255,0)
+green = (102,255,102)
 
 # Create fonts
-title_font = pygame.font.Font('ARCADECLASSIC.TTF', 100)
+title_font = pygame.font.Font('fonts\\ARCADECLASSIC.TTF', 100)
+buttons_font = pygame.font.Font('fonts\\Ode to Idle Gaming.ttf', 30)
 
 # Create Strings
 title_string = 'ARCADE      MACHINE'
+tetris_string = 'TETRIS'
+snake_string = 'SNAKE'
+pong_string = 'PONG'
+connect4_string = 'CONNECT 4'
+reaction_string = 'REACTION'
+infection_string = 'INFECTION'
 
 # Functions
+def draw_button(x_axis, y_axis, text, active):
+	text = text.center(12)
+
+	if active == True:
+		pygame.draw.rect(screen, yellow, [x_axis, y_axis, 250,80])
+		pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, 240,70])
+		button = buttons_font.render(text, True, yellow)
+		screen.blit(button, (x_axis+5,y_axis+15))
+	else:
+		pygame.draw.rect(screen, white, [x_axis, y_axis, 250,80])
+		pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, 240,70])
+		button = buttons_font.render(text, True, white)
+		screen.blit(button, (x_axis+5,y_axis+10))
+
+
 
 
 
@@ -29,7 +53,7 @@ title_string = 'ARCADE      MACHINE'
 # 	- Snake	
 # 	- Pong 
 # 	- Connect 4
-# 	- Fast Reflexes
+# 	- Reaction
 #	- Infection
 #
 # TODO
@@ -39,7 +63,7 @@ title_string = 'ARCADE      MACHINE'
 while True:
 
 	for event in pygame.event.get():
-		print(event)
+		#print(event)
 	
 		if event.type == pygame.QUIT:
 			sys.exit()
@@ -59,43 +83,43 @@ while True:
 
 	# Tetris
 	if (100 <= mouse[0] <= 350) and (350 <= mouse[1] <= 430) :
-		pygame.draw.rect(screen,white,[100,350,250,80])
+		draw_button(100, 350, tetris_string, True)
 	else:
-		pygame.draw.rect(screen,grey,[100,350,250,80])
+		draw_button(100, 350, tetris_string, False)
 
 	# Snake
 	if (100 <= mouse[0] <= 350) and (550 <= mouse[1] <= 630) :
-		pygame.draw.rect(screen,white,[100,550,250,80])
+		draw_button(100, 550, snake_string, True)
 	else:
-		pygame.draw.rect(screen,grey,[100,550,250,80])
+		draw_button(100, 550, snake_string, False)
 
 	# Pong
 	if (100 <= mouse[0] <= 350) and (750 <= mouse[1] <= 830) :
-		pygame.draw.rect(screen,white,[100,750,250,80])
+		draw_button(100, 750, pong_string, True)
 	else:
-		pygame.draw.rect(screen,grey,[100,750,250,80])
+		draw_button(100, 750, pong_string, False)
 
 	# Connect 4
 	if (650 <= mouse[0] <= 900) and (350 <= mouse[1] <= 430) :
-		pygame.draw.rect(screen,white,[650,350,250,80])
+		draw_button(650, 350, connect4_string, True)
 	else:
-		pygame.draw.rect(screen,grey,[650,350,250,80])
+		draw_button(650, 350, connect4_string, False)
 
-	# Fast Reflexes
+	# Reaction
 	if (650 <= mouse[0] <= 900) and (550 <= mouse[1] <= 630) :
-		pygame.draw.rect(screen,white,[650,550,250,80])
+		draw_button(650, 550, reaction_string, True)
 	else:
-		pygame.draw.rect(screen,grey,[650,550,250,80])
+		draw_button(650, 550, reaction_string, False)
 
 	# Infection
 	if (650 <= mouse[0] <= 900) and (750 <= mouse[1] <= 830) :
-		pygame.draw.rect(screen,white,[650,750,250,80])
+		draw_button(650, 750, infection_string, True)
 	else:
-		pygame.draw.rect(screen,grey,[650,750,250,80])
+		draw_button(650, 750, infection_string, False)
 
 
 	#	- Title:
 	title = title_font.render(title_string, True, white)
-	screen.blit(title, (100,50))
+	screen.blit(title, (100,100))
 
 	pygame.display.flip()
