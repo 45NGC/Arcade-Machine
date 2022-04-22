@@ -2,7 +2,7 @@ import pygame, sys
 pygame.init()
 
 # Create screen
-size = (1000,800)
+size = (900,800)
 screen = pygame.display.set_mode(size)
 
 # Create colors
@@ -17,7 +17,7 @@ title_font = pygame.font.Font('fonts\\main_fonts\\ARCADECLASSIC.TTF', 100)
 buttons_font = pygame.font.Font('fonts\\main_fonts\\Ode to Idle Gaming.ttf', 30)
 
 # Create Strings
-title_string 		= 'ARCADE      MACHINE'
+title_string 		= 'ARCADE   MACHINE'
 tetris_string 		= '   TETRIS'
 snake_string 		= '    SNAKE'
 pong_string 		= '     PONG'
@@ -73,6 +73,10 @@ while True:
 	#	- Background:
 	screen.fill(black)
 
+	#	- Title:
+	title = title_font.render(title_string, True, white)
+	screen.blit(title, (75,50))
+
 	# 	- Mouse
 	mouse = pygame.mouse.get_pos()
 
@@ -101,26 +105,21 @@ while True:
 		draw_button(100, 650, pong_string, False)
 
 	# Connect 4
-	if (650 <= mouse[0] <= 900) and (250 <= mouse[1] <= 330) :
-		draw_button(650, 250, connect4_string, True)
+	if (550 <= mouse[0] <= 800) and (250 <= mouse[1] <= 330) :
+		draw_button(550, 250, connect4_string, True)
 	else:
-		draw_button(650, 250, connect4_string, False)
+		draw_button(550, 250, connect4_string, False)
 
 	# Reaction
-	if (650 <= mouse[0] <= 900) and (450 <= mouse[1] <= 530) :
-		draw_button(650, 450, reaction_string, True)
+	if (550 <= mouse[0] <= 800) and (450 <= mouse[1] <= 530) :
+		draw_button(550, 450, reaction_string, True)
 	else:
-		draw_button(650, 450, reaction_string, False)
+		draw_button(550, 450, reaction_string, False)
 
 	# Infection
-	if (650 <= mouse[0] <= 900) and (650 <= mouse[1] <= 730) :
-		draw_button(650, 650, infection_string, True)
+	if (550 <= mouse[0] <= 800) and (650 <= mouse[1] <= 730) :
+		draw_button(550, 650, infection_string, True)
 	else:
-		draw_button(650, 650, infection_string, False)
-
-
-	#	- Title:
-	title = title_font.render(title_string, True, white)
-	screen.blit(title, (100,50))
+		draw_button(550, 650, infection_string, False)
 
 	pygame.display.flip()
