@@ -1,4 +1,3 @@
-from turtle import Screen
 import pygame, sys
 pygame.init()
 
@@ -14,8 +13,8 @@ yellow = (255,255,0)
 green = (102,255,102)
 
 # Create fonts
-title_font = pygame.font.Font('fonts\\ARCADECLASSIC.TTF', 100)
-buttons_font = pygame.font.Font('fonts\\Ode to Idle Gaming.ttf', 30)
+title_font = pygame.font.Font('fonts\\main_fonts\\ARCADECLASSIC.TTF', 100)
+buttons_font = pygame.font.Font('fonts\\main_fonts\\Ode to Idle Gaming.ttf', 30)
 
 # Create Strings
 title_string 		= 'ARCADE      MACHINE'
