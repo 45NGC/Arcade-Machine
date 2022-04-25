@@ -1,6 +1,4 @@
-from multiprocessing.connection import wait
-from time import time
-from pip import main
+from turtle import onkeyrelease, right
 import pygame, sys
 pygame.init()
 
@@ -51,6 +49,24 @@ def activate_button(x_axis, y_axis, text):
 	pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, 240,70])
 	button = buttons_font.render(text, True, yellow)
 	screen.blit(button, (x_axis+5,y_axis+15))
+
+def button_up(i):
+	if i < 3 :
+		return i+4
+	else:
+		return i-2
+
+def button_down(i):
+	if i > 4 :
+		return i-4
+	else:
+		return i+2
+
+def button_rigt_left(i):
+	if i == 1 or 3 or 5 :
+		return i+1
+	else:
+		return i-1
 
 
 ## MAIN LOOP ##
@@ -104,8 +120,8 @@ while True:
 
 	#	- Buttons:
 
+	# TETRIS
 	if x!=100 or y!=250 :
-		# TETRIS
 		pygame.draw.rect(screen, white, [100, 250, 250,80])
 		pygame.draw.rect(screen, black, [105, 255, 240,70])
 		tetris_button = buttons_font.render(tetris_string, True, white)
@@ -113,8 +129,8 @@ while True:
 	else:
 		activate_button(100, 250, tetris_string)
 
+	# SNAKE
 	if x!=100 or y!=450 :
-		# SNAKE
 		pygame.draw.rect(screen, white, [100, 450, 250,80])
 		pygame.draw.rect(screen, black, [105, 455, 240,70])
 		snake_button = buttons_font.render(snake_string, True, white)
@@ -122,8 +138,8 @@ while True:
 	else:
 		activate_button(100, 450, snake_string)
 
+	# PONG
 	if x!=100 or y!=650 :
-		# PONG
 		pygame.draw.rect(screen, white, [100, 650, 250,80])
 		pygame.draw.rect(screen, black, [105, 655, 240,70])
 		pong_button = buttons_font.render(pong_string, True, white)
@@ -131,8 +147,8 @@ while True:
 	else:
 		activate_button(100, 650, pong_string)
 
+	# CONNECT 4
 	if x!=550 or y!=250 :
-		# CONNECT 4
 		pygame.draw.rect(screen, white, [550, 250, 250,80])
 		pygame.draw.rect(screen, black, [555, 255, 240,70])
 		connect4_button = buttons_font.render(connect4_string, True, white)
@@ -140,8 +156,8 @@ while True:
 	else:
 		activate_button(550, 250, connect4_string)
 
+	# REACTION
 	if x!=550 or y!=450 :
-		# REACTION
 		pygame.draw.rect(screen, white, [550, 450, 250,80])
 		pygame.draw.rect(screen, black, [555, 455, 240,70])
 		reaction_button = buttons_font.render(reaction_string, True, white)
@@ -149,8 +165,8 @@ while True:
 	else:
 		activate_button(550, 450, reaction_string)
 
+	# INFECTION
 	if x!=550 or y!=650 :
-		# INFECTION
 		pygame.draw.rect(screen, white, [550, 650, 250,80])
 		pygame.draw.rect(screen, black, [555, 655, 240,70])
 		infection_button = buttons_font.render(infection_string, True, white)
@@ -196,59 +212,65 @@ while True:
 
 
 	##  KEYBOARD CONTROL  ##
-
 	if keyboard:
-		# Depending on the value of 'i' it paints a different scheme of buttons
+		# if pygame.key.name(event.key) == "up":
+		# 	i = button_up(i)
 		
-
-		if pygame.key.get_pressed()[pygame.K_UP] == True :
-			i = i-2
-
-		if pygame.key.get_pressed()[pygame.K_DOWN] == True :
-			i = i+2
+		# if pygame.key.name(event.key) == "down":
+		# 	i = button_down(i)
 		
-		if pygame.key.get_pressed()[pygame.K_LEFT] == True :
-			i = i-1
-
-		if pygame.key.get_pressed()[pygame.K_RIGHT] == True :
-			i = i+1
+		# if pygame.key.name(event.key) == 'right' or 'left':
+		# 	i = button_rigt_left(i)
 
 		# 'i' has to be always between 1 and 6
 		print(i)
-		if i<1:
-			i=1
-
-		if i>6:
-			i=6
 
 		# Tetris
 		if i == 1 :
-			x=100
-			y=250
+			print('TETRIS')
+			x = 100
+			y = 250
 		
 		# Connect 4
 		if i == 2 :
-			x=550
-			y=250
+			print('CONNECT4')
+			x = 550
+			y = 250
 		
 		# Snake
 		if i == 3 :
-			x=100
-			y=450
+			print('SNAKE')
+			x = 100
+			y = 450
 		
 		# Reaction
 		if i == 4 :
-			x=550
-			y=450
+			print('REACTION')
+			x = 550
+			y = 450
 		
 		# Pong
 		if i == 5 :
-			x=100
-			y=650
+			print('PONG')
+			x = 100
+			y = 650
 
 		# Infection
 		if i == 6 :
-			x=550
-			y=650
+			print('INFECTION')
+			x = 550
+			y = 650
+
+
+		# Depending on the value of 'i' it paints a different scheme of buttons
+		
+		if pygame.key.get_pressed()[pygame.K_UP] == True :
+			i = button_up(i)
+
+		if pygame.key.get_pressed()[pygame.K_DOWN] == True :
+			i = button_down(i)
+		
+		if pygame.key.get_pressed()[pygame.K_LEFT] == True or pygame.key.get_pressed()[pygame.K_RIGHT] == True :
+			i = button_rigt_left(i)
 
 	pygame.display.flip()

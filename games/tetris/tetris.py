@@ -5,6 +5,8 @@ pygame.init()
 size = (1000,800)
 screen = pygame.display.set_mode(size)
 
+main_path = 'main.py'
+
 ## TETRIS MAIN LOOP ##
 while True:
 
@@ -12,7 +14,8 @@ while True:
 		print(event)
 	
 		if event.type == pygame.QUIT:
-			sys.exit()
+			pygame.quit()
+			exec(open(main_path).read())
 		
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			print('Mouse button pressed')
