@@ -1,3 +1,6 @@
+from multiprocessing.connection import wait
+from time import time
+from pip import main
 import pygame, sys
 pygame.init()
 
@@ -42,7 +45,64 @@ reaction_path		= 'games\\'
 infection_path		= 'games\\'
 
 # Functions
-def draw_buttons(x, y):
+def activate_button(x_axis, y_axis, text):
+
+	pygame.draw.rect(screen, yellow, [x_axis, y_axis, 250,80])
+	pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, 240,70])
+	button = buttons_font.render(text, True, yellow)
+	screen.blit(button, (x_axis+5,y_axis+15))
+
+
+## MAIN LOOP ##
+# This loop will display a screen with the name 'Arcade Machine' and a scroll of the games we can play, the games will include :
+# 	- Tetris
+# 	- Snake	
+# 	- Pong 
+# 	- Connect 4
+# 	- Reaction
+#	- Infection
+
+# TODO
+# 	- Add animation : rainbow letters for the title
+# 	- Add music and sound to the buttons
+
+x = 0
+y = 0
+i = 0
+
+# By default the control is the mouse
+keyboard = False
+mouse = True
+
+while True:
+
+	for event in pygame.event.get():
+		print(event)
+
+		if event.type == pygame.QUIT :
+			sys.exit()
+
+
+	if event.type == pygame.KEYDOWN :
+			mouse = False
+			keyboard = True
+			i = 1
+
+	if event.type == pygame.MOUSEMOTION :
+			mouse = True
+			keyboard = False
+
+
+	# SCREEN ELEMENTS :
+
+	#	- Background:
+	screen.fill(black)
+
+	#	- Title:
+	title = title_font.render(title_string, True, white)
+	screen.blit(title, (75,50))
+
+	#	- Buttons:
 
 	if x!=100 or y!=250 :
 		# TETRIS
@@ -60,7 +120,7 @@ def draw_buttons(x, y):
 		snake_button = buttons_font.render(snake_string, True, white)
 		screen.blit(snake_button, (105,460))
 	else:
-		activate_button(100, 460, snake_string)
+		activate_button(100, 450, snake_string)
 
 	if x!=100 or y!=650 :
 		# PONG
@@ -69,7 +129,7 @@ def draw_buttons(x, y):
 		pong_button = buttons_font.render(pong_string, True, white)
 		screen.blit(pong_button, (105,660))
 	else:
-		activate_button(100, 660, pong_string)
+		activate_button(100, 650, pong_string)
 
 	if x!=550 or y!=250 :
 		# CONNECT 4
@@ -77,6 +137,8 @@ def draw_buttons(x, y):
 		pygame.draw.rect(screen, black, [555, 255, 240,70])
 		connect4_button = buttons_font.render(connect4_string, True, white)
 		screen.blit(connect4_button, (555,260))
+	else:
+		activate_button(550, 250, connect4_string)
 
 	if x!=550 or y!=450 :
 		# REACTION
@@ -84,6 +146,8 @@ def draw_buttons(x, y):
 		pygame.draw.rect(screen, black, [555, 455, 240,70])
 		reaction_button = buttons_font.render(reaction_string, True, white)
 		screen.blit(reaction_button, (555,460))
+	else:
+		activate_button(550, 450, reaction_string)
 
 	if x!=550 or y!=650 :
 		# INFECTION
@@ -91,84 +155,19 @@ def draw_buttons(x, y):
 		pygame.draw.rect(screen, black, [555, 655, 240,70])
 		infection_button = buttons_font.render(infection_string, True, white)
 		screen.blit(infection_button, (555,660))
+	else:
+		activate_button(550, 650, infection_string)
+	
 
 
-def activate_button(x_axis, y_axis, text):
-
-	pygame.draw.rect(screen, yellow, [x_axis, y_axis, 250,80])
-	pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, 240,70])
-	button = buttons_font.render(text, True, yellow)
-	screen.blit(button, (x_axis+5,y_axis+15))
-
-def keyboard_control():
-	print('KEYBOARD mode')
-	run = True
-	i = 1
-	while run:
-
-		# Depending on the value of 'i' it paints a different scheme of buttons
+	##  MOUSE CONTROL  ##
+	if mouse:
+		x = 0
+		y = 0
+		mouse_pos = pygame.mouse.get_pos()
 
 		# Tetris
-		if i == 1 :
-			draw_buttons(100,250)
-		
-		# Connect 4
-		if i == 2 :
-			draw_buttons(550,250)
-		
-		# Snake
-		if i == 3 :
-			draw_buttons(100,450)
-		
-		# Reaction
-		if i == 4 :
-			draw_buttons(550,450)
-		
-		# Pong
-		if i == 5 :
-			draw_buttons(100,650)
-
-		# Infection
-		if i == 6 :
-			draw_buttons(550,650)
-
-
-		if event.type == pygame.KSCAN_UP :
-			i = i-2
-
-		if event.type == pygame.KSCAN_DOWN :
-			i = i+2
-		
-		if event.type == pygame.KSCAN_LEFT :
-			i = i-1
-
-		if event.type == pygame.KSCAN_LEFT :
-			i = i+1
-
-		# 'i' has to be always between 1 and 6
-		if i<1:
-			i=1
-
-		if i>6:
-			i=6
-
-		# When the user uses the mouse the loop ends
-		if event.type == pygame.MOUSEMOTION :
-			run = False
-
-
-def mouse_control():
-	print('MOUSE mode')
-	run = True
-
-	while run:
-		draw_buttons(0,0)
-
-		#MOUSE
-		mouse = pygame.mouse.get_pos()
-
-		# Tetris
-		if ((100 <= mouse[0] <= 350) and (250 <= mouse[1] <= 330)) :
+		if ((100 <= mouse_pos[0] <= 350) and (250 <= mouse_pos[1] <= 330)) :
 			activate_button(100, 250, tetris_string)
 
 			if event.type == pygame.MOUSEBUTTONDOWN:
@@ -176,68 +175,80 @@ def mouse_control():
 				exec(open(tetris_path).read())
 
 		# Snake
-		if (100 <= mouse[0] <= 350) and (450 <= mouse[1] <= 530) :
+		if (100 <= mouse_pos[0] <= 350) and (450 <= mouse_pos[1] <= 530) :
 			activate_button(100, 450, snake_string)
 
 		# Pong
-		if (100 <= mouse[0] <= 350) and (650 <= mouse[1] <= 730) :
+		if (100 <= mouse_pos[0] <= 350) and (650 <= mouse_pos[1] <= 730) :
 			activate_button(100, 650, pong_string)
 
 		# Connect 4
-		if (550 <= mouse[0] <= 800) and (250 <= mouse[1] <= 330) :
+		if (550 <= mouse_pos[0] <= 800) and (250 <= mouse_pos[1] <= 330) :
 			activate_button(550, 250, connect4_string)
 
 		# Reaction
-		if (550 <= mouse[0] <= 800) and (450 <= mouse[1] <= 530) :
+		if (550 <= mouse_pos[0] <= 800) and (450 <= mouse_pos[1] <= 530) :
 			activate_button(550, 450, reaction_string)
 
 		# Infection
-		if (550 <= mouse[0] <= 800) and (650 <= mouse[1] <= 730) :
+		if (550 <= mouse_pos[0] <= 800) and (650 <= mouse_pos[1] <= 730) :
 			activate_button(550, 650, infection_string)
+
+
+	##  KEYBOARD CONTROL  ##
+
+	if keyboard:
+		# Depending on the value of 'i' it paints a different scheme of buttons
 		
 
-		# When the user uses the keyboard the loop ends
-		if event.type == pygame.KEYDOWN :
-			run = False
+		if pygame.key.get_pressed()[pygame.K_UP] == True :
+			i = i-2
+
+		if pygame.key.get_pressed()[pygame.K_DOWN] == True :
+			i = i+2
 		
-		pygame.display.flip()
+		if pygame.key.get_pressed()[pygame.K_LEFT] == True :
+			i = i-1
 
+		if pygame.key.get_pressed()[pygame.K_RIGHT] == True :
+			i = i+1
 
-## MAIN LOOP ##
-# This loop will display a screen with the name 'Arcade Machine' and a scroll of the games we can play, the games will include :
-# 	- Tetris
-# 	- Snake	
-# 	- Pong 
-# 	- Connect 4
-# 	- Reaction
-#	- Infection
+		# 'i' has to be always between 1 and 6
+		print(i)
+		if i<1:
+			i=1
 
-# TODO
-# 	- Add animation : rainbow letters for the title
-# 	- Add music and sound to the buttons
+		if i>6:
+			i=6
 
-while True:
+		# Tetris
+		if i == 1 :
+			x=100
+			y=250
+		
+		# Connect 4
+		if i == 2 :
+			x=550
+			y=250
+		
+		# Snake
+		if i == 3 :
+			x=100
+			y=450
+		
+		# Reaction
+		if i == 4 :
+			x=550
+			y=450
+		
+		# Pong
+		if i == 5 :
+			x=100
+			y=650
 
-	for event in pygame.event.get():
-		print(event)
+		# Infection
+		if i == 6 :
+			x=550
+			y=650
 
-		if event.type == pygame.QUIT :
-			sys.exit()
-	
-	# SCREEN ELEMENTS :
-
-	#	- Background:
-	screen.fill(black)
-
-	#	- Title:
-	title = title_font.render(title_string, True, white)
-	screen.blit(title, (75,50))
-
-	#	- Buttons:
-	draw_buttons(0,0)
-
-	if event.type == pygame.KEYDOWN :
-		keyboard_control()
-
-	if event.type == pygame.MOUSEMOTION :
-		mouse_control()
+	pygame.display.flip()
