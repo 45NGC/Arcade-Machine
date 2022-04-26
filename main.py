@@ -2,12 +2,11 @@ import pygame, sys
 pygame.init()
 
 # Create screen
-size = (900,800)
+size = (900,850)
 screen = pygame.display.set_mode(size)
 
 # Create colors
 black = (0,0,0)
-grey = (90,90,90)
 white = (255,255,255)
 yellow = (255,255,0)
 green = (102,255,102)
@@ -86,7 +85,7 @@ while True:
 	if (100 <= mouse[0] <= 350) and (250 <= mouse[1] <= 330) :
 		draw_button(100, 250, tetris_string, True)
 
-		if event.type == pygame.MOUSEBUTTONDOWN:
+		if event.type == pygame.MOUSEBUTTONDOWN :
 			pygame.quit()
 			exec(open(tetris_path).read())
 	else:
@@ -95,30 +94,55 @@ while True:
 	# Snake
 	if (100 <= mouse[0] <= 350) and (450 <= mouse[1] <= 530) :
 		draw_button(100, 450, snake_string, True)
+
+		if event.type == pygame.MOUSEBUTTONDOWN :
+			print('NOT AVAILABLE')
+			# pygame.quit()
+			# exec(open(snake_path).read())
 	else:
 		draw_button(100, 450, snake_string, False)
 
 	# Pong
 	if (100 <= mouse[0] <= 350) and (650 <= mouse[1] <= 730) :
 		draw_button(100, 650, pong_string, True)
+
+		if event.type == pygame.MOUSEBUTTONDOWN :
+			print('NOT AVAILABLE')
+			# pygame.quit()
+			# exec(open(pong_path).read())
 	else:
 		draw_button(100, 650, pong_string, False)
 
 	# Connect 4
 	if (550 <= mouse[0] <= 800) and (250 <= mouse[1] <= 330) :
 		draw_button(550, 250, connect4_string, True)
+
+		if event.type == pygame.MOUSEBUTTONDOWN :
+			print('NOT AVAILABLE')
+			# pygame.quit()
+			# exec(open(connect4_path).read())
 	else:
 		draw_button(550, 250, connect4_string, False)
 
 	# Reaction
 	if (550 <= mouse[0] <= 800) and (450 <= mouse[1] <= 530) :
 		draw_button(550, 450, reaction_string, True)
+
+		if event.type == pygame.MOUSEBUTTONDOWN :
+			print('NOT AVAILABLE')
+			# pygame.quit()
+			# exec(open(reaction_path).read())
 	else:
 		draw_button(550, 450, reaction_string, False)
 
 	# Infection
 	if (550 <= mouse[0] <= 800) and (650 <= mouse[1] <= 730) :
 		draw_button(550, 650, infection_string, True)
+
+		if event.type == pygame.MOUSEBUTTONDOWN :
+			print('NOT AVAILABLE')
+			# pygame.quit()
+			# exec(open(infection_path).read())
 	else:
 		draw_button(550, 650, infection_string, False)
 
