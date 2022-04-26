@@ -1,4 +1,3 @@
-from turtle import onkeyrelease, right
 import pygame, sys
 pygame.init()
 
@@ -264,13 +263,13 @@ while True:
 
 		# Depending on the value of 'i' it paints a different scheme of buttons
 		
-		if pygame.key.get_pressed()[pygame.K_UP] == True :
+		if pygame.key.get_pressed()[pygame.K_UP] :
 			i = button_up(i)
 
-		if pygame.key.get_pressed()[pygame.K_DOWN] == True :
+		if pygame.key.get_pressed()[pygame.K_DOWN] :
 			i = button_down(i)
 		
-		if pygame.key.get_pressed()[pygame.K_LEFT] == True or pygame.key.get_pressed()[pygame.K_RIGHT] == True :
+		if pygame.key.get_pressed()[pygame.K_LEFT] or pygame.key.get_pressed()[pygame.K_RIGHT] :
 			i = button_rigt_left(i)
 
 	pygame.display.flip()
