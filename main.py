@@ -8,8 +8,8 @@ screen = pygame.display.set_mode(size)
 # Create colors
 black = (0,0,0)
 white = (255,255,255)
-yellow = (255,255,0)
-green = (102,255,102)
+pink = (255, 153, 255)
+red_pink = (255, 0, 102)
 
 # Create fonts
 title_font = pygame.font.Font('fonts\\main_fonts\\ARCADECLASSIC.TTF', 100)
@@ -33,13 +33,16 @@ reaction_path		= 'games\\'
 infection_path		= 'games\\'
 
 # Functions
-def draw_button(x_axis, y_axis, text, active):
+def rainbow_letters() :
+	pass
+
+def draw_button(x_axis, y_axis, text, active) :
 	text = text.center(12)
 
 	if active == True:
-		pygame.draw.rect(screen, yellow, [x_axis, y_axis, 250,80])
+		pygame.draw.rect(screen, pink, [x_axis, y_axis, 250,80])
 		pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, 240,70])
-		button = buttons_font.render(text, True, yellow)
+		button = buttons_font.render(text, True, red_pink)
 		screen.blit(button, (x_axis+5,y_axis+15))
 	else:
 		pygame.draw.rect(screen, white, [x_axis, y_axis, 250,80])
@@ -62,9 +65,9 @@ def draw_button(x_axis, y_axis, text, active):
 
 while True:
 
-	for event in pygame.event.get():
+	for event in pygame.event.get() :
 	
-		if event.type == pygame.QUIT:
+		if event.type == pygame.QUIT :
 			sys.exit()
 	
 	# SCREEN ELEMENTS :
