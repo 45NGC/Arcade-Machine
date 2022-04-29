@@ -154,15 +154,17 @@ T = [['.....',
 
 
 # Functions
+def hide_buttons_panels() :
+	pass
 main_path = 'main.py'
 
 ## TETRIS MAIN LOOP ##
 while True:
 
-	for event in pygame.event.get():
+	for event in pygame.event.get() :
 		#print(event)
 	
-		if event.type == pygame.QUIT:
+		if event.type == pygame.QUIT :
 			pygame.quit()
 			exec(open(main_path).read())
 	
