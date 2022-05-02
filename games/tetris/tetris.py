@@ -156,28 +156,9 @@ T = [['.....',
 # Functions
 def hide_buttons_panels() :
 	pass
-main_path = 'main.py'
 
-## TETRIS MAIN LOOP ##
-while True:
-
-	for event in pygame.event.get() :
-		#print(event)
-	
-		if event.type == pygame.QUIT :
-			pygame.quit()
-			exec(open(main_path).read())
-	
-	# pygame.draw.rect(screen, white, [5,5, block_size, block_size])
-	# pygame.draw.rect(screen, yellow, [5,105, block_size, block_size])
-	# pygame.draw.rect(screen, green, [5,205, block_size, block_size])
-	# pygame.draw.rect(screen, purple, [5,305, block_size, block_size])
-	# pygame.draw.rect(screen, orange, [5,405, block_size, block_size])
-	# pygame.draw.rect(screen, red, [5,505, block_size, block_size])
-	# pygame.draw.rect(screen, blue, [5,605, block_size, block_size])
-	# pygame.draw.rect(screen, turquoise, [5,705, block_size, block_size])
-
-	#	- Background:
+def show_buttons_panels() :
+      #	- Background:
 	screen.fill(black)
 
 	# 	- Tetris panel
@@ -201,4 +182,28 @@ while True:
 	pygame.draw.rect(screen, grey, [pause_X, pause_Y, pause_size, pause_size])
 	pygame.draw.rect(screen, grey, [pause_X, pause_Y, pause_size, pause_size])
 	pygame.draw.rect(screen, grey, [pause_X, pause_Y, pause_size, pause_size])
-	pygame.display.flip()
+
+## TETRIS MAIN LOOP ##
+def main() :
+      print('GAME')
+
+## TETRIS MENU LOOP ##
+def menu() :
+      run = True
+      while run :
+            screen.fill(black)
+            show_buttons_panels()
+            pygame.display.update()
+            for event in pygame.event.get():
+                  if event.type == pygame.QUIT:
+                        run = False
+
+                  if event.type == pygame.KEYDOWN:
+                        keys_pressed = pygame.key.get_pressed()
+                        if keys_pressed[pygame.K_SPACE]:
+                              main()
+
+
+menu()
+pygame.quit()
+exec(open('main.py').read())

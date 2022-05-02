@@ -1,4 +1,5 @@
-import pygame, sys
+import sys
+import pygame
 pygame.init()
 
 # Create screen
@@ -63,7 +64,11 @@ def draw_button(x_axis, y_axis, text, active) :
 # 	- Add animation : rainbow letters for the title
 # 	- Add music and sound to the buttons
 
-while True:
+clock = pygame.time.Clock()
+run = True
+
+while run:
+	clock.tick(60)
 
 	for event in pygame.event.get() :
 	
