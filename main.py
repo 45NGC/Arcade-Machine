@@ -5,12 +5,41 @@ pygame.init()
 # Create screen
 size = (900,850)
 screen = pygame.display.set_mode(size)
+pygame.display.set_caption('ARCADE MACHINE')
 
 # Create colors
 black = (0,0,0)
 white = (255,255,255)
 pink = (255, 153, 255)
 red_pink = (255, 0, 102)
+
+rainbow_array = [
+	(255, 0, 0),
+	(255, 64, 0),
+	(255, 191, 0),
+	(255, 255, 0),
+	(191, 255, 0),
+	(128, 255, 0),
+	(64, 255, 0),
+	(0, 255, 0),
+	(0, 255, 64),
+	(0, 255, 128),
+	(0, 255, 191),
+	(0, 255, 255),
+	(0, 191, 255),
+	(0, 128, 255),
+	(0, 64, 255),
+	(0, 0, 255),
+	(64, 0, 255),
+	(128, 0, 255),
+	(191, 0, 255),
+	(255, 0, 255),
+	(255, 0, 191),
+	(255, 0, 128),
+	(255, 0, 64)
+]
+
+rainbow_i = 0
 
 # Create fonts
 title_font = pygame.font.Font('fonts\\main_fonts\\ARCADECLASSIC.TTF', 100)
@@ -34,8 +63,8 @@ reaction_path		= 'games\\'
 infection_path		= 'games\\'
 
 # Functions
-def rainbow_letters() :
-	pass
+def rainbow_letters(rainbow_i) :
+	return rainbow_array[rainbow_i]
 
 def draw_button(x_axis, y_axis, text, active) :
 	text = text.center(12)
@@ -68,7 +97,7 @@ clock = pygame.time.Clock()
 run = True
 
 while run:
-	clock.tick(60)
+	clock.tick(15)
 
 	for event in pygame.event.get() :
 	
@@ -81,8 +110,12 @@ while run:
 	screen.fill(black)
 
 	#	- Title:
-	title = title_font.render(title_string, True, white)
+	rainbow_i += 1
+	if rainbow_i > 22 : rainbow_i = 0
+	rainbow = rainbow_letters(rainbow_i)
+	title = title_font.render(title_string, True, rainbow)
 	screen.blit(title, (75,50))
+
 
 	# 	- Mouse
 	mouse = pygame.mouse.get_pos()

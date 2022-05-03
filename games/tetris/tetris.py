@@ -4,6 +4,7 @@ pygame.init()
 # Create screen
 size = (900,850)
 screen = pygame.display.set_mode(size)
+pygame.display.set_caption('TETRIS')
 
 # Create colors
 black = (0,0,0)
@@ -40,9 +41,9 @@ next_panel_height = 400
 next_panel_X = 700
 next_panel_Y = 50
 
-pause_size = 100
-pause_X = 725
-pause_Y = 650
+pause_button_size = 100
+pause_button_X = 725
+pause_button_Y = 650
 
 # Buttons
 
@@ -157,31 +158,38 @@ T = [['.....',
 def hide_buttons_panels() :
 	pass
 
-def show_buttons_panels() :
+def show_buttons_panels(pause) :
       #	- Background:
-	screen.fill(black)
+      screen.fill(black)
 
-	# 	- Tetris panel
-	pygame.draw.rect(screen, pink, [tetris_panel_X-2, tetris_panel_Y-2, tetris_panel_width+4, tetris_panel_height+4])
-	pygame.draw.rect(screen, grey, [tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height])
+      # 	- Tetris panel
+      pygame.draw.rect(screen, pink, [tetris_panel_X-2, tetris_panel_Y-2, tetris_panel_width+4, tetris_panel_height+4])
+      pygame.draw.rect(screen, grey, [tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height])
 
-	# 	- Hold panel
-	pygame.draw.rect(screen, pink, [hold_panel_X-2, hold_panel_Y-2, hold_panel_width+4, hold_panel_height+4])
-	pygame.draw.rect(screen, grey, [hold_panel_X, hold_panel_Y, hold_panel_width, hold_panel_height])
-	
-	# 	- Score panel
-	pygame.draw.rect(screen, pink, [score_panel_X-2, score_panel_Y-2, score_panel_width+4, score_panel_height+4])
-	pygame.draw.rect(screen, grey, [score_panel_X, score_panel_Y, score_panel_width, score_panel_height])
+      # 	- Hold panel
+      pygame.draw.rect(screen, pink, [hold_panel_X-2, hold_panel_Y-2, hold_panel_width+4, hold_panel_height+4])
+      pygame.draw.rect(screen, grey, [hold_panel_X, hold_panel_Y, hold_panel_width, hold_panel_height])
 
-	# 	- Next panel
-	pygame.draw.rect(screen, pink, [next_panel_X-2, next_panel_Y-2, next_panel_width+4, next_panel_height+4])
-	pygame.draw.rect(screen, grey, [next_panel_X, next_panel_Y, next_panel_width, next_panel_height])
+      # 	- Score panel
+      pygame.draw.rect(screen, pink, [score_panel_X-2, score_panel_Y-2, score_panel_width+4, score_panel_height+4])
+      pygame.draw.rect(screen, grey, [score_panel_X, score_panel_Y, score_panel_width, score_panel_height])
 
-	# 	- Pause panel
-	pygame.draw.rect(screen, pink, [pause_X-2,pause_Y-2, pause_size+4, pause_size+4])
-	pygame.draw.rect(screen, grey, [pause_X, pause_Y, pause_size, pause_size])
-	pygame.draw.rect(screen, grey, [pause_X, pause_Y, pause_size, pause_size])
-	pygame.draw.rect(screen, grey, [pause_X, pause_Y, pause_size, pause_size])
+      # 	- Next panel
+      pygame.draw.rect(screen, pink, [next_panel_X-2, next_panel_Y-2, next_panel_width+4, next_panel_height+4])
+      pygame.draw.rect(screen, grey, [next_panel_X, next_panel_Y, next_panel_width, next_panel_height])
+
+      # 	- Pause panel
+      pygame.draw.rect(screen, pink, [pause_button_X-2,pause_button_Y-2, pause_button_size+4, pause_button_size+4])
+      pygame.draw.rect(screen, grey, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size])
+      pygame.draw.rect(screen, grey, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size])
+      pygame.draw.rect(screen, grey, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size])
+
+      if pause :
+            pygame.draw.rect(screen, pink, [pause_button_X+30, pause_button_Y+15, 10, 70])
+            pygame.draw.rect(screen, pink, [pause_button_X+60, pause_button_Y+15, 10, 70])
+      else :
+            pygame.draw.rect(screen, white, [pause_button_X+30, pause_button_Y+15, 10, 70])
+            pygame.draw.rect(screen, white, [pause_button_X+60, pause_button_Y+15, 10, 70])
 
 ## TETRIS MAIN LOOP ##
 def main() :
@@ -189,12 +197,15 @@ def main() :
 
 ## TETRIS MENU LOOP ##
 def menu() :
+      menu_clock = pygame.time.Clock()
       run = True
+      pause = False
       while run :
-            screen.fill(black)
-            show_buttons_panels()
-            pygame.display.update()
+            menu_clock.tick(60)
+            
             for event in pygame.event.get():
+                  #print(event)
+                  print('\nPause -> '+str(pause)+'\n')
                   if event.type == pygame.QUIT:
                         run = False
 
@@ -202,6 +213,23 @@ def menu() :
                         keys_pressed = pygame.key.get_pressed()
                         if keys_pressed[pygame.K_SPACE]:
                               main()
+
+                        if keys_pressed[pygame.K_ESCAPE] :
+                              if pause == False : 
+                                    pause = True
+                              else :
+                                    pause = False
+
+            
+            # SCREEN ELEMENTS :
+
+            #	- Background:
+            screen.fill(black)
+
+            #	- Buttons:
+            show_buttons_panels(pause)
+
+            pygame.display.flip()
 
 
 menu()
