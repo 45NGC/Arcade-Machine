@@ -9,11 +9,9 @@ pygame.display.set_caption('ARCADE MACHINE')
 
 # Create colors
 black = (0,0,0)
-grey = (90,90,90)
 white = (255,255,255)
 pink = (255, 153, 255)
 red_pink = (255, 0, 102)
-yellow = (255, 204, 0)
 
 rainbow_array = [
 	(255, 0, 0),
@@ -115,7 +113,6 @@ def draw_button(x_axis, y_axis, text, active, i_text_animation) :
 clock = pygame.time.Clock()
 run = True
 rainbow_title = 0
-rainbow_frame = 10
 i_text_animation = 0
 
 while run:
@@ -130,16 +127,6 @@ while run:
 
 	#	- Background:
 	screen.fill(black)
-
-	# rainbow_frame += 1
-	# if rainbow_frame > 42 : rainbow_frame = 0
-
-	# 1 :
-	# pygame.draw.rect(screen, white, [0, 0, 10,850])
-	# pygame.draw.rect(screen, white, [890, 0, 10,850])
-	
-	#pygame.draw.rect(screen, grey, [0, 0, 30,850])
-	#pygame.draw.rect(screen, white, [10, 0, 10,850])
 
 	#	- Title:
 	rainbow_title += 1

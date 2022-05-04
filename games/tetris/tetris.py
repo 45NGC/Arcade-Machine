@@ -45,6 +45,10 @@ pause_button_size = 100
 pause_button_X = 725
 pause_button_Y = 650
 
+pause_menu_size = 300
+pause_menu_x = 300
+pause_menu_Y = 200
+
 # Buttons
 
 # Block
@@ -180,8 +184,6 @@ def show_buttons_panels(pause) :
 
       # 	- Pause panel
       pygame.draw.rect(screen, pink, [pause_button_X-2,pause_button_Y-2, pause_button_size+4, pause_button_size+4])
-      pygame.draw.rect(screen, grey, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size])
-      pygame.draw.rect(screen, grey, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size])
       pygame.draw.rect(screen, grey, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size])
 
       if pause :
