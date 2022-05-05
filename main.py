@@ -61,8 +61,8 @@ rainbow_array = [
 ]
 
 # Create fonts
-title_font = pygame.font.Font('fonts\\main_fonts\\ARCADECLASSIC.TTF', 100)
-buttons_font = pygame.font.Font('fonts\\main_fonts\\Ode to Idle Gaming.ttf', 30)
+title_font = pygame.font.Font('games\\fonts\\main_fonts\\ARCADECLASSIC.TTF', 100)
+buttons_font = pygame.font.Font('games\\fonts\\main_fonts\\Ode to Idle Gaming.ttf', 30)
 text_animation_array = [0,1,2,3,4,5,4,3,2,1]
 
 # Create Strings
@@ -75,8 +75,8 @@ reaction_string 	= ' REACTION'
 infection_string 	= 'INFECTION'
 
 # Define game paths
-tetris_path			= 'games\\tetris\\tetris.py'
-snake_path			= 'games\\snake\\snake.py'
+tetris_path			= 'games\\tetris.py'
+snake_path			= 'games\\snake.py'
 pong_path			= 'games\\'
 connect4_path		= 'games\\'
 reaction_path		= 'games\\'
