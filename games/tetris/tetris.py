@@ -256,7 +256,7 @@ def main() :
             screen.fill(black)
 
             #	- Panels :
-            #draw_panels(False, pause)
+            draw_panels(False, pause)
 
 
             pygame.display.flip()
