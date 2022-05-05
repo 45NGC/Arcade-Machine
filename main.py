@@ -83,14 +83,14 @@ reaction_path		= 'games\\'
 infection_path		= 'games\\'
 
 # Functions
-def draw_button(x_axis, y_axis, text, active, i_text_animation) :
+def draw_button(x_axis, y_axis, text, active, text_animation) :
 	text = text.center(12)
 
 	if active == True:
 		pygame.draw.rect(screen, pink, [x_axis, y_axis, 250,80])
 		pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, 240,70])
 		button = buttons_font.render(text, True, red_pink)
-		screen.blit(button, (x_axis+5 , y_axis+10 + text_animation_array[i_text_animation]))
+		screen.blit(button, (x_axis+5 , y_axis+10 + text_animation))
 	else:
 		pygame.draw.rect(screen, white, [x_axis, y_axis, 250,80])
 		pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, 240,70])
@@ -145,7 +145,7 @@ while run:
 	
 	# Tetris
 	if (100 <= mouse[0] <= 350) and (250 <= mouse[1] <= 330) :
-		draw_button(100, 250, tetris_string, True, i_text_animation)
+		draw_button(100, 250, tetris_string, True, text_animation_array[i_text_animation])
 
 		if event.type == pygame.MOUSEBUTTONDOWN :
 			pygame.quit()
@@ -155,7 +155,7 @@ while run:
 
 	# Snake
 	if (100 <= mouse[0] <= 350) and (450 <= mouse[1] <= 530) :
-		draw_button(100, 450, snake_string, True, i_text_animation)
+		draw_button(100, 450, snake_string, True, text_animation_array[i_text_animation])
 
 		if event.type == pygame.MOUSEBUTTONDOWN :
 			print('NOT AVAILABLE')
@@ -166,7 +166,7 @@ while run:
 
 	# Pong
 	if (100 <= mouse[0] <= 350) and (650 <= mouse[1] <= 730) :
-		draw_button(100, 650, pong_string, True, i_text_animation)
+		draw_button(100, 650, pong_string, True, text_animation_array[i_text_animation])
 
 		if event.type == pygame.MOUSEBUTTONDOWN :
 			print('NOT AVAILABLE')
@@ -177,7 +177,7 @@ while run:
 
 	# Connect 4
 	if (550 <= mouse[0] <= 800) and (250 <= mouse[1] <= 330) :
-		draw_button(550, 250, connect4_string, True, i_text_animation)
+		draw_button(550, 250, connect4_string, True, text_animation_array[i_text_animation])
 
 		if event.type == pygame.MOUSEBUTTONDOWN :
 			print('NOT AVAILABLE')
@@ -188,7 +188,7 @@ while run:
 
 	# Reaction
 	if (550 <= mouse[0] <= 800) and (450 <= mouse[1] <= 530) :
-		draw_button(550, 450, reaction_string, True, i_text_animation)
+		draw_button(550, 450, reaction_string, True, text_animation_array[i_text_animation])
 
 		if event.type == pygame.MOUSEBUTTONDOWN :
 			print('NOT AVAILABLE')
@@ -199,7 +199,7 @@ while run:
 
 	# Infection
 	if (550 <= mouse[0] <= 800) and (650 <= mouse[1] <= 730) :
-		draw_button(550, 650, infection_string, True, i_text_animation)
+		draw_button(550, 650, infection_string, True, text_animation_array[i_text_animation])
 
 		if event.type == pygame.MOUSEBUTTONDOWN :
 			print('NOT AVAILABLE')
