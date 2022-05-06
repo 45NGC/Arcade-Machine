@@ -53,9 +53,9 @@ tetris_label_X = 300
 tetris_label_Y = 75
 
 highscores_panel_width = 340
-highscores_panel_height = 300
+highscores_panel_height = 320
 highscores_panel_X = 280
-highscores_panel_Y = 490
+highscores_panel_Y = 470
 
 tetris_panel_width = 400  
 tetris_panel_height = 800
@@ -204,19 +204,19 @@ def draw_panels(menu, pause) :
 
       # 	- Tetris panel
       pygame.draw.rect(screen, pink, [tetris_panel_X-2, tetris_panel_Y-2, tetris_panel_width+4, tetris_panel_height+4])
-      pygame.draw.rect(screen, grey, [tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height])
+      pygame.draw.rect(screen, dark_grey, [tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height])
 
       # 	- Hold panel
       pygame.draw.rect(screen, pink, [hold_panel_X-2, hold_panel_Y-2, hold_panel_width+4, hold_panel_height+4])
-      pygame.draw.rect(screen, grey, [hold_panel_X, hold_panel_Y, hold_panel_width, hold_panel_height])
+      pygame.draw.rect(screen, dark_grey, [hold_panel_X, hold_panel_Y, hold_panel_width, hold_panel_height])
 
       # 	- Score panel
       pygame.draw.rect(screen, pink, [score_panel_X-2, score_panel_Y-2, score_panel_width+4, score_panel_height+4])
-      pygame.draw.rect(screen, grey, [score_panel_X, score_panel_Y, score_panel_width, score_panel_height])
+      pygame.draw.rect(screen, dark_grey, [score_panel_X, score_panel_Y, score_panel_width, score_panel_height])
 
       # 	- Next panel
       pygame.draw.rect(screen, pink, [next_panel_X-2, next_panel_Y-2, next_panel_width+4, next_panel_height+4])
-      pygame.draw.rect(screen, grey, [next_panel_X, next_panel_Y, next_panel_width, next_panel_height])
+      pygame.draw.rect(screen, dark_grey, [next_panel_X, next_panel_Y, next_panel_width, next_panel_height])
 
       if menu :
             # TETRIS LABEL
@@ -239,15 +239,15 @@ def draw_panels(menu, pause) :
             # HIGH SCORES TABLE
             pygame.draw.rect(screen, pink, [highscores_panel_X-2, highscores_panel_Y-2, highscores_panel_width+4, highscores_panel_height+4])
             pygame.draw.rect(screen, black, [highscores_panel_X, highscores_panel_Y, highscores_panel_width, highscores_panel_height])
-            pygame.draw.rect(screen, pink, [highscores_panel_X, highscores_panel_Y+65, highscores_panel_width, 2])
-            pygame.draw.rect(screen, pink, [highscores_panel_X, highscores_panel_Y+112, highscores_panel_width, 2])
-            pygame.draw.rect(screen, pink, [highscores_panel_X, highscores_panel_Y+159, highscores_panel_width, 2])
-            pygame.draw.rect(screen, pink, [highscores_panel_X, highscores_panel_Y+206, highscores_panel_width, 2])
-            pygame.draw.rect(screen, pink, [highscores_panel_X, highscores_panel_Y+253, highscores_panel_width, 2])
+            pygame.draw.rect(screen, grey, [highscores_panel_X+15, highscores_panel_Y+60, highscores_panel_width-30, 47])
+            pygame.draw.rect(screen, light_grey, [highscores_panel_X+15, highscores_panel_Y+109, highscores_panel_width-30, 47])
+            pygame.draw.rect(screen, grey, [highscores_panel_X+15, highscores_panel_Y+158, highscores_panel_width-30, 47])
+            pygame.draw.rect(screen, light_grey, [highscores_panel_X+15, highscores_panel_Y+207, highscores_panel_width-30, 47])
+            pygame.draw.rect(screen, grey, [highscores_panel_X+15, highscores_panel_Y+256, highscores_panel_width-30, 47])
 
             # HIGH SCORES TEXT
             highscores_text = text_font.render(highscores_string, True, white)
-            screen.blit(highscores_text, (highscores_panel_X+60, highscores_panel_Y+15))
+            screen.blit(highscores_text, (highscores_panel_X+60, highscores_panel_Y+10))
 
       # 	- Pause panel
       if pause :
