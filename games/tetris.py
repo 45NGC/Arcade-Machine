@@ -25,11 +25,20 @@ turquoise = (0, 255, 255)
 
 # Create fonts
 tetris_font = pygame.font.Font('games\\fonts\\tetris_fonts\\UniformBold.ttf', 100)
-text_font = pygame.font.Font('games\\fonts\\tetris_fonts\\Gameplay.ttf', 30)
+font_h1 = pygame.font.Font('games\\fonts\\tetris_fonts\\Gameplay.ttf', 30)
+font_h2 = pygame.font.Font('games\\fonts\\tetris_fonts\\Gameplay.ttf', 25)
+font_h3 = pygame.font.Font('games\\fonts\\tetris_fonts\\Gameplay.ttf', 20)
 
 
 
 # Create strings
+test_string1 = '1'
+test_string2 = '123456'
+test_string3 = '1234567'
+
+test_string1 = test_string1.center(10)
+test_string2 = test_string2.center(10)
+
 tetris_string = 'TETRIS'
 
 play_string = 'PLAY'
@@ -202,21 +211,55 @@ def draw_panels(menu, pause) :
       #	- Background:
       screen.fill(black)
 
-      # 	- Tetris panel
+
+      # 	- TETRIS
+      # Panel
       pygame.draw.rect(screen, pink, [tetris_panel_X-2, tetris_panel_Y-2, tetris_panel_width+4, tetris_panel_height+4])
       pygame.draw.rect(screen, dark_grey, [tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height])
 
-      # 	- Hold panel
+
+      # 	- HOLD
+      # Panel
       pygame.draw.rect(screen, pink, [hold_panel_X-2, hold_panel_Y-2, hold_panel_width+4, hold_panel_height+4])
       pygame.draw.rect(screen, dark_grey, [hold_panel_X, hold_panel_Y, hold_panel_width, hold_panel_height])
+      pygame.draw.rect(screen, black, [hold_panel_X+10, hold_panel_Y+60, hold_panel_width-20, hold_panel_height-70])
 
-      # 	- Score panel
+      # Text
+      hold_text = font_h2.render(hold_string, True, white)
+      screen.blit(hold_text, (hold_panel_X+40, hold_panel_Y+15))
+
+
+      # 	- SCORE / LINES
+      # Panel
       pygame.draw.rect(screen, pink, [score_panel_X-2, score_panel_Y-2, score_panel_width+4, score_panel_height+4])
       pygame.draw.rect(screen, dark_grey, [score_panel_X, score_panel_Y, score_panel_width, score_panel_height])
+      pygame.draw.rect(screen, black, [score_panel_X+10, score_panel_Y+60, score_panel_width-20, 50])
+      pygame.draw.rect(screen, black, [score_panel_X+10, score_panel_Y+220, score_panel_width-20, 50])
 
-      # 	- Next panel
+      # Text
+      score_text = font_h2.render(score_string, True, white)
+      lines_text = font_h2.render(lines_string, True, white)
+      score = font_h3.render(test_string1, True, white)
+      lines = font_h3.render(test_string2, True, white)
+
+      screen.blit(score_text, (score_panel_X+30, score_panel_Y+15))
+      screen.blit(lines_text, (score_panel_X+35, score_panel_Y+175))
+
+      screen.blit(score, (score_panel_X+40, score_panel_Y+70))
+      screen.blit(lines, (score_panel_X+40, score_panel_Y+230))
+
+
+      # 	- NEXT
       pygame.draw.rect(screen, pink, [next_panel_X-2, next_panel_Y-2, next_panel_width+4, next_panel_height+4])
       pygame.draw.rect(screen, dark_grey, [next_panel_X, next_panel_Y, next_panel_width, next_panel_height])
+
+      # 	- PAUSE
+      if pause :
+            # Cover background
+            pygame.draw.rect(screen, light_grey, [tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height])
+
+            pygame.draw.rect(screen, pink, [pause_menu_X-2, pause_menu_Y-2, pause_menu_size+4, pause_menu_size+4])
+            pygame.draw.rect(screen, black, [pause_menu_X, pause_menu_Y, pause_menu_size, pause_menu_size])
 
       if menu :
             # TETRIS LABEL
@@ -239,6 +282,7 @@ def draw_panels(menu, pause) :
             # HIGH SCORES TABLE
             pygame.draw.rect(screen, pink, [highscores_panel_X-2, highscores_panel_Y-2, highscores_panel_width+4, highscores_panel_height+4])
             pygame.draw.rect(screen, black, [highscores_panel_X, highscores_panel_Y, highscores_panel_width, highscores_panel_height])
+
             pygame.draw.rect(screen, grey, [highscores_panel_X+15, highscores_panel_Y+60, highscores_panel_width-30, 47])
             pygame.draw.rect(screen, light_grey, [highscores_panel_X+15, highscores_panel_Y+109, highscores_panel_width-30, 47])
             pygame.draw.rect(screen, grey, [highscores_panel_X+15, highscores_panel_Y+158, highscores_panel_width-30, 47])
@@ -246,16 +290,8 @@ def draw_panels(menu, pause) :
             pygame.draw.rect(screen, grey, [highscores_panel_X+15, highscores_panel_Y+256, highscores_panel_width-30, 47])
 
             # HIGH SCORES TEXT
-            highscores_text = text_font.render(highscores_string, True, white)
+            highscores_text = font_h1.render(highscores_string, True, white)
             screen.blit(highscores_text, (highscores_panel_X+60, highscores_panel_Y+10))
-
-      # 	- Pause panel
-      if pause :
-            # Cover background
-            pygame.draw.rect(screen, light_grey, [tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height])
-
-            pygame.draw.rect(screen, pink, [pause_menu_X-2, pause_menu_Y-2, pause_menu_size+4, pause_menu_size+4])
-            pygame.draw.rect(screen, black, [pause_menu_X, pause_menu_Y, pause_menu_size, pause_menu_size])   
 
 def draw_buttons() :
       pass
