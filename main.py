@@ -60,7 +60,7 @@ def draw_button(x_axis, y_axis, text, active, text_animation) :
 		screen.blit(button, (x_axis+5 , y_axis+10 + text_animation))
 	else:
 		pygame.draw.rect(screen, white, [x_axis, y_axis, 250,80], border_radius = 20)
-		pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, 240,70], border_radius = 20)
+		pygame.draw.rect(screen, black, [x_axis+3, y_axis+3, 244,74], border_radius = 20)
 		button = buttons_font.render(text, True, white)
 		screen.blit(button, (x_axis+5,y_axis+10))
 
@@ -74,8 +74,7 @@ def draw_button(x_axis, y_axis, text, active, text_animation) :
 #	- Infection
 
 # TODO
-# 	- Add animation : rainbow letters for the title
-# 	- Add music and sound to the buttons
+# 	- Add music and sound effects to the buttons
 
 clock = pygame.time.Clock()
 run = True

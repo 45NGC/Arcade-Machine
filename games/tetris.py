@@ -381,5 +381,3 @@ def menu() :
 
 
 menu()
-pygame.quit()
-exec(open('main.py').read())
