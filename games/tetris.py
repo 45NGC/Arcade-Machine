@@ -1,4 +1,5 @@
 import pygame
+import sys
 pygame.init()
 
 # Create screen
@@ -45,16 +46,6 @@ controls_string = 'CONTROLS'
 quit_string = 'QUIT'
 
 # Panels
-tetris_label_width = 300
-tetris_label_height = 110
-tetris_label_X = 300
-tetris_label_Y = 75
-
-highscores_panel_width = 340
-highscores_panel_height = 320
-highscores_panel_X = 280
-highscores_panel_Y = 470
-
 tetris_panel_width = 400  
 tetris_panel_height = 800
 tetris_panel_X = 250
@@ -74,6 +65,21 @@ next_panel_width = 150
 next_panel_height = 400
 next_panel_X = 700
 next_panel_Y = 50
+
+tetris_label_width = 300
+tetris_label_height = 110
+tetris_label_X = 300
+tetris_label_Y = 75
+
+play_button_width = 250
+play_button_height = 80
+play_button_X = 325
+play_button_Y = 350
+
+highscores_panel_width = 340
+highscores_panel_height = 320
+highscores_panel_X = 280
+highscores_panel_Y = 470
 
 pause_button_size = 100
 pause_button_X = 725
@@ -195,7 +201,7 @@ def draw_board() :
       pass
 
 
-def draw_menu():
+def draw_menu(play_button_active):
       # TETRIS LABEL
       pygame.draw.rect(screen, pink, [tetris_label_X-10, tetris_label_Y-10, tetris_label_width+20, tetris_label_height+20])
       pygame.draw.rect(screen, pink, [tetris_label_X+99-10, tetris_label_Y-10, tetris_label_height+20, tetris_label_width-100+20])
@@ -209,9 +215,20 @@ def draw_menu():
       pygame.draw.rect(screen, black, [tetris_label_X, tetris_label_Y, tetris_label_width, tetris_label_height])
       pygame.draw.rect(screen, black, [tetris_label_X+99, tetris_label_Y, tetris_label_height, tetris_label_width-100])
 
-      # TETRIS TEXT
       tetris_text = tetris_font.render(tetris_string, True, white)
       screen.blit(tetris_text, (tetris_label_X+18, tetris_label_Y))
+
+      # START BUTTON
+      if play_button_active == True:
+            pygame.draw.rect(screen, purple, [play_button_X-3, play_button_Y-3, play_button_width+6, play_button_height+6], border_radius = 20)
+            pygame.draw.rect(screen, black, [play_button_X, play_button_Y, play_button_width, play_button_height], border_radius = 20)
+            button = font_h2.render(play_string, True, white)
+            screen.blit(button, (play_button_X+90, play_button_X+50))
+      else:
+            pygame.draw.rect(screen, pink, [play_button_X-2, play_button_Y-2, play_button_width+4, play_button_height+4], border_radius = 20)
+            pygame.draw.rect(screen, black, [play_button_X, play_button_Y, play_button_width, play_button_height], border_radius = 20)
+            button = font_h2.render(play_string, True, white)
+            screen.blit(button, (play_button_X+90, play_button_X+50))
 
       # HIGH SCORES TABLE
       pygame.draw.rect(screen, pink, [highscores_panel_X-2, highscores_panel_Y-2, highscores_panel_width+4, highscores_panel_height+4])
@@ -223,7 +240,6 @@ def draw_menu():
       pygame.draw.rect(screen, light_grey, [highscores_panel_X+15, highscores_panel_Y+207, highscores_panel_width-30, 47])
       pygame.draw.rect(screen, grey, [highscores_panel_X+15, highscores_panel_Y+256, highscores_panel_width-30, 47])
 
-      # HIGH SCORES TEXT
       highscores_text = font_h1.render(highscores_string, True, white)
       screen.blit(highscores_text, (highscores_panel_X+60, highscores_panel_Y+10))
 
@@ -251,7 +267,7 @@ def draw_panels() :
       # Panel
       pygame.draw.rect(screen, pink, [hold_panel_X-2, hold_panel_Y-2, hold_panel_width+4, hold_panel_height+4])
       pygame.draw.rect(screen, dark_grey, [hold_panel_X, hold_panel_Y, hold_panel_width, hold_panel_height])
-      pygame.draw.rect(screen, black, [hold_panel_X+10, hold_panel_Y+60, hold_panel_width-20, hold_panel_height-70])
+      pygame.draw.rect(screen, black, [hold_panel_X+10, hold_panel_Y+60, hold_panel_width-20, hold_panel_height-70], border_radius = 10)
 
       # Text
       hold_text = font_h2.render(hold_string, True, white)
@@ -262,8 +278,8 @@ def draw_panels() :
       # Panel
       pygame.draw.rect(screen, pink, [score_panel_X-2, score_panel_Y-2, score_panel_width+4, score_panel_height+4])
       pygame.draw.rect(screen, dark_grey, [score_panel_X, score_panel_Y, score_panel_width, score_panel_height])
-      pygame.draw.rect(screen, black, [score_panel_X+10, score_panel_Y+60, score_panel_width-20, 50])
-      pygame.draw.rect(screen, black, [score_panel_X+10, score_panel_Y+220, score_panel_width-20, 50])
+      pygame.draw.rect(screen, black, [score_panel_X+10, score_panel_Y+60, score_panel_width-20, 50], border_radius = 10)
+      pygame.draw.rect(screen, black, [score_panel_X+10, score_panel_Y+220, score_panel_width-20, 50], border_radius = 10)
 
       # Text
       score_text = font_h2.render(score_string, True, white)
@@ -281,25 +297,23 @@ def draw_panels() :
       # Panel
       pygame.draw.rect(screen, pink, [next_panel_X-2, next_panel_Y-2, next_panel_width+4, next_panel_height+4])
       pygame.draw.rect(screen, dark_grey, [next_panel_X, next_panel_Y, next_panel_width, next_panel_height])
-      pygame.draw.rect(screen, black, [next_panel_X+10, next_panel_Y+60, next_panel_width-20, next_panel_height-70])
+      pygame.draw.rect(screen, black, [next_panel_X+10, next_panel_Y+60, next_panel_width-20, next_panel_height-70], border_radius = 10)
 
       # Text
       next_text = font_h2.render(next_string, True, white)
       screen.blit(next_text, (next_panel_X+40, next_panel_Y+15))
 
-
-def draw_buttons() :
-      pass
-
 ## TETRIS MAIN LOOP ##
 def main() :
       print('GAME')
+      main_clock = pygame.time.Clock()
       run = True
       pause = False
       while run :
+            main_clock.tick(30)
             for event in pygame.event.get():
                   if event.type == pygame.QUIT:
-                        run = False
+                        sys.exit()
 
             # SCREEN ELEMENTS :
 
@@ -317,18 +331,22 @@ def menu() :
       menu_clock = pygame.time.Clock()
       run = True
       pause = False
+      play = False
+      play_button_active = False
       while run :
             menu_clock.tick(30)
             
             for event in pygame.event.get():
                   #print(event)
                   if event.type == pygame.QUIT:
-                        run = False
+                        sys.exit()
 
                   if event.type == pygame.KEYDOWN:
                         keys_pressed = pygame.key.get_pressed()
                         if keys_pressed[pygame.K_SPACE]:
-                              main()
+                              play_button_active = True
+                              pygame.time.wait(1)
+                              play = True
 
                         if keys_pressed[pygame.K_ESCAPE] :
                               if pause == False : 
@@ -337,15 +355,26 @@ def menu() :
                                     pause = False
 
             
-            # SCREEN ELEMENTS :
+            # SCREEN ELEMENTS
 
-            #	- Background:
+            # Background :
             screen.fill(black)
 
-            #	- Panels :
+            # Mouse :
+            mouse = pygame.mouse.get_pos()
+
+            if (play_button_X <= mouse[0] <= play_button_X+play_button_width) and (play_button_Y <= mouse[1] <= play_button_Y+play_button_height) :
+                  play_button_active = True
+                  if event.type == pygame.MOUSEBUTTONDOWN : play = True
+            else:
+                  play_button_active = False
+
+            # Panels :
             draw_panels()
-            draw_menu()
+            draw_menu(play_button_active)
             if pause : draw_pause()
+
+            if play : main()
 
 
             pygame.display.flip()
