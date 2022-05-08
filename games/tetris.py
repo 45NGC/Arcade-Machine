@@ -219,11 +219,11 @@ def draw_menu(play_button_active):
       screen.blit(tetris_text, (tetris_label_X+18, tetris_label_Y))
 
       # START BUTTON
-      if play_button_active == True:
+      if play_button_active :
             pygame.draw.rect(screen, purple, [play_button_X-3, play_button_Y-3, play_button_width+6, play_button_height+6], border_radius = 20)
             pygame.draw.rect(screen, black, [play_button_X, play_button_Y, play_button_width, play_button_height], border_radius = 20)
-            button = font_h2.render(play_string, True, white)
-            screen.blit(button, (play_button_X+90, play_button_X+50))
+            play_button = font_h2.render(play_string, True, white)
+            screen.blit(play_button, (play_button_X+90, play_button_X+50))
       else:
             pygame.draw.rect(screen, pink, [play_button_X-2, play_button_Y-2, play_button_width+4, play_button_height+4], border_radius = 20)
             pygame.draw.rect(screen, black, [play_button_X, play_button_Y, play_button_width, play_button_height], border_radius = 20)
@@ -252,10 +252,7 @@ def draw_pause():
       pygame.draw.rect(screen, black, [pause_menu_X, pause_menu_Y, pause_menu_size, pause_menu_size])
 
 
-def draw_panels() :
-      #	- Background:
-      screen.fill(black)
-
+def draw_panels(pause_button_active) :
 
       # 	- TETRIS
       # Panel
@@ -303,17 +300,58 @@ def draw_panels() :
       next_text = font_h2.render(next_string, True, white)
       screen.blit(next_text, (next_panel_X+40, next_panel_Y+15))
 
+
+      # 	- PAUSE
+      # Button
+      if pause_button_active :
+            pygame.draw.rect(screen, purple, [pause_button_X-3, pause_button_Y-3, pause_button_size+6, pause_button_size+6], border_radius = 20)
+            pygame.draw.rect(screen, black, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size], border_radius = 20)
+            pygame.draw.rect(screen, pink, [pause_button_X+30, pause_button_Y+15, 10, 70])
+            pygame.draw.rect(screen, pink, [pause_button_X+60, pause_button_Y+15, 10, 70])
+      else:
+            pygame.draw.rect(screen, pink, [pause_button_X-2, pause_button_Y-2, pause_button_size+4, pause_button_size+4], border_radius = 20)
+            pygame.draw.rect(screen, black, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size], border_radius = 20)
+            pygame.draw.rect(screen, white, [pause_button_X+30, pause_button_Y+15, 10, 70])
+            pygame.draw.rect(screen, white, [pause_button_X+60, pause_button_Y+15, 10, 70])
+
 ## TETRIS MAIN LOOP ##
 def main() :
       print('GAME')
       main_clock = pygame.time.Clock()
       run = True
       pause = False
+      pause_button_active = False
       while run :
             main_clock.tick(30)
+            mouse = pygame.mouse.get_pos()
+
             for event in pygame.event.get():
                   if event.type == pygame.QUIT:
                         sys.exit()
+                  
+                  if event.type == pygame.KEYDOWN:
+                        keys_pressed = pygame.key.get_pressed()
+
+                        if keys_pressed[pygame.K_ESCAPE] :
+                              if pause == False :
+                                    pause_button_active = True 
+                                    pause = True
+                              else :
+                                    pause = False
+                                    pause_button_active = False
+
+                  
+                  if pause == False :
+                        if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
+                              pause_button_active = True
+                              if event.type == pygame.MOUSEBUTTONDOWN : pause = True
+                        else:
+                              pause_button_active = False
+                  else:
+                        if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
+                              if event.type == pygame.MOUSEBUTTONDOWN : 
+                                    pause_button_active = False 
+                                    pause = False
 
             # SCREEN ELEMENTS :
 
@@ -321,7 +359,9 @@ def main() :
             screen.fill(black)
 
             #	- Panels :
-            draw_panels()
+            draw_panels(pause_button_active)
+            draw_board()
+            if pause : draw_pause()
 
 
             pygame.display.flip()
@@ -333,8 +373,10 @@ def menu() :
       pause = False
       play = False
       play_button_active = False
+      pause_button_active = False
       while run :
             menu_clock.tick(30)
+            mouse = pygame.mouse.get_pos()
             
             for event in pygame.event.get():
                   #print(event)
@@ -344,14 +386,32 @@ def menu() :
                   if event.type == pygame.KEYDOWN:
                         keys_pressed = pygame.key.get_pressed()
                         if keys_pressed[pygame.K_SPACE]:
-                              play_button_active = True
-                              pygame.time.wait(1)
                               play = True
 
                         if keys_pressed[pygame.K_ESCAPE] :
-                              if pause == False : 
+                              if pause == False :
+                                    pause_button_active = True 
                                     pause = True
                               else :
+                                    pause = False
+                                    pause_button_active = False
+
+                  if (play_button_X <= mouse[0] <= play_button_X+play_button_width) and (play_button_Y <= mouse[1] <= play_button_Y+play_button_height) :
+                        play_button_active = True
+                        if event.type == pygame.MOUSEBUTTONDOWN : play = True
+                  else:
+                        play_button_active = False
+                  
+                  if pause == False :
+                        if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
+                              pause_button_active = True
+                              if event.type == pygame.MOUSEBUTTONDOWN : pause = True
+                        else:
+                              pause_button_active = False
+                  else:
+                        if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
+                              if event.type == pygame.MOUSEBUTTONDOWN : 
+                                    pause_button_active = False 
                                     pause = False
 
             
@@ -360,20 +420,10 @@ def menu() :
             # Background :
             screen.fill(black)
 
-            # Mouse :
-            mouse = pygame.mouse.get_pos()
-
-            if (play_button_X <= mouse[0] <= play_button_X+play_button_width) and (play_button_Y <= mouse[1] <= play_button_Y+play_button_height) :
-                  play_button_active = True
-                  if event.type == pygame.MOUSEBUTTONDOWN : play = True
-            else:
-                  play_button_active = False
-
             # Panels :
-            draw_panels()
+            draw_panels(pause_button_active)
             draw_menu(play_button_active)
             if pause : draw_pause()
-
             if play : main()
 
 
