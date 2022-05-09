@@ -1,5 +1,3 @@
-from cgi import print_environ
-from re import X
 import pygame
 import sys
 pygame.init()
@@ -205,8 +203,6 @@ T = [['.....',
       '..0..',
       '.....']]
 
-back_to_main = False
-
 # Functions
 def draw_button(x_axis, y_axis, text, active) :
       text = text.center(22)
@@ -380,7 +376,7 @@ def draw_pause(in_game):
                         if event.type == pygame.MOUSEBUTTONDOWN :
                               if in_game == True : menu()
                               if in_game == False :
-                                    back_to_main = True
+                                    # return to main
                                     pygame.quit()
                   else:
                         quit_button_active = False
@@ -406,20 +402,20 @@ def draw_pause(in_game):
             pygame.display.flip()
       
       if in_game :
-            main()
+            tetris_game()
       else:
-            menu()
+            tetris_menu()
 
 
 ## TETRIS MAIN LOOP ##
-def main() :
+def tetris_game() :
       print('GAME')
-      main_clock = pygame.time.Clock()
+      game_clock = pygame.time.Clock()
       run = True
       pause = False
       pause_button_active = False
       while run :
-            main_clock.tick(30)
+            game_clock.tick(30)
             mouse = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
@@ -455,7 +451,7 @@ def main() :
             pygame.display.flip()
 
 ## TETRIS MENU LOOP ##
-def menu() :
+def tetris_menu() :
       menu_clock = pygame.time.Clock()
       run = True
       pause = False
@@ -508,7 +504,4 @@ def menu() :
 
             pygame.display.flip()
 
-if back_to_main :
-      exec(open('main.py').read())
-else:
-      menu()
+tetris_menu()
