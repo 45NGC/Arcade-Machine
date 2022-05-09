@@ -1,4 +1,5 @@
 import pygame
+import os
 import sys
 pygame.init()
 
@@ -374,10 +375,11 @@ def draw_pause(in_game):
                   if (quit_button_X <= mouse[0] <= quit_button_X+button_width) and (quit_button_Y <= mouse[1] <= quit_button_Y+button_height) :
                         quit_button_active = True
                         if event.type == pygame.MOUSEBUTTONDOWN :
-                              if in_game == True : menu()
+                              if in_game == True : tetris_menu()
                               if in_game == False :
                                     # return to main
                                     pygame.quit()
+                                    os.system('python main.py')
                   else:
                         quit_button_active = False
 
@@ -499,8 +501,7 @@ def tetris_menu() :
             draw_panels(pause_button_active)
             draw_menu(play_button_active)
             if pause : draw_pause(in_game=False)
-            if play : main()
-
+            if play : tetris_game()
 
             pygame.display.flip()
 
