@@ -89,7 +89,7 @@ quit_button_Y = 480
 
 # TODO
 # 	- Add music and sound effects to the buttons
-#	- Create variables for the buttons xy
+#	- Create variables for the buttons xy and move them to utilities.py
 def arcade_machine_menu() :
 	main_clock = pygame.time.Clock()
 	run = True
@@ -195,7 +195,6 @@ def tetris_menu() :
 	pause = False
 	play = False
 	play_button_active = False
-	pause_button_active = False
 	while run :
 		menu_clock.tick(30)
 		mouse = pygame.mouse.get_pos()
@@ -210,7 +209,6 @@ def tetris_menu() :
 
 					if keys_pressed[pygame.K_SPACE] : play = True
 					if keys_pressed[pygame.K_ESCAPE] : 
-							pause_button_active = True
 							pause = True
 
 				#MOUSECONTROLS
@@ -222,10 +220,7 @@ def tetris_menu() :
 				
 
 				if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
-					pause_button_active = True
 					if event.type == pygame.MOUSEBUTTONDOWN : pause = True
-				elif pause == False:
-					pause_button_active = False
 
 		
 		# SCREEN ELEMENTS
@@ -234,7 +229,7 @@ def tetris_menu() :
 		screen.fill(black)
 
 		# Panels :
-		draw_tetris_panels(screen, pause_button_active)
+		draw_tetris_panels(screen)
 		draw_tetris_menu(screen, play_button_active)
 		if pause : tetris_pause(in_game=False)
 		if play : tetris_game()
@@ -247,7 +242,6 @@ def tetris_game() :
 	game_clock = pygame.time.Clock()
 	run = True
 	pause = False
-	pause_button_active = False
 	while run :
 		game_clock.tick(30)
 		mouse = pygame.mouse.get_pos()
@@ -261,15 +255,11 @@ def tetris_game() :
 					keys_pressed = pygame.key.get_pressed()
 
 					if keys_pressed[pygame.K_ESCAPE] :
-							pause_button_active = True
 							pause = True
 
 				#MOUSECONTROLS
 				if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
-					pause_button_active = True
 					if event.type == pygame.MOUSEBUTTONDOWN : pause = True
-				elif pause == False:
-					pause_button_active = False
 
 		# SCREEN ELEMENTS :
 
@@ -277,7 +267,7 @@ def tetris_game() :
 		screen.fill(black)
 
 		#	- Panels :
-		draw_tetris_panels(screen, pause_button_active)
+		draw_tetris_panels(screen)
 		#draw_board()
 		if pause : tetris_pause(in_game=True)
 

@@ -1,3 +1,2 @@
-from game_scripts.utilities import draw_button
 from game_scripts.arcade_machine import arcade_machine_menu
 arcade_machine_menu()

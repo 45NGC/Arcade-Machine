@@ -200,7 +200,7 @@ T = [['.....',
 
 
 # TETRIS FUNCTIONS
-def draw_tetris_panels(screen, pause_button_active) :
+def draw_tetris_panels(screen) :
 
 	# 	- TETRIS
 	# Panel
@@ -250,17 +250,11 @@ def draw_tetris_panels(screen, pause_button_active) :
 
 
 	# 	- PAUSE
-	# Button
-	if pause_button_active :
-		pygame.draw.rect(screen, purple, [pause_button_X-3, pause_button_Y-3, pause_button_size+6, pause_button_size+6], border_radius = 20)
-		pygame.draw.rect(screen, black, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size], border_radius = 20)
-		pygame.draw.rect(screen, pink, [pause_button_X+30, pause_button_Y+15, 10, 70])
-		pygame.draw.rect(screen, pink, [pause_button_X+60, pause_button_Y+15, 10, 70])
-	else:
-		pygame.draw.rect(screen, pink, [pause_button_X-2, pause_button_Y-2, pause_button_size+4, pause_button_size+4], border_radius = 20)
-		pygame.draw.rect(screen, black, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size], border_radius = 20)
-		pygame.draw.rect(screen, white, [pause_button_X+30, pause_button_Y+15, 10, 70])
-		pygame.draw.rect(screen, white, [pause_button_X+60, pause_button_Y+15, 10, 70])
+		# Button
+	pygame.draw.rect(screen, pink, [pause_button_X-2, pause_button_Y-2, pause_button_size+4, pause_button_size+4], border_radius = 20)
+	pygame.draw.rect(screen, black, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size], border_radius = 20)
+	pygame.draw.rect(screen, white, [pause_button_X+30, pause_button_Y+15, 10, 70])
+	pygame.draw.rect(screen, white, [pause_button_X+60, pause_button_Y+15, 10, 70])
 
 
 def draw_tetris_menu(screen, play_button_active) :
@@ -311,3 +305,10 @@ def draw_tetris_pause(screen, resume_button_active, controls_button_active, quit
 	draw_button2(screen, resume_button_X, resume_button_Y, button_width, button_height, resume_string, resume_button_active)
 	draw_button2(screen, controls_button_X, controls_button_Y, button_width, button_height, controls_string, controls_button_active)
 	draw_button2(screen, quit_button_X, quit_button_Y, button_width, button_height, quit_string, quit_button_active)
+
+	# Pause button
+	pygame.draw.rect(screen, purple, [pause_button_X-2, pause_button_Y-2, pause_button_size+4, pause_button_size+4], border_radius = 20)
+	pygame.draw.rect(screen, black, [pause_button_X, pause_button_Y, pause_button_size, pause_button_size], border_radius = 20)
+	pygame.draw.rect(screen, pink, [pause_button_X+30, pause_button_Y+15, 10, 70])
+	pygame.draw.rect(screen, pink, [pause_button_X+60, pause_button_Y+15, 10, 70])
+
