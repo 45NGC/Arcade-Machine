@@ -1,5 +1,5 @@
 from game_scripts.utilities import draw_button
-from game_scripts.tetris import draw_tetris_panels, draw_tetris_menu, draw_tetris_pause
+from game_scripts.tetris import draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause
 import sys
 import pygame
 pygame.init()
@@ -268,9 +268,8 @@ def tetris_game() :
 
 		#	- Panels :
 		draw_tetris_panels(screen)
-		#draw_board()
+		draw_tetris_board(screen)
 		if pause : tetris_pause(in_game=True)
-
 
 		pygame.display.flip()
 
