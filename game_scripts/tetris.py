@@ -63,12 +63,6 @@ tetris_label_height = 110
 tetris_label_X = 300
 tetris_label_Y = 75
 
-button_width = 250
-button_height = 80
-
-play_button_X = 325
-play_button_Y = 350
-
 highscores_panel_width = 340
 highscores_panel_height = 320
 highscores_panel_X = 280
@@ -82,6 +76,8 @@ pause_menu_size = 350
 pause_menu_X = 275
 pause_menu_Y = 220
 
+play_button_X = 325
+play_button_Y = 350
 resume_button_X = 325
 resume_button_Y = 300
 controls_button_X = 325
@@ -282,7 +278,7 @@ def draw_tetris_menu(screen, mouse) :
 	screen.blit(tetris_text, (tetris_label_X+18, tetris_label_Y))
 
 	# START BUTTON
-	draw_button2(screen, play_button_X, play_button_Y, button_width, button_height, play_string, mouse)
+	draw_button2(screen, play_button_X, play_button_Y, play_string, mouse)
 
 	# HIGH SCORES TABLE
 	pygame.draw.rect(screen, pink, [highscores_panel_X-2, highscores_panel_Y-2, highscores_panel_width+4, highscores_panel_height+4])
@@ -308,9 +304,9 @@ def draw_tetris_pause(screen, mouse) :
 	screen.blit(pause_label, (pause_menu_X+125, pause_menu_Y+20))
 
 	# Buttons
-	draw_button2(screen, resume_button_X, resume_button_Y, button_width, button_height, resume_string, mouse)
-	draw_button2(screen, controls_button_X, controls_button_Y, button_width, button_height, controls_string, mouse)
-	draw_button2(screen, quit_button_X, quit_button_Y, button_width, button_height, quit_string, mouse)
+	draw_button2(screen, resume_button_X, resume_button_Y, resume_string, mouse)
+	draw_button2(screen, controls_button_X, controls_button_Y, controls_string, mouse)
+	draw_button2(screen, quit_button_X, quit_button_Y, quit_string, mouse)
 
 	# Pause button
 	pygame.draw.rect(screen, purple, [pause_button_X-2, pause_button_Y-2, pause_button_size+4, pause_button_size+4], border_radius = 20)
