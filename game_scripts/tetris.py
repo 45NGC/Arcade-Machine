@@ -7,15 +7,12 @@ pygame.init()
 black = (0,0,0)
 white = (255,255,255)
 pink = (255, 153, 255)
-red_pink = (255, 0, 102)
 dark_grey = (40,40,40)
 grey = (60,60,60)
 light_grey = (100,100,100)
 yellow = (255,204,0)
 green = (51,204,51)
-dark_purple = (83,0,185)
 purple = (153,0,255)
-dark_pink = (255,53,155)
 orange = (255, 153, 0)
 red = (255, 57, 57)
 blue = (0, 64, 255)
@@ -199,6 +196,8 @@ T = [['.....',
       '..0..',
       '.....']]
 
+shapes = [S, Z, I, O, J, L, T]
+shape_colors = [green, red, turquoise, yellow, orange, blue, purple]
 
 
 # TETRIS FUNCTIONS
@@ -258,14 +257,12 @@ def draw_tetris_panels(screen) :
 	pygame.draw.rect(screen, white, [pause_button_X+30, pause_button_Y+15, 10, 70])
 	pygame.draw.rect(screen, white, [pause_button_X+60, pause_button_Y+15, 10, 70])
 
-
 def draw_tetris_board(screen) :
 
       for i in range(rows):
             pygame.draw.line(screen, light_grey, (tetris_panel_X, tetris_panel_Y+ i*block_size), (tetris_panel_X + tetris_panel_width, tetris_panel_Y + i * block_size))
             for j in range(columns):
                   pygame.draw.line(screen, light_grey, (tetris_panel_X + j * block_size, tetris_panel_Y), (tetris_panel_X + j * block_size, tetris_panel_Y + tetris_panel_height))
-
 
 def draw_tetris_menu(screen, play_button_active) :
 	# TETRIS LABEL
@@ -300,7 +297,6 @@ def draw_tetris_menu(screen, play_button_active) :
 	highscores_text = font_h1.render(highscores_string, True, white)
 	screen.blit(highscores_text, (highscores_panel_X+60, highscores_panel_Y+10))
 
-
 def draw_tetris_pause(screen, resume_button_active, controls_button_active, quit_button_active) :
 	# Cover background
 	pygame.draw.rect(screen, light_grey, [tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height])
@@ -322,3 +318,20 @@ def draw_tetris_pause(screen, resume_button_active, controls_button_active, quit
 	pygame.draw.rect(screen, pink, [pause_button_X+30, pause_button_Y+15, 10, 70])
 	pygame.draw.rect(screen, pink, [pause_button_X+60, pause_button_Y+15, 10, 70])
 
+def update_tetris_score(screen, score, lines) :
+      #score = font_h3.render(str(score).center(7), True, white)
+	#lines = font_h3.render(str(lines).center(7), True, white)
+	#screen.blit(score, (score_panel_X+30, score_panel_Y+70))
+	#screen.blit(lines, (score_panel_X+30, score_panel_Y+230))
+      pass
+
+
+# TETRIS CLASSES
+class Piece(object) :
+
+      def __init__(self, column, row, shape) :
+            self.x = column
+            self.y = row
+            self.shape = shape
+            self.color = shape_colors[shapes.index(shape)]
+            self.rotation = 0
