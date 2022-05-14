@@ -33,10 +33,10 @@ def draw_button1(screen, x_axis, y_axis, text, mouse, i_text_animation) :
 
 
 
-def draw_button2(screen, x_axis, y_axis, button_width, button_height, text, active) :
+def draw_button2(screen, x_axis, y_axis, button_width, button_height, text, mouse) :
 	text = text.center(22)
 
-	if active :
+	if (x_axis <= mouse[0] <= x_axis+button_width) and (y_axis <= mouse[1] <= y_axis+button_height) :
 		pygame.draw.rect(screen, purple, [x_axis-3, y_axis-3, button_width+6, button_height+6], border_radius = 20)
 		pygame.draw.rect(screen, black, [x_axis, y_axis, button_width, button_height], border_radius = 20)
 		button = button2_font.render(text, True, white)
