@@ -1,4 +1,4 @@
-from game_scripts.utilities import draw_button
+from game_scripts.utilities import draw_button1
 from game_scripts.tetris import draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause
 import sys
 import pygame
@@ -43,11 +43,8 @@ rainbow_array = [
 
 # FONTS
 title_font = pygame.font.Font('resources\\fonts\\main_fonts\\ARCADECLASSIC.TTF', 100)
-text_animation_array = [0,1,2,3,4,5,4,3,2,1]
 
 # STRINGS
-
-# Main strings
 title_string 		= 'ARCADE   MACHINE'
 tetris_string 		= '   TETRIS'
 snake_string 		= '    SNAKE'
@@ -56,10 +53,19 @@ connect4_string 	= 'CONNECT 4'
 reaction_string 	= ' REACTION'
 infection_string 	= 'INFECTION'
 
-# Buttons
+# BUTTONS
+#main
 button_width = 250
 button_height = 80
 
+l_column = 100
+r_column = 550
+row_1 = 250
+row_2 = 450
+row_3 = 650
+
+
+#tetris
 play_button_X = 325
 play_button_Y = 350
 
@@ -120,68 +126,34 @@ def arcade_machine_menu() :
 		if i_text_animation == 9 : i_text_animation = 0
 
 		#tetris
-		if (100 <= mouse[0] <= 350) and (250 <= mouse[1] <= 330) :
-			draw_button(screen, 100, 250, tetris_string, True, text_animation_array[i_text_animation])
-
-			if event.type == pygame.MOUSEBUTTONDOWN :
-				tetris_menu()
-		else:
-			draw_button(screen, 100, 250, tetris_string, False, 0)
-
+		draw_button1(screen, l_column, row_1, tetris_string, mouse, i_text_animation)
+		if (l_column <= mouse[0] <= l_column+button_width) and (row_1 <= mouse[1] <= row_1+button_height) :
+			if event.type == pygame.MOUSEBUTTONDOWN : tetris_menu()
+		
 		#snake
-		if (100 <= mouse[0] <= 350) and (450 <= mouse[1] <= 530) :
-			draw_button(screen, 100, 450, snake_string, True, text_animation_array[i_text_animation])
-
-			if event.type == pygame.MOUSEBUTTONDOWN :
-				print('NOT AVAILABLE')
-				# pygame.quit()
-				# exec(open(snake_path).read())
-		else:
-			draw_button(screen, 100, 450, snake_string, False, 0)
+		draw_button1(screen, l_column, row_2, snake_string, mouse, i_text_animation)
+		if (l_column <= mouse[0] <= l_column+button_width) and (row_2 <= mouse[1] <= row_2+button_height) :
+			if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 
 		#pong
-		if (100 <= mouse[0] <= 350) and (650 <= mouse[1] <= 730) :
-			draw_button(screen, 100, 650, pong_string, True, text_animation_array[i_text_animation])
-
-			if event.type == pygame.MOUSEBUTTONDOWN :
-				print('NOT AVAILABLE')
-				# pygame.quit()
-				# exec(open(pong_path).read())
-		else:
-			draw_button(screen, 100, 650, pong_string, False, 0)
+		draw_button1(screen, l_column, row_3, pong_string, mouse, i_text_animation)
+		if (l_column <= mouse[0] <= l_column+button_width) and (row_3 <= mouse[1] <= row_3+button_height) :
+			if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 
 		#connect4
-		if (550 <= mouse[0] <= 800) and (250 <= mouse[1] <= 330) :
-			draw_button(screen, 550, 250, connect4_string, True, text_animation_array[i_text_animation])
-
-			if event.type == pygame.MOUSEBUTTONDOWN :
-				print('NOT AVAILABLE')
-				# pygame.quit()
-				# exec(open(connect4_path).read())
-		else:
-			draw_button(screen, 550, 250, connect4_string, False, 0)
+		draw_button1(screen, r_column, row_1, connect4_string, mouse, i_text_animation)
+		if (r_column <= mouse[0] <= r_column+button_width) and (row_1 <= mouse[1] <= row_1+button_height) :
+			if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 
 		#reaction
-		if (550 <= mouse[0] <= 800) and (450 <= mouse[1] <= 530) :
-			draw_button(screen, 550, 450, reaction_string, True, text_animation_array[i_text_animation])
-
-			if event.type == pygame.MOUSEBUTTONDOWN :
-				print('NOT AVAILABLE')
-				# pygame.quit()
-				# exec(open(reaction_path).read())
-		else:
-			draw_button(screen, 550, 450, reaction_string, False, 0)
+		draw_button1(screen, r_column, row_2, reaction_string, mouse, i_text_animation)
+		if (r_column <= mouse[0] <= r_column+button_width) and (row_2 <= mouse[1] <= row_2+button_height) :
+			if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 
 		#infection
-		if (550 <= mouse[0] <= 800) and (650 <= mouse[1] <= 730) :
-			draw_button(screen, 550, 650, infection_string, True, text_animation_array[i_text_animation])
-
-			if event.type == pygame.MOUSEBUTTONDOWN :
-				print('NOT AVAILABLE')
-				# pygame.quit()
-				# exec(open(infection_path).read())
-		else:
-			draw_button(screen, 550, 650, infection_string, False, 0)
+		draw_button1(screen, r_column, row_3, infection_string, mouse, i_text_animation)
+		if (r_column <= mouse[0] <= r_column+button_width) and (row_3 <= mouse[1] <= row_3+button_height) :
+			if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 
 		pygame.display.flip()
 
