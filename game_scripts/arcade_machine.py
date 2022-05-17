@@ -1,6 +1,7 @@
 from game_scripts.utilities import draw_button1
 from game_scripts.tetris import draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_piece
 import sys
+import time
 import pygame
 pygame.init()
 
@@ -208,8 +209,11 @@ def tetris_menu() :
 ## TETRIS MAIN LOOP ##
 def tetris_game() :
 	game_clock = pygame.time.Clock()
+	fall = 0
 	pause = False
-	fall_time = 0
+	fall_timer = 1  #1 second
+	elapsed_time = 0
+	start_time = time.time()
 	piece_rotation = 0
 	piece_x = 0
 	run = True
@@ -217,6 +221,13 @@ def tetris_game() :
 	while run :
 		game_clock.tick(30)
 		mouse = pygame.mouse.get_pos()
+
+		# TIMER for the pieces falling
+		elapsed_time = time.time() - start_time
+		if elapsed_time > fall_timer : 
+			fall += 1
+			elapsed_time = 0
+			start_time = time.time()
 
 		for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -229,7 +240,7 @@ def tetris_game() :
 					if keys_pressed[pygame.K_ESCAPE] : pause = True
 
 					if keys_pressed[pygame.K_UP] : piece_rotation += 1 
-					if keys_pressed[pygame.K_DOWN] : fall_time += 1
+					if keys_pressed[pygame.K_DOWN] : fall += 1
 					if keys_pressed[pygame.K_LEFT] : piece_x -= 1
 					if keys_pressed[pygame.K_RIGHT] : piece_x += 1
 
@@ -248,7 +259,7 @@ def tetris_game() :
 
 		#	- Game :
 		if pause : tetris_pause(in_game=True)
-		draw_piece(screen, 1, piece_x, piece_rotation, fall_time)
+		draw_piece(screen, 6, piece_x, piece_rotation, fall)
 
 		draw_tetris_board(screen)
 		pygame.display.flip()
