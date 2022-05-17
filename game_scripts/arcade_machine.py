@@ -1,5 +1,5 @@
 from game_scripts.utilities import draw_button1
-from game_scripts.tetris import draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause
+from game_scripts.tetris import draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_piece
 import sys
 import pygame
 pygame.init()
@@ -209,6 +209,9 @@ def tetris_menu() :
 def tetris_game() :
 	game_clock = pygame.time.Clock()
 	pause = False
+	fall_time = 0
+	piece_rotation = 0
+	piece_x = 0
 	run = True
 
 	while run :
@@ -223,8 +226,13 @@ def tetris_game() :
 				if event.type == pygame.KEYDOWN:
 					keys_pressed = pygame.key.get_pressed()
 
-					if keys_pressed[pygame.K_ESCAPE] :
-							pause = True
+					if keys_pressed[pygame.K_ESCAPE] : pause = True
+
+					if keys_pressed[pygame.K_UP] : piece_rotation += 1 
+					if keys_pressed[pygame.K_DOWN] : fall_time += 1
+					if keys_pressed[pygame.K_LEFT] : piece_x -= 1
+					if keys_pressed[pygame.K_RIGHT] : piece_x += 1
+
 
 				#MOUSECONTROLS
 				if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
@@ -237,9 +245,12 @@ def tetris_game() :
 
 		#	- Panels :
 		draw_tetris_panels(screen)
-		draw_tetris_board(screen)
-		if pause : tetris_pause(in_game=True)
 
+		#	- Game :
+		if pause : tetris_pause(in_game=True)
+		draw_piece(screen, 1, piece_x, piece_rotation, fall_time)
+
+		draw_tetris_board(screen)
 		pygame.display.flip()
 
 
