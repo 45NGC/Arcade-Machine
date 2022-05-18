@@ -259,7 +259,7 @@ def tetris_game() :
 
 		#	- Game :
 		if pause : tetris_pause(in_game=True)
-		draw_piece(screen, 6, piece_x, piece_rotation, fall)
+		draw_piece(screen, 1, piece_x, piece_rotation, fall)
 
 		draw_tetris_board(screen)
 		pygame.display.flip()

@@ -266,10 +266,18 @@ def reset_space_avaiable(space_avaiable) :
 
 def draw_piece(screen, piece, coordenades_x, rotation, fall) :
 	rotation += 1 
+	run = True
 
 	# []
 	if piece == 1 :
-		pygame.draw.rect(screen, yellow, [tetris_panel_X+tetris_panel_width//2+block_size*coordenades_x, tetris_panel_Y+block_size*fall, block_size*2, block_size*2])
+		y = tetris_panel_Y+block_size*fall
+		x = tetris_panel_X+tetris_panel_width//2+block_size*coordenades_x
+
+		if y > 745 :
+			y = 745
+
+		pygame.draw.rect(screen, yellow, [x, y, block_size*2, block_size*2])
+
 	
 	# L
 	if piece == 2 :
