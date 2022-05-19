@@ -44,14 +44,14 @@ def arcade_machine_menu() :
 
 	i_text_animation = 0
 
-	button_width = 250
-	button_height = 80
+	button_width = 244
+	button_height = 74
 
-	l_column = 100
-	r_column = 550
-	row_1 = 250
-	row_2 = 450
-	row_3 = 650
+	l_column = 105
+	r_column = 555
+	row_1 = 255
+	row_2 = 455
+	row_3 = 655
 
 	title_string 		= 'ARCADE   MACHINE'
 	tetris_string 		= '   TETRIS'
@@ -125,6 +125,13 @@ def pause_loop(game, in_game) :
 	pause_menu_X = 275
 	pause_menu_Y = 220
 
+	button_width = 250
+	button_height = 80
+
+	pause_button_size = 100
+	pause_button_X = 725
+	pause_button_Y = 650
+
 	resume_button_X = 325
 	resume_button_Y = 300
 
@@ -136,7 +143,7 @@ def pause_loop(game, in_game) :
 
 	paused = True
 
-	if game is 'TETRIS' :
+	if game == 'TETRIS' :
 
 		while paused:
 			pause_clock.tick(30)
@@ -173,7 +180,7 @@ def pause_loop(game, in_game) :
 
 			pygame.display.flip()
 		
-		if game is 'PONG' :
+		if game == 'PONG' :
 			pass
 
 ############################################################## <TETRIS> ###############################################################
@@ -183,6 +190,8 @@ def tetris_menu() :
 	menu_clock = pygame.time.Clock()
 	pause = False
 	play = False
+	button_width = 250
+	button_height = 80
 	play_button_X = 325
 	play_button_Y = 350
 	pause_button_size = 100
@@ -231,6 +240,9 @@ def tetris_menu() :
 def tetris_game() :
 	game_clock = pygame.time.Clock()
 	fall = 0
+	pause_button_size = 100
+	pause_button_X = 725
+	pause_button_Y = 650
 	pause = False
 	fall_timer = 1  #1 second
 	elapsed_time = 0

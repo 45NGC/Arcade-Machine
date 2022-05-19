@@ -24,13 +24,13 @@ def draw_button1(screen, x_axis, y_axis, text, mouse, i_text_animation) :
 	text_animation_array = [0,1,2,3,4,5,4,3,2,1]
 	
 	if(x_axis <= mouse[0] <= x_axis+button1_width) and (y_axis <= mouse[1] <= y_axis+button1_height) :
-		pygame.draw.rect(screen, pink, [x_axis, y_axis, button1_width+6,button1_height+6], border_radius = 20)
-		pygame.draw.rect(screen, black, [x_axis+5, y_axis+5, button1_width-4,button1_height-4], border_radius = 20)
+		pygame.draw.rect(screen, pink, [x_axis-3, y_axis-3, button1_width+6,button1_height+6], border_radius = 20)
+		pygame.draw.rect(screen, black, [x_axis+3, y_axis+3, button1_width-6,button1_height-6], border_radius = 20)
 		button = button1_font.render(text, True, red_pink)
 		screen.blit(button, (x_axis+5 , y_axis+10 + text_animation_array[i_text_animation]))
 	else:
-		pygame.draw.rect(screen, white, [x_axis, y_axis, button1_width+6,button1_height+6], border_radius = 20)
-		pygame.draw.rect(screen, black, [x_axis+3, y_axis+3, button1_width,button1_height], border_radius = 20)
+		pygame.draw.rect(screen, white, [x_axis-3, y_axis-3, button1_width+6,button1_height+6], border_radius = 20)
+		pygame.draw.rect(screen, black, [x_axis, y_axis, button1_width,button1_height], border_radius = 20)
 		button = button1_font.render(text, True, white)
 		screen.blit(button, (x_axis+5,y_axis+10))
 
