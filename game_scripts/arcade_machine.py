@@ -118,10 +118,6 @@ def arcade_machine_menu() :
 def pause_loop(game, in_game) :
 	pause_clock = pygame.time.Clock()
 
-	pause_menu_size = 350
-	pause_menu_X = 275
-	pause_menu_Y = 220
-
 	button_width = 250
 	button_height = 80
 
@@ -305,6 +301,7 @@ def pong_menu() :
 	# - 1 vs IA classic/dinamic
 	# - 1 vs WALL classic/dinamic
 	# - Training (ball always bouncing)
+	# idea -> game mode with limited movement for each hit
 	pass
 
 def pong_game() :
