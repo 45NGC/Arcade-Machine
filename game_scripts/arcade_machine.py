@@ -6,12 +6,15 @@ import pygame
 pygame.init()
 
 # Create screen
-size = (900,850)
-screen = pygame.display.set_mode(size)
+screen_size = (900,850)
+screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption('ARCADE MACHINE')
 
 # Colors
 black = (0,0,0)
+white = (255,255,255)
+light_grey = (100,100,100)
+red_pink = (255, 0, 102)
 
 ## MAIN LOOP ##
 # This loop will display a screen with the name 'Arcade Machine' and a scroll of the games we can play, the games will include :
@@ -225,7 +228,6 @@ def tetris_menu() :
 		
 		# SCREEN ELEMENTS
 
-		# Background :
 		screen.fill(black)
 
 		# Panels :
@@ -284,13 +286,12 @@ def tetris_game() :
 
 		# SCREEN ELEMENTS :
 
-		#	- Background :
 		screen.fill(black)
 
-		#	- Panels :
+		# Panels :
 		draw_tetris_panels(screen)
 
-		#	- Game :
+		# Game :
 		if pause : pause_loop(game='TETRIS', in_game=True)
 		pause = False
 		draw_piece(screen, 1, piece_x, piece_rotation, fall)
@@ -305,15 +306,22 @@ def tetris_game() :
 
 
 def pong_menu() :
+	# 3 GAME MODES :
+	# - 1 vs 1
+	# - 1 vs IA
+	# - 1 vs WALL
 	pass
 
 def pong_game() :
 	pong_clock = pygame.time.Clock()
-	game_area_height = 580
+
 	game_area_width = 900
-	ball = pygame.Rect(game_area_width/2-10, game_area_height/2-10, 20, 20)
+	game_area_height = 580 #850
+
+	ball = pygame.Rect(game_area_width/2-10, 150+game_area_height/2-10, 20, 20)
 	player1 = pygame.Rect(5, game_area_height/2-35, 5, 70)
 	player2 = pygame.Rect(game_area_width-5, game_area_height/2-35, 5, 70)
+
 	run = True
 
 	while run :
@@ -322,6 +330,19 @@ def pong_game() :
 		for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					sys.exit()
+		
+		# SCREEN ELEMENTS :
+		screen.fill(black)
+
+		# Game area
+		pygame.draw.line(screen, white, (0,149), (game_area_width, 149))
+		pygame.draw.line(screen, white, (0,151+game_area_height), (game_area_width, 151+game_area_height))
+		pygame.draw.aaline(screen, light_grey, (game_area_width/2,150), (game_area_width/2,150+game_area_height))
+
+		# Ball
+		pygame.draw.ellipse(screen, red_pink, ball)
+
+		pygame.display.flip()
 
 def pong_pause(in_game) :
 	pass
