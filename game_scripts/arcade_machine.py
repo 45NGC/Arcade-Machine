@@ -10,12 +10,6 @@ screen_size = (900,850)
 screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption('ARCADE MACHINE')
 
-# Colors
-black = (0,0,0)
-white = (255,255,255)
-light_grey = (100,100,100)
-red_pink = (255, 0, 102)
-
 ## MAIN LOOP ##
 # This loop will display a screen with the name 'Arcade Machine' and a scroll of the games we can play, the games will include :
 # 	- Tetris
@@ -76,7 +70,7 @@ def arcade_machine_menu() :
 		
 		# SCREEN ELEMENTS :
 
-		screen.fill(black)
+		screen.fill((0,0,0))
 		mouse = pygame.mouse.get_pos()
 
 		# Title:
@@ -228,7 +222,7 @@ def tetris_menu() :
 		
 		# SCREEN ELEMENTS
 
-		screen.fill(black)
+		screen.fill((0,0,0))
 
 		# Panels :
 		draw_tetris_panels(screen)
@@ -286,7 +280,7 @@ def tetris_game() :
 
 		# SCREEN ELEMENTS :
 
-		screen.fill(black)
+		screen.fill((0,0,0))
 
 		# Panels :
 		draw_tetris_panels(screen)
@@ -306,21 +300,37 @@ def tetris_game() :
 
 
 def pong_menu() :
-	# 3 GAME MODES :
-	# - 1 vs 1
-	# - 1 vs IA
-	# - 1 vs WALL
+	# 4 GAME MODES :
+	# - 1 vs 1 classic/dinamic (moves on x axis allowed)
+	# - 1 vs IA classic/dinamic
+	# - 1 vs WALL classic/dinamic
+	# - Training (ball always bouncing)
 	pass
 
 def pong_game() :
 	pong_clock = pygame.time.Clock()
-
 	game_area_width = 900
-	game_area_height = 580 #850
+	game_area_height = 580
 
+	# COLORS
+	white = (255,255,255)
+	light_grey = (100,100,100)
+	green = (153, 255, 102)
+
+	# LINES
+	line_up = pygame.Rect(0, 149, game_area_width, 1)
+	line_down = pygame.Rect(0, 150+game_area_height, game_area_width, 1)
+
+	# PLAYERS
+	player1 = pygame.Rect(5, 150+game_area_height/2-35, 5, 70)
+	player2 = pygame.Rect(game_area_width-10, 150+game_area_height/2-35, 5, 70)
+	player1_speed = 0
+	player2_speed = 0
+
+	# BALL
 	ball = pygame.Rect(game_area_width/2-10, 150+game_area_height/2-10, 20, 20)
-	player1 = pygame.Rect(5, game_area_height/2-35, 5, 70)
-	player2 = pygame.Rect(game_area_width-5, game_area_height/2-35, 5, 70)
+	ball_speed_x = 3
+	ball_speed_y = 3
 
 	run = True
 
@@ -328,19 +338,57 @@ def pong_game() :
 		pong_clock.tick(60)
 
 		for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					sys.exit()
+			if event.type == pygame.QUIT:
+				sys.exit()
+			
+			#KEYCONTROLS
+			if event.type == pygame.KEYDOWN:
+				# keys_pressed = pygame.key.get_pressed()
+
+				# if keys_pressed[pygame.K_ESCAPE] : pause = True
+				# if keys_pressed[pygame.K_UP] : player1_speed -= 3 
+				# if keys_pressed[pygame.K_DOWN] : player1_speed += 3
+				# if keys_pressed[pygame.K_LSHIFT] : player2_speed -= 3
+				# if keys_pressed[pygame.K_LCTRL] : player2_speed += 3
+				if event.key == pygame.K_UP : player2_speed -= 3
+				if event.key == pygame.K_DOWN : player2_speed += 3
+				if event.key == pygame.K_LSHIFT : player1_speed -= 3
+				if event.key == pygame.K_LCTRL : player1_speed += 3
+
+			if event.type == pygame.KEYUP:
+
+				if event.key == pygame.K_UP : player2_speed += 3
+				if event.key == pygame.K_DOWN : player2_speed -= 3
+				if event.key == pygame.K_LSHIFT : player1_speed += 3
+				if event.key == pygame.K_LCTRL : player1_speed -= 3
+
 		
 		# SCREEN ELEMENTS :
-		screen.fill(black)
+		screen.fill((0,0,0))
 
 		# Game area
-		pygame.draw.line(screen, white, (0,149), (game_area_width, 149))
-		pygame.draw.line(screen, white, (0,151+game_area_height), (game_area_width, 151+game_area_height))
+		pygame.draw.rect(screen, white, line_up)
+		pygame.draw.rect(screen, white, line_down)
 		pygame.draw.aaline(screen, light_grey, (game_area_width/2,150), (game_area_width/2,150+game_area_height))
 
+		# Players
+		pygame.draw.rect(screen, white, player1)
+		pygame.draw.rect(screen, white, player2)
+		player1.y += player1_speed
+		player2.y += player2_speed
+
 		# Ball
-		pygame.draw.ellipse(screen, red_pink, ball)
+		pygame.draw.ellipse(screen, green, ball)
+
+		ball.x += ball_speed_x
+		ball.y += ball_speed_y
+
+		if ball.colliderect(line_up) or ball.colliderect(line_down) :
+			ball_speed_y *= -1
+
+		if ball.colliderect(player1) or ball.colliderect(player2) :
+			ball_speed_x *= -1
+		
 
 		pygame.display.flip()
 
