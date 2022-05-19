@@ -161,7 +161,7 @@ def arcade_machine_menu() :
 
 ############################################################## <TETRIS> ##############################################################
 
-## TETRIS MENU LOOP ##
+
 def tetris_menu() :
 	menu_clock = pygame.time.Clock()
 	pause = False
@@ -201,12 +201,11 @@ def tetris_menu() :
 		draw_tetris_panels(screen)
 		draw_tetris_menu(screen, mouse)
 		if pause : tetris_pause(in_game=False)
+		pause = False
 		if play : tetris_game()
 
 		pygame.display.flip()
 
-
-## TETRIS MAIN LOOP ##
 def tetris_game() :
 	game_clock = pygame.time.Clock()
 	fall = 0
@@ -259,11 +258,11 @@ def tetris_game() :
 
 		#	- Game :
 		if pause : tetris_pause(in_game=True)
+		pause = False
 		draw_piece(screen, 1, piece_x, piece_rotation, fall)
 
 		draw_tetris_board(screen)
 		pygame.display.flip()
-
 
 def tetris_pause(in_game):
 	pause_clock = pygame.time.Clock()
@@ -304,10 +303,5 @@ def tetris_pause(in_game):
 		draw_tetris_pause(screen, mouse)
 
 		pygame.display.flip()
-	
-	if in_game :
-		tetris_game()
-	else:
-		tetris_menu()
 
 ############################################################## </TETRIS> ##############################################################
