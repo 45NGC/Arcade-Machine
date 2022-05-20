@@ -1,5 +1,6 @@
 from game_scripts.utilities import draw_button1
 from game_scripts.tetris import draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_piece
+from game_scripts.pong import draw_pong_menu
 import sys
 import time
 import random
@@ -97,7 +98,7 @@ def arcade_machine_menu() :
 		#pong
 		draw_button1(screen, l_column, row_3, pong_string, mouse, i_text_animation)
 		if (l_column <= mouse[0] <= l_column+button_width) and (row_3 <= mouse[1] <= row_3+button_height) :
-			if event.type == pygame.MOUSEBUTTONDOWN : pong_game()
+			if event.type == pygame.MOUSEBUTTONDOWN : pong_menu()
 
 		#connect4
 		draw_button1(screen, r_column, row_1, connect4_string, mouse, i_text_animation)
@@ -116,66 +117,6 @@ def arcade_machine_menu() :
 
 		pygame.display.flip()
 
-def pause_loop(game, in_game) :
-	pause_clock = pygame.time.Clock()
-
-	button_width = 250
-	button_height = 80
-
-	pause_button_size = 100
-	pause_button_X = 725
-	pause_button_Y = 650
-
-	resume_button_X = 325
-	resume_button_Y = 300
-
-	controls_button_X = 325
-	controls_button_Y = 390
-
-	quit_button_X = 325
-	quit_button_Y = 480
-
-	paused = True
-
-	if game == 'TETRIS' :
-
-		while paused:
-			pause_clock.tick(30)
-			mouse = pygame.mouse.get_pos()
-			for event in pygame.event.get():
-
-					if event.type == pygame.QUIT:
-						sys.exit()
-					
-					#KEYCONTROLS
-					if event.type == pygame.KEYDOWN:
-						keys_pressed = pygame.key.get_pressed()
-
-						if keys_pressed[pygame.K_SPACE] : paused = False
-
-						if keys_pressed[pygame.K_ESCAPE] : paused = False
-
-					#MOUSECONTROLS
-					if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
-								if event.type == pygame.MOUSEBUTTONDOWN : paused = False
-					
-					if (resume_button_X <= mouse[0] <= resume_button_X+button_width) and (resume_button_Y <= mouse[1] <= resume_button_Y+button_height) :
-						if event.type == pygame.MOUSEBUTTONDOWN : paused = False
-					
-					if (controls_button_X <= mouse[0] <= controls_button_X+button_width) and (controls_button_Y <= mouse[1] <= controls_button_Y+button_height) :
-						if event.type == pygame.MOUSEBUTTONDOWN : pass #show_controls() 
-
-					if (quit_button_X <= mouse[0] <= quit_button_X+button_width) and (quit_button_Y <= mouse[1] <= quit_button_Y+button_height) :
-						if event.type == pygame.MOUSEBUTTONDOWN :
-								if in_game == True : tetris_menu()
-								if in_game == False : arcade_machine_menu()
-
-			draw_tetris_pause(screen, mouse)
-
-			pygame.display.flip()
-		
-		if game == 'PONG' :
-			pass
 
 ############################################################## <TETRIS> ###############################################################
 
@@ -224,7 +165,7 @@ def tetris_menu() :
 		# Panels :
 		draw_tetris_panels(screen)
 		draw_tetris_menu(screen, mouse)
-		if pause : pause_loop(game='TETRIS', in_game=False)
+		if pause : tetris_pause(in_game=False)
 		pause = False
 		if play : tetris_game()
 
@@ -283,11 +224,67 @@ def tetris_game() :
 		draw_tetris_panels(screen)
 
 		# Game :
-		if pause : pause_loop(game='TETRIS', in_game=True)
+		if pause : tetris_pause(in_game=True)
 		pause = False
 		draw_piece(screen, 1, piece_x, piece_rotation, fall)
 
 		draw_tetris_board(screen)
+		pygame.display.flip()
+
+def tetris_pause(in_game) :
+	pause_clock = pygame.time.Clock()
+
+	button_width = 250
+	button_height = 80
+
+	pause_button_size = 100
+	pause_button_X = 725
+	pause_button_Y = 650
+
+	resume_button_X = 325
+	resume_button_Y = 300
+
+	controls_button_X = 325
+	controls_button_Y = 390
+
+	quit_button_X = 325
+	quit_button_Y = 480
+
+	paused = True
+
+	while paused:
+		pause_clock.tick(30)
+		mouse = pygame.mouse.get_pos()
+		for event in pygame.event.get():
+
+				if event.type == pygame.QUIT:
+					sys.exit()
+				
+				#KEYCONTROLS
+				if event.type == pygame.KEYDOWN:
+					keys_pressed = pygame.key.get_pressed()
+
+					if keys_pressed[pygame.K_SPACE] : paused = False
+
+					if keys_pressed[pygame.K_ESCAPE] : paused = False
+
+				#MOUSECONTROLS
+				if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
+							if event.type == pygame.MOUSEBUTTONDOWN : paused = False
+				
+				if (resume_button_X <= mouse[0] <= resume_button_X+button_width) and (resume_button_Y <= mouse[1] <= resume_button_Y+button_height) :
+					if event.type == pygame.MOUSEBUTTONDOWN : paused = False
+				
+				if (controls_button_X <= mouse[0] <= controls_button_X+button_width) and (controls_button_Y <= mouse[1] <= controls_button_Y+button_height) :
+					if event.type == pygame.MOUSEBUTTONDOWN : pass #show_controls() 
+
+				if (quit_button_X <= mouse[0] <= quit_button_X+button_width) and (quit_button_Y <= mouse[1] <= quit_button_Y+button_height) :
+					if event.type == pygame.MOUSEBUTTONDOWN :
+							if in_game == True : tetris_menu()
+							if in_game == False : arcade_machine_menu()
+
+		draw_tetris_pause(screen, mouse)
+
 		pygame.display.flip()
 
 
@@ -303,7 +300,23 @@ def pong_menu() :
 	# - 1 vs WALL classic/dinamic
 	# - Training (ball always bouncing)
 	# idea -> game mode with limited movement for each hit
-	pass
+	menu_clock = pygame.time.Clock()
+	run = True
+
+	while run :
+		menu_clock.tick(30)
+		mouse = pygame.mouse.get_pos()
+
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				sys.exit()
+		
+		# SCREEN ELEMENTS
+		screen.fill((0,0,0))
+
+		draw_pong_menu(screen, mouse)
+
+		pygame.display.flip()
 
 def pong_game() :
 	pong_clock = pygame.time.Clock()
@@ -313,7 +326,8 @@ def pong_game() :
 	# COLORS
 	white = (255,255,255)
 	light_grey = (100,100,100)
-	green = (153, 255, 102)
+	pink = (255, 153, 255)
+
 
 	# LINES
 	line_up = pygame.Rect(0, 149, game_area_width, 1)
@@ -324,6 +338,10 @@ def pong_game() :
 	player2 = pygame.Rect(game_area_width-10, 150+game_area_height/2-35, 5, 70)
 	player1_speed = 0
 	player2_speed = 0
+
+	# SCORE
+	player1_score = 0
+	player2_score = 0
 
 	# BALL
 	ball = pygame.Rect(game_area_width/2-10, 150+game_area_height/2-10, 20, 20)
@@ -341,20 +359,12 @@ def pong_game() :
 			
 			#KEYCONTROLS
 			if event.type == pygame.KEYDOWN:
-				# keys_pressed = pygame.key.get_pressed()
-
-				# if keys_pressed[pygame.K_ESCAPE] : pause = True
-				# if keys_pressed[pygame.K_UP] : player1_speed -= 3 
-				# if keys_pressed[pygame.K_DOWN] : player1_speed += 3
-				# if keys_pressed[pygame.K_LSHIFT] : player2_speed -= 3
-				# if keys_pressed[pygame.K_LCTRL] : player2_speed += 3
 				if event.key == pygame.K_UP : player2_speed -= 3
 				if event.key == pygame.K_DOWN : player2_speed += 3
 				if event.key == pygame.K_LSHIFT : player1_speed -= 3
 				if event.key == pygame.K_LCTRL : player1_speed += 3
 
 			if event.type == pygame.KEYUP:
-
 				if event.key == pygame.K_UP : player2_speed += 3
 				if event.key == pygame.K_DOWN : player2_speed -= 3
 				if event.key == pygame.K_LSHIFT : player1_speed += 3
@@ -380,20 +390,15 @@ def pong_game() :
 		if player2.y > 150+game_area_height-70 : player2.y = 150+game_area_height-70
 
 		# Ball
-		pygame.draw.ellipse(screen, green, ball)
+		pygame.draw.ellipse(screen, pink, ball)
 
 		ball.x += ball_speed_x
 		ball.y += ball_speed_y
 
-		# if ball.top.colliderect(line_up) or ball.botton.colliderect(line_down) :
-		# 	ball_speed_y *= -1
-
-		if ball.top <= 150 or ball.bottom >= 150+game_area_height :
-			ball_speed_y *= -1
-
-		if ball.colliderect(player1) or ball.colliderect(player2) :
-			ball_speed_x *= -1
+		if ball.top <= 150 or ball.bottom >= 150+game_area_height : ball_speed_y *= -1
+		if ball.colliderect(player1) or ball.colliderect(player2) : ball_speed_x *= -1
 		
+		#restart ball
 		if ball.left > game_area_width or ball.right < 0 :
 			ball.center = (game_area_width/2-10, 150+game_area_height/2-10)
 			ball_speed_x *= random.choice((1,-1))

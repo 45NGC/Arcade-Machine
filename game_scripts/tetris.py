@@ -1,4 +1,3 @@
-from cmath import rect
 from game_scripts.utilities import draw_button2
 import random
 import pygame
@@ -177,7 +176,7 @@ def draw_tetris_panels(screen) :
 
 def draw_tetris_board(screen) :
 
-      for i in range(rows):
+    for i in range(rows):
             pygame.draw.line(screen, light_grey, (tetris_panel_X, tetris_panel_Y+ i*block_size), (tetris_panel_X + tetris_panel_width, tetris_panel_Y + i * block_size))
             for j in range(columns):
                   pygame.draw.line(screen, light_grey, (tetris_panel_X + j * block_size, tetris_panel_Y), (tetris_panel_X + j * block_size, tetris_panel_Y + tetris_panel_height))
