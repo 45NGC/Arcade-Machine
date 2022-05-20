@@ -373,6 +373,10 @@ def pong_game() :
 		pygame.draw.rect(screen, white, player2)
 		player1.y += player1_speed
 		player2.y += player2_speed
+		if player1.y < 150 : player1.y = 150
+		if player1.y > 150+game_area_height-70 : player1.y = 150+game_area_height-70
+		if player2.y < 150 : player2.y = 150
+		if player2.y > 150+game_area_height-70 : player2.y = 150+game_area_height-70
 
 		# Ball
 		pygame.draw.ellipse(screen, green, ball)
