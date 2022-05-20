@@ -2,6 +2,7 @@ from game_scripts.utilities import draw_button1
 from game_scripts.tetris import draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_piece
 import sys
 import time
+import random
 import pygame
 pygame.init()
 
@@ -326,8 +327,8 @@ def pong_game() :
 
 	# BALL
 	ball = pygame.Rect(game_area_width/2-10, 150+game_area_height/2-10, 20, 20)
-	ball_speed_x = 3
-	ball_speed_y = 3
+	ball_speed_x = 4
+	ball_speed_y = 4
 
 	run = True
 
@@ -384,11 +385,19 @@ def pong_game() :
 		ball.x += ball_speed_x
 		ball.y += ball_speed_y
 
-		if ball.colliderect(line_up) or ball.colliderect(line_down) :
+		# if ball.top.colliderect(line_up) or ball.botton.colliderect(line_down) :
+		# 	ball_speed_y *= -1
+
+		if ball.top <= 150 or ball.bottom >= 150+game_area_height :
 			ball_speed_y *= -1
 
 		if ball.colliderect(player1) or ball.colliderect(player2) :
 			ball_speed_x *= -1
+		
+		if ball.left > game_area_width or ball.right < 0 :
+			ball.center = (game_area_width/2-10, 150+game_area_height/2-10)
+			ball_speed_x *= random.choice((1,-1))
+			ball_speed_y *= random.choice((1,-1))
 		
 
 		pygame.display.flip()
