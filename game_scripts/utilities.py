@@ -9,8 +9,8 @@ red_pink = (255, 0, 102)
 purple = (153,0,255)
 
 # FONTS
-button1_font = pygame.font.Font('resources\\fonts\\main_fonts\\Ode to Idle Gaming.ttf', 30)
-button2_font = pygame.font.Font('resources\\fonts\\tetris_fonts\\Gameplay.ttf', 25)
+button1_font = pygame.font.Font('resources\\fonts\\Ode to Idle Gaming.ttf', 30)
+button2_font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 25)
 
 # BUTTONS
 button1_width = 244

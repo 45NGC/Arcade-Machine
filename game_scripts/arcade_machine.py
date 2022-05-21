@@ -13,7 +13,7 @@ screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption('ARCADE MACHINE')
 
 ## MAIN LOOP ##
-# This loop will display a screen with the name 'Arcade Machine' and a scroll of the games we can play, the games will include :
+# This loop will display a screen with the name 'Arcade Machine' and 6 buttons of the avaiable games :
 # 	- Tetris
 # 	- Snake	
 # 	- Pong 
@@ -39,7 +39,7 @@ def arcade_machine_menu() :
 	(0, 191, 255),(0, 255, 255),(0, 255, 191),(0, 255, 128),
 	(0, 255, 64),(0, 255, 0),(64, 255, 0),(128, 255, 0),
 	(191, 255, 0),(255, 255, 0),(255, 191, 0),(255, 64, 0)]
-	title_font = pygame.font.Font('resources\\fonts\\main_fonts\\ARCADECLASSIC.TTF', 100)
+	title_font = pygame.font.Font('resources\\fonts\\ARCADECLASSIC.TTF', 100)
 
 	i_text_animation = 0
 
@@ -295,11 +295,9 @@ def tetris_pause(in_game) :
 
 def pong_menu() :
 	# 4 GAME MODES :
-	# - 1 vs 1 classic/dinamic (moves on x axis allowed)
-	# - 1 vs IA classic/dinamic
-	# - 1 vs WALL classic/dinamic
-	# - Training (ball always bouncing)
-	# idea -> game mode with limited movement for each hit
+	# - 1 vs 1
+	# - 1 vs IA 
+	# - Practise (1 vs wall)
 	menu_clock = pygame.time.Clock()
 	run = True
 
