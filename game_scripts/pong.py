@@ -24,8 +24,8 @@ def draw_pong_menu(screen, mouse) :
 	mode2_string  = '1 vs 1'
 	mode3_string  = 'PRACTISE'
 	draw_button2(screen, 70, 330, mode1_string, mouse)
-	draw_button2(screen, 70, 460, mode2_string, mouse)
-	draw_button2(screen, 70, 590, mode3_string, mouse)
+	draw_button2(screen, 580, 330, mode2_string, mouse)
+	draw_button2(screen, 325, 590, mode3_string, mouse)
 
 	# IA difficulty selector
 	# easy_mode_string = 'EASY'

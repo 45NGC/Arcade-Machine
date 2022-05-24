@@ -294,11 +294,17 @@ def tetris_pause(in_game) :
 
 
 def pong_menu() :
-	# 4 GAME MODES :
+	# 3 GAME MODES :
 	# - 1 vs 1
 	# - 1 vs IA 
 	# - Practise (1 vs wall)
 	menu_clock = pygame.time.Clock()
+	vsIA_button_X = 70
+	vsIA_button_Y = 330
+	vs1_button_X = 580
+	vs1_button_Y = 330
+	practise_button_X = 325
+	practise_button_Y = 590
 	run = True
 
 	while run :
@@ -306,8 +312,23 @@ def pong_menu() :
 		mouse = pygame.mouse.get_pos()
 
 		for event in pygame.event.get():
+
 			if event.type == pygame.QUIT:
 				sys.exit()
+			
+			#MOUSECONTROLS
+			# if (pause_button_X <= mouse[0] <= pause_button_X+250) and (pause_button_Y <= mouse[1] <= pause_button_Y+250) :
+			# 	if event.type == pygame.MOUSEBUTTONDOWN : pass #pause function
+
+			if (vsIA_button_X <= mouse[0] <= vsIA_button_X+250) and (vsIA_button_Y <= mouse[1] <= vsIA_button_Y+250) :
+				if event.type == pygame.MOUSEBUTTONDOWN : pong_game(game_mode = 1)
+			
+			if (vs1_button_X <= mouse[0] <= vs1_button_X+250) and (vs1_button_Y <= mouse[1] <= vs1_button_Y+250) :
+				if event.type == pygame.MOUSEBUTTONDOWN : pong_game(game_mode = 2)
+			
+			if (practise_button_X <= mouse[0] <= practise_button_X+250) and (practise_button_Y <= mouse[1] <= practise_button_Y+250) :
+				if event.type == pygame.MOUSEBUTTONDOWN : pong_game(game_mode = 3)
+
 		
 		# SCREEN ELEMENTS
 		screen.fill((0,0,0))
@@ -316,7 +337,7 @@ def pong_menu() :
 
 		pygame.display.flip()
 
-def pong_game() :
+def pong_game(game_mode) :
 	pong_clock = pygame.time.Clock()
 	game_area_width = 900
 	game_area_height = 580
@@ -336,6 +357,7 @@ def pong_game() :
 	player2 = pygame.Rect(game_area_width-10, 150+game_area_height/2-35, 5, 70)
 	player1_speed = 0
 	player2_speed = 0
+	ia_speed = 4
 
 	# SCORE
 	player1_score = 0
@@ -357,14 +379,18 @@ def pong_game() :
 			
 			#KEYCONTROLS
 			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_UP : player2_speed -= 3
-				if event.key == pygame.K_DOWN : player2_speed += 3
+				if game_mode == 2 :
+					if event.key == pygame.K_UP : player2_speed -= 3
+					if event.key == pygame.K_DOWN : player2_speed += 3
+
 				if event.key == pygame.K_LSHIFT : player1_speed -= 3
 				if event.key == pygame.K_LCTRL : player1_speed += 3
 
 			if event.type == pygame.KEYUP:
-				if event.key == pygame.K_UP : player2_speed += 3
-				if event.key == pygame.K_DOWN : player2_speed -= 3
+				if game_mode == 2 :
+					if event.key == pygame.K_UP : player2_speed += 3
+					if event.key == pygame.K_DOWN : player2_speed -= 3
+				
 				if event.key == pygame.K_LSHIFT : player1_speed += 3
 				if event.key == pygame.K_LCTRL : player1_speed -= 3
 
@@ -381,7 +407,15 @@ def pong_game() :
 		pygame.draw.rect(screen, white, player1)
 		pygame.draw.rect(screen, white, player2)
 		player1.y += player1_speed
-		player2.y += player2_speed
+		if game_mode == 2 : player2.y += player2_speed
+
+		# IA
+		if game_mode == 1 :
+			if player2.top < ball.y :
+				player2.top += ia_speed
+			if player2.top > ball.y :
+				player2.top -= ia_speed
+		
 		if player1.y < 150 : player1.y = 150
 		if player1.y > 150+game_area_height-70 : player1.y = 150+game_area_height-70
 		if player2.y < 150 : player2.y = 150
