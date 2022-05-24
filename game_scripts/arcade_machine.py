@@ -323,6 +323,10 @@ def pong_menu() :
 			
 			if (practise_button_X <= mouse[0] <= practise_button_X+250) and (practise_button_Y <= mouse[1] <= practise_button_Y+80) :
 				if event.type == pygame.MOUSEBUTTONDOWN : pong_game(game_mode = 3)
+			
+			#KEYCONTROLS
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE : pong_pause(in_game=False)
 
 		
 		# SCREEN ELEMENTS
@@ -349,9 +353,14 @@ def pong_pause(in_game) :
 
 			if event.type == pygame.QUIT:
 				sys.exit()
-
+			
+			#MOUSECONTROLS
 			if (pause_button_X <= mouse[0] <= pause_button_X+50) and (pause_button_Y <= mouse[1] <= pause_button_Y+50) :
 				if event.type == pygame.MOUSEBUTTONDOWN : paused = False
+			
+			#KEYCONTROLS
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE : paused = False
 
 		draw_pong_pause_menu(screen, mouse)
 		pygame.display.flip()
@@ -376,7 +385,7 @@ def pong_game(game_mode) :
 	player2 = pygame.Rect(game_area_width-10, 150+game_area_height/2-35, 5, 70)
 	player1_speed = 0
 	player2_speed = 0
-	ia_speed = 4
+	ia_speed = 3.3
 
 	# SCORE
 	player1_score = 0
@@ -407,20 +416,22 @@ def pong_game(game_mode) :
 			
 			#KEYCONTROLS
 			if event.type == pygame.KEYDOWN:
-				if game_mode == 2 :
-					if event.key == pygame.K_UP : player2_speed -= 3
-					if event.key == pygame.K_DOWN : player2_speed += 3
+				if event.key == pygame.K_ESCAPE : pong_pause(in_game=True)
 
 				if event.key == pygame.K_LSHIFT : player1_speed -= 3
 				if event.key == pygame.K_LCTRL : player1_speed += 3
 
+				if game_mode == 2 :
+					if event.key == pygame.K_UP : player2_speed -= 3
+					if event.key == pygame.K_DOWN : player2_speed += 3
+
 			if event.type == pygame.KEYUP:
+				if event.key == pygame.K_LSHIFT : player1_speed += 3
+				if event.key == pygame.K_LCTRL : player1_speed -= 3
+
 				if game_mode == 2 :
 					if event.key == pygame.K_UP : player2_speed += 3
 					if event.key == pygame.K_DOWN : player2_speed -= 3
-				
-				if event.key == pygame.K_LSHIFT : player1_speed += 3
-				if event.key == pygame.K_LCTRL : player1_speed -= 3
 
 		
 		# SCREEN ELEMENTS :

@@ -59,7 +59,6 @@ def draw_pong_pause_menu(screen, mouse):
 	pygame.draw.rect(screen, pink, pause_menu_background)
 	pygame.draw.rect(screen, black, pause_menu)
 
-
 def draw_pong_circumstancial_menus():
 	# IA difficulty selector
 	# easy_mode_string = 'EASY'
