@@ -6,6 +6,7 @@ pygame.init()
 black = (0,0,0)
 white = (255,255,255)
 pink = (255, 153, 255)
+purple = (153,0,255)
 
 def draw_pong_menu(screen, mouse) :
 	# Title
@@ -25,8 +26,41 @@ def draw_pong_menu(screen, mouse) :
 	mode3_string  = 'PRACTISE'
 	draw_button2(screen, 70, 330, mode1_string, mouse)
 	draw_button2(screen, 580, 330, mode2_string, mouse)
-	draw_button2(screen, 325, 590, mode3_string, mouse)
+	draw_button2(screen, 325, 570, mode3_string, mouse)
 
+def draw_pong_pause_button(screen) :
+	x_axis, y_axis = 425, 770
+	button_border = pygame.Rect(x_axis-2, y_axis-2, 54, 54)
+	pause_button = pygame.Rect(x_axis, y_axis, 50, 50)
+	stick_1 = pygame.Rect(x_axis+10, y_axis+5, 5, 40)
+	stick_2 = pygame.Rect(x_axis+35, y_axis+5, 5, 40)
+
+	pygame.draw.rect(screen, pink, button_border, border_radius = 10)
+	pygame.draw.rect(screen, black, pause_button, border_radius = 10)
+	pygame.draw.rect(screen, white, stick_1)
+	pygame.draw.rect(screen, white, stick_2)
+
+def draw_pong_pause_menu(screen, mouse):
+	x_axis , y_axis = 425, 770
+	button_border = pygame.Rect(x_axis-2, y_axis-2, 54, 54)
+	pause_button = pygame.Rect(x_axis, y_axis, 50, 50)
+	stick_1 = pygame.Rect(x_axis+10, y_axis+5, 5, 40)
+	stick_2 = pygame.Rect(x_axis+35, y_axis+5, 5, 40)
+
+	# Change pause button color
+	pygame.draw.rect(screen, purple, button_border, border_radius = 10)
+	pygame.draw.rect(screen, black, pause_button, border_radius = 10)
+	pygame.draw.rect(screen, pink, stick_1)
+	pygame.draw.rect(screen, pink, stick_2)
+
+	# Pause menu
+	pause_menu_background = pygame.Rect(273, 248, 354, 354)
+	pause_menu = pygame.Rect(275, 250, 350, 350)
+	pygame.draw.rect(screen, pink, pause_menu_background)
+	pygame.draw.rect(screen, black, pause_menu)
+
+
+def draw_pong_circumstancial_menus():
 	# IA difficulty selector
 	# easy_mode_string = 'EASY'
 	# normal_mode_string = 'NORMAL'
@@ -49,5 +83,4 @@ def draw_pong_menu(screen, mouse) :
 	# if selected_difficulty == 2 : pygame.draw.ellipse(screen, black, normal_mode_switch)
 	# if selected_difficulty == 3 : pygame.draw.ellipse(screen, black, hard_mode_switch)
 	# if selected_difficulty == 4 : pygame.draw.ellipse(screen, black, legend_mode_switch)
-
-	# Pause button
+	pass
