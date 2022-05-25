@@ -375,7 +375,6 @@ def pong_game(game_mode) :
 	light_grey = (100,100,100)
 	pink = (255, 153, 255)
 
-
 	# LINES
 	line_up = pygame.Rect(0, 149, game_area_width, 1)
 	line_down = pygame.Rect(0, 150+game_area_height, game_area_width, 1)
@@ -392,9 +391,15 @@ def pong_game(game_mode) :
 	score_font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 25)
 
 	# BALL
+	ball_start = True
 	ball = pygame.Rect(game_area_width/2-10, 150+game_area_height/2-10, 20, 20)
 	ball_speed_x = 4
 	ball_speed_y = 4
+
+	# TIMER
+	timer1 = pygame.time.get_ticks()
+	timer2 = pygame.time.get_ticks()
+	timer_font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 35)
 
 	# PAUSE BUTTON
 	pause_button_X = 425
@@ -480,14 +485,42 @@ def pong_game(game_mode) :
 		if ball.top <= 150 or ball.bottom >= 150+game_area_height : ball_speed_y *= -1
 		if ball.colliderect(player1) or ball.colliderect(player2) : ball_speed_x *= -1
 
-		if ball.left > game_area_width : player1_score += 1
-		if ball.right < 0 : player2_score += 1
-		
+		if ball.left > game_area_width : 
+			player1_score += 1
+			ball_start = True
+			
+		if ball.right < 0 : 
+			player2_score += 1
+			ball_start = True
+
 		#restart ball
-		if ball.left > game_area_width or ball.right < 0 :
-			ball.center = (game_area_width/2-10, 150+game_area_height/2-10)
-			ball_speed_x *= random.choice((1,-1))
-			ball_speed_y *= random.choice((1,-1))
+		if ball_start :
+			timer2 = pygame.time.get_ticks()
+			ball.center = (game_area_width/2, 150+game_area_height/2)
+
+			# print('1  ->  '+str(timer1))
+			# print()
+			# print('2  ->  '+str(timer2))
+			# print()
+
+			if timer2 - timer1 < 4000 :
+				ball_speed_x = 0
+				ball_speed_y = 0
+			else :
+				ball_speed_x = 4 * random.choice((1,-1))
+				ball_speed_y = 4 * random.choice((1,-1))
+				ball_start = False
+
+
+			if timer2 - timer1 < 1000 :
+				three = timer_font.render('3', True, white)
+				screen.blit(three,(game_area_width/2-10, 30))
+			if 1000 < timer2 - timer1 < 2000 :
+				two = timer_font.render('2', True, white)
+				screen.blit(two,(game_area_width/2-10, 30))
+			if 2000 < timer2 - timer1 < 3000 :
+				one = timer_font.render('1', True, white)
+				screen.blit(one,(game_area_width/2-10, 30))
 		
 
 		draw_pong_pause_button(screen)
