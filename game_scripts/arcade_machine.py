@@ -387,9 +387,9 @@ def pong_game(game_mode) :
 	player2_speed = 0
 	ia_speed = 3.3
 
-	# SCORE
 	player1_score = 0
 	player2_score = 0
+	score_font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 25)
 
 	# BALL
 	ball = pygame.Rect(game_area_width/2-10, 150+game_area_height/2-10, 20, 20)
@@ -441,6 +441,8 @@ def pong_game(game_mode) :
 		pygame.draw.rect(screen, white, line_up)
 		pygame.draw.rect(screen, white, line_down)
 		pygame.draw.aaline(screen, light_grey, (game_area_width/2,150), (game_area_width/2,150+game_area_height))
+		pygame.draw.aaline(screen, white, (game_area_width/2-10, 100), (game_area_width/2+10, 100))
+
 
 		# Players
 		pygame.draw.rect(screen, white, player1)
@@ -460,6 +462,15 @@ def pong_game(game_mode) :
 		if player2.y < 150 : player2.y = 150
 		if player2.y > 150+game_area_height-70 : player2.y = 150+game_area_height-70
 
+		player1_score_text = score_font.render(str(player1_score), True, white)
+		player2_score_text = score_font.render(str(player2_score), True, white)
+		if player1_score > 9 :
+			screen.blit(player1_score_text, (game_area_width/2-70, 85))
+		else:
+			screen.blit(player1_score_text, (game_area_width/2-60, 85))
+		
+		screen.blit(player2_score_text, (game_area_width/2+40, 85))
+
 		# Ball
 		pygame.draw.ellipse(screen, pink, ball)
 
@@ -468,6 +479,9 @@ def pong_game(game_mode) :
 
 		if ball.top <= 150 or ball.bottom >= 150+game_area_height : ball_speed_y *= -1
 		if ball.colliderect(player1) or ball.colliderect(player2) : ball_speed_x *= -1
+
+		if ball.left > game_area_width : player1_score += 1
+		if ball.right < 0 : player2_score += 1
 		
 		#restart ball
 		if ball.left > game_area_width or ball.right < 0 :
