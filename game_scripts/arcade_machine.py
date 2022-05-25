@@ -398,7 +398,7 @@ def pong_game(game_mode) :
 
 	# TIMER
 	timer1 = pygame.time.get_ticks()
-	timer2 = pygame.time.get_ticks()
+	timer2 = 0
 	timer_font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 35)
 
 	# PAUSE BUTTON
@@ -417,7 +417,9 @@ def pong_game(game_mode) :
 
 			#MOUSECONTROLS
 			if (pause_button_X <= mouse[0] <= pause_button_X+50) and (pause_button_Y <= mouse[1] <= pause_button_Y+50) :
-				if event.type == pygame.MOUSEBUTTONDOWN : pong_pause(in_game=True)
+				if event.type == pygame.MOUSEBUTTONDOWN :
+					pause = True
+					pong_pause(in_game=True)
 			
 			#KEYCONTROLS
 			if event.type == pygame.KEYDOWN:
@@ -442,7 +444,7 @@ def pong_game(game_mode) :
 		# SCREEN ELEMENTS :
 		screen.fill((0,0,0))
 
-		# Game area
+		# game area
 		pygame.draw.rect(screen, white, line_up)
 		pygame.draw.rect(screen, white, line_down)
 		pygame.draw.aaline(screen, light_grey, (game_area_width/2,150), (game_area_width/2,150+game_area_height))
@@ -455,7 +457,7 @@ def pong_game(game_mode) :
 		player1.y += player1_speed
 		if game_mode == 2 : player2.y += player2_speed
 
-		# IA
+		# ia
 		if game_mode == 1 :
 			if player2.top < ball.y :
 				player2.top += ia_speed
@@ -467,16 +469,16 @@ def pong_game(game_mode) :
 		if player2.y < 150 : player2.y = 150
 		if player2.y > 150+game_area_height-70 : player2.y = 150+game_area_height-70
 
+		# score text
 		player1_score_text = score_font.render(str(player1_score), True, white)
 		player2_score_text = score_font.render(str(player2_score), True, white)
 		if player1_score > 9 :
 			screen.blit(player1_score_text, (game_area_width/2-70, 85))
 		else:
 			screen.blit(player1_score_text, (game_area_width/2-60, 85))
-		
 		screen.blit(player2_score_text, (game_area_width/2+40, 85))
 
-		# Ball
+		# BALL
 		pygame.draw.ellipse(screen, pink, ball)
 
 		ball.x += ball_speed_x
@@ -487,21 +489,24 @@ def pong_game(game_mode) :
 
 		if ball.left > game_area_width : 
 			player1_score += 1
+			timer1 = pygame.time.get_ticks()
 			ball_start = True
 			
 		if ball.right < 0 : 
 			player2_score += 1
+			timer1 = pygame.time.get_ticks()
 			ball_start = True
 
-		#restart ball
+		# restart ball
 		if ball_start :
+		
 			timer2 = pygame.time.get_ticks()
 			ball.center = (game_area_width/2, 150+game_area_height/2)
 
-			# print('1  ->  '+str(timer1))
-			# print()
-			# print('2  ->  '+str(timer2))
-			# print()
+			print('1  ->  '+str(timer1))
+			print()
+			print('2  ->  '+str(timer2))
+			print()
 
 			if timer2 - timer1 < 4000 :
 				ball_speed_x = 0
@@ -510,7 +515,6 @@ def pong_game(game_mode) :
 				ball_speed_x = 4 * random.choice((1,-1))
 				ball_speed_y = 4 * random.choice((1,-1))
 				ball_start = False
-
 
 			if timer2 - timer1 < 1000 :
 				three = timer_font.render('3', True, white)
@@ -524,8 +528,6 @@ def pong_game(game_mode) :
 		
 
 		draw_pong_pause_button(screen)
-		
-
 		pygame.display.flip()
 
 
