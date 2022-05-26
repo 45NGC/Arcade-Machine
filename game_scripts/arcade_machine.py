@@ -385,7 +385,7 @@ def pong_game(game_mode) :
 	player2 = pygame.Rect(game_area_width-10, 150+game_area_height/2-35, 5, 70)
 	player1_speed = 0
 	player2_speed = 0
-	ia_speed = 3.3
+	ia_speed = 6
 
 	player1_score = 0
 	player2_score = 0
@@ -445,7 +445,7 @@ def pong_game(game_mode) :
 		# SCREEN ELEMENTS :
 		screen.fill((0,0,0))
 
-		# game area
+		# Game area
 		pygame.draw.rect(screen, white, line_up)
 		pygame.draw.rect(screen, white, line_down)
 		pygame.draw.aaline(screen, light_grey, (game_area_width/2,150), (game_area_width/2,150+game_area_height))
@@ -488,20 +488,63 @@ def pong_game(game_mode) :
 				screen.blit(player1_score_text, (game_area_width/2-60, 85))
 			screen.blit(player2_score_text, (game_area_width/2+40, 85))
 
-		# BALL
+		# Ball
 		pygame.draw.ellipse(screen, pink, ball)
 
 		ball.x += ball_speed_x
 		ball.y += ball_speed_y
 
-		if ball.top <= 150 or ball.bottom >= 150+game_area_height : 
+		# Collisions
+
+		# top limit collision
+		if ball.top <= 150 and ball_speed_y < 0 : 
 			ball_speed_y *= -1
-		if ball.colliderect(player1) or ball.colliderect(player2) : 
-			ball_speed_x *= -1
+		
+		# bottom limit collision
+		if ball.bottom >= 150+game_area_height and ball_speed_y > 0 :
+			ball_speed_y *= -1 
+
+		# player1 collision
+		if ball.colliderect(player1) and ball_speed_x < 0 :
+			print('1 ball speed x -> '+str(ball_speed_x))
+			print('1 ball speed y -> '+str(ball_speed_y))
+
+			if abs(ball.left - player1.right) < 5 :
+				ball_speed_x *= -1
+			elif abs(ball.bottom - player1.top) < 10 and ball_speed_y > 0 :
+				ball_speed_y *= -1
+			elif abs(ball.top - player1.bottom) < 10 and ball_speed_y < 0 :
+				ball_speed_y *= -1
+
+			if ball_speed_y < 0 : ball_speed_y -= 0.5
+			if ball_speed_y > 0 : ball_speed_y += 0.5
+			if ball_speed_y > 8 : ball_speed_y = 8
+			if ball_speed_y < -8 : ball_speed_y = -8
+
 		if game_mode == 3 :
+			# right limit collision
 			if ball.colliderect(line_right) : ball_speed_x *= -1
 			if ball.colliderect(player1) : player1_score += 1
+		else:
+			# player2 collision
+			if ball.colliderect(player2) and ball_speed_x > 0 :
+				print('2 ball speed x -> '+str(ball_speed_x))
+				print('2 ball speed y -> '+str(ball_speed_y))
 
+				if abs(ball.right - player2.left) < 5 :
+					ball_speed_x *= -1
+				elif abs(ball.bottom - player2.top) < 10 and ball_speed_y > 0 :
+					ball_speed_y *= -1
+				elif abs(ball.top - player2.bottom) < 10 and ball_speed_y < 0 :
+					ball_speed_y *= -1
+				
+				if ball_speed_y < 0 : ball_speed_y -= 0.5
+				if ball_speed_y > 0 : ball_speed_y += 0.5
+				if ball_speed_y > 8 : ball_speed_y = 8
+				if ball_speed_y < -8 : ball_speed_y = -8
+
+
+		# Score
 		if ball.left > game_area_width : 
 			player1_score += 1
 			timer1 = pygame.time.get_ticks()
@@ -512,16 +555,10 @@ def pong_game(game_mode) :
 			timer1 = pygame.time.get_ticks()
 			ball_start = True
 
-		# restart ball
+		# Restart ball
 		if ball_start :
-		
 			timer2 = pygame.time.get_ticks()
 			ball.center = (game_area_width/2, 150+game_area_height/2)
-
-			# print('1  ->  '+str(timer1))
-			# print()
-			# print('2  ->  '+str(timer2))
-			# print()
 
 			if timer2 - timer1 < 4000 :
 				ball_speed_x = 0
@@ -541,8 +578,9 @@ def pong_game(game_mode) :
 				one = timer_font.render('1', True, white)
 				screen.blit(one,(game_area_width/2-10, 30))
 		
-
+		# Pause button
 		draw_pong_pause_button(screen)
+
 		pygame.display.flip()
 
 
