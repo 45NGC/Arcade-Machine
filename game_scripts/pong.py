@@ -54,10 +54,23 @@ def draw_pong_pause_menu(screen, mouse):
 	pygame.draw.rect(screen, pink, stick_2)
 
 	# Pause menu
-	pause_menu_background = pygame.Rect(273, 248, 354, 354)
-	pause_menu = pygame.Rect(275, 250, 350, 350)
+	pause_menu_background = pygame.Rect(273, 218, 354, 354)
+	pause_menu = pygame.Rect(275, 220, 350, 350)
 	pygame.draw.rect(screen, pink, pause_menu_background)
 	pygame.draw.rect(screen, black, pause_menu)
+
+	pause_string = 'PAUSE'
+	pause_font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 30)
+	pause_title = pause_font.render(pause_string, True, white)
+	screen.blit(pause_title, (400,240))
+	
+	# Buttons
+	resume_string = '  RESUME'
+	controls_string = 'CONTROLS'
+	quit_string = '     QUIT'
+	draw_button2(screen, 325, 300, resume_string, mouse)
+	draw_button2(screen, 325, 390, controls_string, mouse)
+	draw_button2(screen, 325, 480, quit_string, mouse)
 
 def draw_pong_circumstancial_menus():
 	# IA difficulty selector
