@@ -1,3 +1,4 @@
+from tkinter.tix import WINDOW
 from game_scripts.utilities import draw_button2
 import random
 import pygame
@@ -31,7 +32,7 @@ tetris_panel_Y = 25
 tetris_panel = pygame.Rect(tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height)
 
 
-# TETRIS FUNCTIONS
+# TETRIS UI FUNCTIONS
 def draw_tetris_panels(screen) :
 	tetris_panel_border = pygame.Rect(tetris_panel_X-2, tetris_panel_Y-2, tetris_panel_width+4, tetris_panel_height+4)
 	tetris_panel = pygame.Rect(tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height)
@@ -237,100 +238,152 @@ def draw_tetris_pause(screen, mouse) :
 	pygame.draw.rect(screen, pink, pause_button_simbol_2)
 
 
+# TETRIS GAME FUNCTIONS
+TEMPLATEWIDTH = 5
+TEMPLATEHEIGHT = 5
+WINDOWWIDTH = 900
+WINDOWHEIGHT = 850
+BOARDWIDTH = 10
+BOARDHEIGHT = 20
+BLANK = '.'
 
-def update_tetris_score(screen, score, lines) :
-	#score = font_h3.render(str(score).center(7), True, white)
-	#lines = font_h3.render(str(lines).center(7), True, white)
-	#screen.blit(score, (score_panel_X+30, score_panel_Y+70))
-	#screen.blit(lines, (score_panel_X+30, score_panel_Y+230))
-	pass
+S_SHAPE_TEMPLATE = [['.....',
+                     '.....',
+                     '..OO.',
+                     '.OO..',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '..OO.',
+                     '...O.',
+                     '.....']]
 
-# make an array to indicate that when the piece falls its coordinates are not available for other pieces that may collide with it
-space_avaiable = [
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],]
+Z_SHAPE_TEMPLATE = [['.....',
+                     '.....',
+                     '.OO..',
+                     '..OO.',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '.OO..',
+                     '.O...',
+                     '.....']]
 
-def reset_space_avaiable(space_avaiable) :
-	space_avaiable = [
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],
-	[0,0,0,0,0,0,0,0,0,0],]
+I_SHAPE_TEMPLATE = [['..O..',
+                     '..O..',
+                     '..O..',
+                     '..O..',
+                     '.....'],
+                    ['.....',
+                     '.....',
+                     'OOOO.',
+                     '.....',
+                     '.....']]
 
-def update_space_avaiable(space_avaiable, x, y) :
-	pass
+O_SHAPE_TEMPLATE = [['.....',
+                     '.....',
+                     '.OO..',
+                     '.OO..',
+                     '.....']]
 
-def draw_piece(screen, piece, coordenades_x, rotation, fall) :
-	rotation += 1 
-	run = True
-	block_size = 40
+J_SHAPE_TEMPLATE = [['.....',
+                     '.O...',
+                     '.OOO.',
+                     '.....',
+                     '.....'],
+                    ['.....',
+                     '..OO.',
+                     '..O..',
+                     '..O..',
+                     '.....'],
+                    ['.....',
+                     '.....',
+                     '.OOO.',
+                     '...O.',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '..O..',
+                     '.OO..',
+                     '.....']]
 
-	# []
-	if piece == 1 :
-		y = tetris_panel_Y+block_size*fall
-		x = tetris_panel_X+tetris_panel_width//2+block_size*coordenades_x
+L_SHAPE_TEMPLATE = [['.....',
+                     '...O.',
+                     '.OOO.',
+                     '.....',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '..O..',
+                     '..OO.',
+                     '.....'],
+                    ['.....',
+                     '.....',
+                     '.OOO.',
+                     '.O...',
+                     '.....'],
+                    ['.....',
+                     '.OO..',
+                     '..O..',
+                     '..O..',
+                     '.....']]
 
-		if y > 745 :
-			y = 745
+T_SHAPE_TEMPLATE = [['.....',
+                     '..O..',
+                     '.OOO.',
+                     '.....',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '..OO.',
+                     '..O..',
+                     '.....'],
+                    ['.....',
+                     '.....',
+                     '.OOO.',
+                     '..O..',
+                     '.....'],
+                    ['.....',
+                     '..O..',
+                     '.OO..',
+                     '..O..',
+                     '.....']]
 
-		pygame.draw.rect(screen, yellow, [x, y, block_size*2, block_size*2])
+PIECES = {'S': S_SHAPE_TEMPLATE,
+          'Z': Z_SHAPE_TEMPLATE,
+          'J': J_SHAPE_TEMPLATE,
+          'L': L_SHAPE_TEMPLATE,
+          'I': I_SHAPE_TEMPLATE,
+          'O': O_SHAPE_TEMPLATE,
+          'T': T_SHAPE_TEMPLATE}
 
-	
-	# L
-	if piece == 2 :
-		pygame.draw.rect(screen, blue, [(tetris_panel_X+tetris_panel_width//2)+block_size*coordenades_x, tetris_panel_Y+block_size*fall, block_size, block_size*3])
-		pygame.draw.rect(screen, blue, [(tetris_panel_X+tetris_panel_width//2)+block_size*(coordenades_x+1), tetris_panel_Y+block_size*(fall+2), block_size, block_size])
+COLORS = [green, red, blue, orange, turquoise, yellow, purple]
 
-	# J
-	if piece == 3 :
-		pygame.draw.rect(screen, orange, [(tetris_panel_X+tetris_panel_width//2)+block_size*coordenades_x, tetris_panel_Y+block_size*fall, block_size, block_size*3])
-		pygame.draw.rect(screen, orange, [(tetris_panel_X+tetris_panel_width//2)+block_size*(coordenades_x-1), tetris_panel_Y+block_size*(fall+2), block_size, block_size])
 
-	# S
-	if piece == 4 :
-		pygame.draw.rect(screen, green, [(tetris_panel_X+tetris_panel_width//2)+block_size*coordenades_x, tetris_panel_Y+block_size*fall, block_size, block_size*2])
-		pygame.draw.rect(screen, green, [(tetris_panel_X+tetris_panel_width//2)+block_size*(coordenades_x+1), tetris_panel_Y+block_size*(fall+1), block_size, block_size*2])
+def get_piece():
+    shape = random.choice(list(PIECES.keys()))
+    newPiece = {'shape': shape,
+                'rotation': random.randint(0, len(PIECES[shape]) - 1),
+                'x': int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2),
+                'y': -2, # start it above the board (i.e. less than 0)
+                'color': COLORS[list(PIECES.keys()).index(shape)]}
+    return newPiece
 
-	# Z
-	if piece == 5 :
-		pygame.draw.rect(screen, red, [(tetris_panel_X+tetris_panel_width//2)+block_size*coordenades_x, tetris_panel_Y+block_size*fall, block_size, block_size*2])
-		pygame.draw.rect(screen, red, [(tetris_panel_X+tetris_panel_width//2)+block_size*(coordenades_x-1), tetris_panel_Y+block_size*(fall+1), block_size, block_size*2])
+def get_empty_board():
+	# returns a 10x20 array filled with blanks (.)
+    board = []
+    for i in range(BOARDWIDTH):
+        board.append([BLANK] * BOARDHEIGHT)
+    return board
 
-	# T
-	if piece == 6 :
-		pygame.draw.rect(screen, purple, [(tetris_panel_X+tetris_panel_width//2)+block_size*coordenades_x, tetris_panel_Y+block_size*fall, block_size, block_size*3])
-		pygame.draw.rect(screen, purple, [(tetris_panel_X+tetris_panel_width//2)+block_size*(coordenades_x+1), tetris_panel_Y+block_size*(fall+1), block_size, block_size])
+def is_valid_position(board, piece, ad_X=0, ad_Y=0):
+    for x in range(TEMPLATEWIDTH):
+        for y in range(TEMPLATEHEIGHT):
+            isAboveBoard = y + piece['y'] + ad_Y < 0
+            if isAboveBoard or PIECES[piece['shape']][piece['rotation']][y][x] == BLANK:
+                continue
+            if not (0 <= (x + piece['x'] + ad_X) < BOARDWIDTH and (y + piece['y'] + ad_Y) < BOARDHEIGHT):
+                return False
+            if board[x + piece['x'] + ad_X][y + piece['y'] + ad_Y] != BLANK:
+                return False
+    return True

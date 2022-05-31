@@ -1,5 +1,6 @@
 from game_scripts.utilities import draw_button1
-from game_scripts.tetris import draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_piece
+from game_scripts.tetris import draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause
+from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position
 from game_scripts.pong import draw_pong_menu, draw_pong_pause_button, draw_pong_pause_menu
 import sys
 import time
@@ -167,6 +168,84 @@ def tetris_menu() :
 
 		pygame.display.flip()
 
+
+def tetris_game0():
+	game_clock = pygame.time.Clock()
+	board = get_empty_board()
+	moving_down = False
+	moving_left = False
+	moving_right = False
+	score = 0
+	#fall = calculate_fall_speed()
+	current_piece = get_piece()
+	next_piece1 = get_piece()
+	next_piece2 = get_piece()
+
+	run = True
+	end = False
+
+	while run :
+		game_clock.tick(60)
+
+		if current_piece == None :
+			current_piece = next_piece1
+			next_piece1 = next_piece2
+			next_piece2 = get_piece()
+
+			if not is_valid_position(board, current_piece):
+				end = True
+		
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				sys.exit()
+			
+			# KEYCONTROLS
+			if event.type == pygame.KEYUP:
+				if (event.key == pygame.K_LEFT) : 
+					moving_left = False
+				elif (event.key == pygame.K_RIGHT): 
+					moving_right = False
+				elif (event.key == pygame.K_DOWN): 
+					moving_down = False
+
+			elif event.type == pygame.KEYDOWN:
+				# move the piece sideways
+				if (event.key == pygame.K_LEFT) and is_valid_position(board, current_piece, adj_X=-1):
+					current_piece['x'] -= 1
+					moving_left = True
+					moving_right = False
+				elif (event.key == pygame.K_RIGHT) and is_valid_position(board, current_piece, adjX=1):
+					current_piece['x'] += 1
+					moving_right = True
+					moving_left = False
+
+				# rotate piece
+				elif (event.key == pygame.K_UP):
+					current_piece['rotation'] = (current_piece['rotation'] + 1) % len(PIECES[current_piece['shape']])
+					if not is_valid_position(board, current_piece):
+						current_piece['rotation'] = (current_piece['rotation'] - 1) % len(PIECES[current_piece['shape']])
+
+				# move piece down
+				elif (event.key == pygame.K_DOWN):
+					moving_down = True
+					if is_valid_position(board, current_piece, adj_Y=1):
+						current_piece['y'] += 1
+
+				# move the current piece all the way down
+				elif event.key == pygame.K_SPACE:
+					moving_down = False
+					moving_left = False
+					moving_right = False
+					for i in range(1, 20):
+						if not is_valid_position(board, current_piece, adj_Y=i):
+							break
+					current_piece['y'] += i - 1
+		
+		pygame.display.flip()
+
+
+
+
 def tetris_game() :
 	game_clock = pygame.time.Clock()
 	fall = 0
@@ -219,7 +298,7 @@ def tetris_game() :
 		draw_tetris_panels(screen)
 
 		# Game :
-		draw_piece(screen, 1, piece_x, piece_rotation, fall)
+		#draw_piece(screen, 1, piece_x, piece_rotation, fall)
 
 		draw_tetris_board(screen)
 		pygame.display.flip()
