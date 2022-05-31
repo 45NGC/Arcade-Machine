@@ -35,9 +35,9 @@ hold_panel_width = 150
 hold_panel_height = 200
 hold_panel_X = 50
 hold_panel_Y = 50
-next_panel_width = 150
-next_panel_height = 400
-next_panel_X = 700
+next_panel_width = 210
+next_panel_height = 500
+next_panel_X = 670
 next_panel_Y = 50
 
 BLOCKSIZE = 40
@@ -363,8 +363,8 @@ def get_piece():
     shape = random.choice(list(PIECES.keys()))
     newPiece = {'shape': shape,
                 'rotation': random.randint(0, len(PIECES[shape]) - 1),
-                'x': int(ROWS / 2) - int(TEMPLATEWIDTH / 2),
-                'y': -2, # start it above the board (i.e. less than 0)
+                'x': int(COLUMNS / 2) - int(TEMPLATEWIDTH / 2),
+                'y': -4, # start it above the board (i.e. less than 0)
                 'color': COLORS[list(PIECES.keys()).index(shape)]}
     return newPiece
 
@@ -421,5 +421,5 @@ def draw_piece(screen, piece, pixelx=None, pixely=None):
 
 
 def draw_next_pieces(screen, piece1, piece2):
-	if piece1 != None : draw_piece(screen, piece1,  pixelx=next_panel_X, pixely=next_panel_Y)
-	if piece2 != None : draw_piece(screen, piece2,  pixelx=next_panel_X, pixely=next_panel_Y+100)
+	if piece1 != None : draw_piece(screen, piece1,  pixelx=next_panel_X+15, pixely=next_panel_Y+90)
+	if piece2 != None : draw_piece(screen, piece2,  pixelx=next_panel_X+15, pixely=next_panel_Y+270)

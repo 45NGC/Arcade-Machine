@@ -177,7 +177,7 @@ def tetris_game0():
 	moving_left = False
 	moving_right = False
 	score = 0
-	fall = 0.2
+	fall = 0.27
 	current_piece = get_piece()
 	next_piece1 = None
 	next_piece2 = get_piece()
@@ -190,7 +190,7 @@ def tetris_game0():
 	end = False
 
 	while run :
-		game_clock.tick(10)
+		game_clock.tick(25)
 		mouse = pygame.mouse.get_pos()
 
 		if next_piece1 == None : 
@@ -268,11 +268,12 @@ def tetris_game0():
 		if time.time() - fall_timer > fall:
             # check if the piece has avaiable space
 			if not is_valid_position(board, current_piece, ad_Y=1):
-				#add_piece_to_board(board, current_piece)
+				add_piece_to_board(board, current_piece)
 				current_piece = None
 			else:
 				# if the piece has space it continues to fall down
 				current_piece['y'] += 1
+				fall_timer = time.time()
 		
 		#MOUSECONTROLS
 		if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
