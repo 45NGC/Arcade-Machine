@@ -1,3 +1,4 @@
+from tarfile import BLOCKSIZE
 from tkinter.tix import WINDOW
 from game_scripts.utilities import draw_button2
 import random
@@ -30,6 +31,23 @@ tetris_panel_height = 800
 tetris_panel_X = 250
 tetris_panel_Y = 25
 tetris_panel = pygame.Rect(tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height)
+hold_panel_width = 150
+hold_panel_height = 200
+hold_panel_X = 50
+hold_panel_Y = 50
+next_panel_width = 150
+next_panel_height = 400
+next_panel_X = 700
+next_panel_Y = 50
+
+BLOCKSIZE = 40
+TEMPLATEWIDTH = 5
+TEMPLATEHEIGHT = 5
+WINDOWWIDTH = 900
+WINDOWHEIGHT = 850
+ROWS = 20
+COLUMNS = 10
+BLANK = '.'
 
 
 # TETRIS UI FUNCTIONS
@@ -37,10 +55,6 @@ def draw_tetris_panels(screen) :
 	tetris_panel_border = pygame.Rect(tetris_panel_X-2, tetris_panel_Y-2, tetris_panel_width+4, tetris_panel_height+4)
 	tetris_panel = pygame.Rect(tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height)
 
-	hold_panel_width = 150
-	hold_panel_height = 200
-	hold_panel_X = 50
-	hold_panel_Y = 50
 	hold_panel_border = pygame.Rect(hold_panel_X-2, hold_panel_Y-2, hold_panel_width+4, hold_panel_height+4)
 	hold_panel = pygame.Rect(hold_panel_X, hold_panel_Y, hold_panel_width, hold_panel_height)
 	hold_space = pygame.Rect(hold_panel_X+10, hold_panel_Y+60, hold_panel_width-20, hold_panel_height-70)
@@ -54,10 +68,6 @@ def draw_tetris_panels(screen) :
 	score_space = pygame.Rect(score_panel_X+10, score_panel_Y+60, score_panel_width-20, 50)
 	lines_space = pygame.Rect(score_panel_X+10, score_panel_Y+220, score_panel_width-20, 50)
 
-	next_panel_width = 150
-	next_panel_height = 400
-	next_panel_X = 700
-	next_panel_Y = 50
 	next_panel_border = pygame.Rect(next_panel_X-2, next_panel_Y-2, next_panel_width+4, next_panel_height+4)
 	next_panel = pygame.Rect(next_panel_X, next_panel_Y, next_panel_width, next_panel_height)
 	next_space = pygame.Rect(next_panel_X+10, next_panel_Y+60, next_panel_width-20, next_panel_height-70)
@@ -129,14 +139,10 @@ def draw_tetris_panels(screen) :
 	pygame.draw.rect(screen, white, pause_button_simbol_2)
 
 def draw_tetris_board(screen) :
-	block_size = 40
-	rows = 20
-	columns = 10 
-
-	for i in range(rows):
-			pygame.draw.line(screen, light_grey, (tetris_panel_X, tetris_panel_Y+ i*block_size), (tetris_panel_X + tetris_panel_width, tetris_panel_Y + i * block_size))
-			for j in range(columns):
-					pygame.draw.line(screen, light_grey, (tetris_panel_X + j * block_size, tetris_panel_Y), (tetris_panel_X + j * block_size, tetris_panel_Y + tetris_panel_height))
+	for i in range(ROWS):
+			pygame.draw.line(screen, light_grey, (tetris_panel_X, tetris_panel_Y+ i*BLOCKSIZE), (tetris_panel_X + tetris_panel_width, tetris_panel_Y + i * BLOCKSIZE))
+			for j in range(COLUMNS):
+					pygame.draw.line(screen, light_grey, (tetris_panel_X + j * BLOCKSIZE, tetris_panel_Y), (tetris_panel_X + j * BLOCKSIZE, tetris_panel_Y + tetris_panel_height))
 
 def draw_tetris_menu(screen, mouse) :
 	# TETRIS LABEL
@@ -239,13 +245,6 @@ def draw_tetris_pause(screen, mouse) :
 
 
 # TETRIS GAME FUNCTIONS
-TEMPLATEWIDTH = 5
-TEMPLATEHEIGHT = 5
-WINDOWWIDTH = 900
-WINDOWHEIGHT = 850
-BOARDWIDTH = 10
-BOARDHEIGHT = 20
-BLANK = '.'
 
 S_SHAPE_TEMPLATE = [['.....',
                      '.....',
@@ -364,7 +363,7 @@ def get_piece():
     shape = random.choice(list(PIECES.keys()))
     newPiece = {'shape': shape,
                 'rotation': random.randint(0, len(PIECES[shape]) - 1),
-                'x': int(BOARDWIDTH / 2) - int(TEMPLATEWIDTH / 2),
+                'x': int(ROWS / 2) - int(TEMPLATEWIDTH / 2),
                 'y': -2, # start it above the board (i.e. less than 0)
                 'color': COLORS[list(PIECES.keys()).index(shape)]}
     return newPiece
@@ -372,18 +371,55 @@ def get_piece():
 def get_empty_board():
 	# returns a 10x20 array filled with blanks (.)
     board = []
-    for i in range(BOARDWIDTH):
-        board.append([BLANK] * BOARDHEIGHT)
+    for i in range(COLUMNS):
+        board.append([BLANK] * ROWS)
     return board
 
 def is_valid_position(board, piece, ad_X=0, ad_Y=0):
     for x in range(TEMPLATEWIDTH):
         for y in range(TEMPLATEHEIGHT):
-            isAboveBoard = y + piece['y'] + ad_Y < 0
-            if isAboveBoard or PIECES[piece['shape']][piece['rotation']][y][x] == BLANK:
+            above_board = y + piece['y'] + ad_Y < 0
+            if above_board or PIECES[piece['shape']][piece['rotation']][y][x] == BLANK:
                 continue
-            if not (0 <= (x + piece['x'] + ad_X) < BOARDWIDTH and (y + piece['y'] + ad_Y) < BOARDHEIGHT):
+            if not (0 <= (x + piece['x'] + ad_X) < COLUMNS and (y + piece['y'] + ad_Y) < ROWS):
                 return False
             if board[x + piece['x'] + ad_X][y + piece['y'] + ad_Y] != BLANK:
                 return False
     return True
+
+def add_piece_to_board(board, piece):
+    for x in range(TEMPLATEWIDTH):
+        for y in range(TEMPLATEHEIGHT):
+            if PIECES[piece['shape']][piece['rotation']][x][y] != BLANK:
+                board[x + piece['x']][y + piece['y']] = piece['color']
+
+def draw_board_blocks(screen, board):
+    for x in range(COLUMNS):
+        for y in range(ROWS):
+            draw_block(screen, x, y, board[x][y])
+
+def draw_block(screen, blockx, blocky, color, x_axis=None, y_axis=None):
+	# blockx and blocky are variables for the board pieces
+	# x_axis and y_axis are variables for drawing the next and hold pieces
+    if color == BLANK:
+        return
+    if x_axis == None and y_axis == None:
+        x_axis, y_axis = tetris_panel_X + (blockx * BLOCKSIZE), tetris_panel_Y + (blocky * BLOCKSIZE) 
+    pygame.draw.rect(screen, color, (x_axis, y_axis, BLOCKSIZE , BLOCKSIZE))
+
+def draw_piece(screen, piece, pixelx=None, pixely=None):
+    piece_shape = PIECES[piece['shape']][piece['rotation']]
+    if pixelx == None and pixely == None:
+        # if pixelx & pixely are specified, use the location stored in the piece data structure
+        pixelx, pixely = tetris_panel_X + (piece['x'] * BLOCKSIZE), tetris_panel_Y + (piece['y'] * BLOCKSIZE)
+
+    # draw each of the boxes that make up the piece
+    for x in range(TEMPLATEWIDTH):
+        for y in range(TEMPLATEHEIGHT):
+            if piece_shape[y][x] != BLANK:
+                draw_block(screen, None, None, piece['color'], pixelx + (x * BLOCKSIZE), pixely + (y * BLOCKSIZE))
+
+
+def draw_next_pieces(screen, piece1, piece2):
+	if piece1 != None : draw_piece(screen, piece1,  pixelx=next_panel_X, pixely=next_panel_Y)
+	if piece2 != None : draw_piece(screen, piece2,  pixelx=next_panel_X, pixely=next_panel_Y+100)
