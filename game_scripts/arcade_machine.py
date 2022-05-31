@@ -172,6 +172,7 @@ def tetris_menu() :
 def tetris_game0():
 	game_clock = pygame.time.Clock()
 	board = get_empty_board()
+	fall_timer = time.time()
 	moving_down = False
 	moving_left = False
 	moving_right = False
@@ -191,6 +192,7 @@ def tetris_game0():
 			current_piece = next_piece1
 			next_piece1 = next_piece2
 			next_piece2 = get_piece()
+			fall_timer = time.time()
 
 			if not is_valid_position(board, current_piece):
 				end = True
@@ -209,26 +211,31 @@ def tetris_game0():
 					moving_down = False
 
 			elif event.type == pygame.KEYDOWN:
+				# pause
+				if event.key == pygame.K_ESCAPE :
+					tetris_pause(in_game=True)
+					fall_timer = time.time()
+
 				# move the piece sideways
-				if (event.key == pygame.K_LEFT) and is_valid_position(board, current_piece, adj_X=-1):
+				if event.key == pygame.K_LEFT and is_valid_position(board, current_piece, ad_X=-1):
 					current_piece['x'] -= 1
 					moving_left = True
 					moving_right = False
-				elif (event.key == pygame.K_RIGHT) and is_valid_position(board, current_piece, adjX=1):
+				elif event.key == pygame.K_RIGHT and is_valid_position(board, current_piece, ad_X=1):
 					current_piece['x'] += 1
 					moving_right = True
 					moving_left = False
 
 				# rotate piece
-				elif (event.key == pygame.K_UP):
+				elif event.key == pygame.K_UP:
 					current_piece['rotation'] = (current_piece['rotation'] + 1) % len(PIECES[current_piece['shape']])
 					if not is_valid_position(board, current_piece):
 						current_piece['rotation'] = (current_piece['rotation'] - 1) % len(PIECES[current_piece['shape']])
 
 				# move piece down
-				elif (event.key == pygame.K_DOWN):
+				elif event.key == pygame.K_DOWN:
 					moving_down = True
-					if is_valid_position(board, current_piece, adj_Y=1):
+					if is_valid_position(board, current_piece, ad_Y=1):
 						current_piece['y'] += 1
 
 				# move the current piece all the way down
@@ -237,9 +244,14 @@ def tetris_game0():
 					moving_left = False
 					moving_right = False
 					for i in range(1, 20):
-						if not is_valid_position(board, current_piece, adj_Y=i):
+						if not is_valid_position(board, current_piece, ad_Y=i):
 							break
 					current_piece['y'] += i - 1
+		
+		if moving_left and isValidPosition(board, current_piece, ad_X=-1):
+			current_piece['x'] -= 1
+		elif moving_right and isValidPosition(board, current_piece, ad_X=1):
+			current_piece['x'] += 1
 		
 		pygame.display.flip()
 
