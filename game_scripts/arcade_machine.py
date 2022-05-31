@@ -291,7 +291,7 @@ def tetris_game0():
 		draw_next_pieces(screen, next_piece1, next_piece2)
 
 		# Draw current piece
-		#if current_piece != None: draw_piece(screen, current_piece)
+		if current_piece != None: draw_piece(screen, current_piece)
 		draw_tetris_board(screen)
 		
 		pygame.display.flip()
