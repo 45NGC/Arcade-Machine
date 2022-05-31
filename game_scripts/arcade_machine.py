@@ -211,6 +211,10 @@ def tetris_game0():
 			if event.type == pygame.QUIT:
 				sys.exit()
 			
+			#MOUSECONTROLS
+			if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
+				if event.type == pygame.MOUSEBUTTONDOWN : tetris_pause(in_game=True)
+			
 			# KEYCONTROLS
 			if event.type == pygame.KEYUP:
 				if (event.key == pygame.K_LEFT) : 
@@ -275,9 +279,6 @@ def tetris_game0():
 				current_piece['y'] += 1
 				fall_timer = time.time()
 		
-		#MOUSECONTROLS
-		if (pause_button_X <= mouse[0] <= pause_button_X+pause_button_size) and (pause_button_Y <= mouse[1] <= pause_button_Y+pause_button_size) :
-			if event.type == pygame.MOUSEBUTTONDOWN : tetris_pause(in_game=True)
 		
 
 		# SCREEN ELEMENTS :
