@@ -1,6 +1,6 @@
 from game_scripts.utilities import draw_button1
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause
-from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece
+from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu, draw_pong_pause_button, draw_pong_pause_menu
 import sys
 import time
@@ -275,6 +275,9 @@ def tetris_game():
             # check if the piece has avaiable space
 			if not is_valid_position(board, current_piece, ad_Y=1):
 				add_piece_to_board(board, current_piece)
+				update_score_lines = remove_complete_lines(board)
+				score += update_score_lines[0]
+				lines += update_score_lines[1]
 				hold_chance = True
 				current_piece = None
 			else:

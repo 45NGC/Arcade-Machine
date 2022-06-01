@@ -29,9 +29,9 @@ tetris_panel_height = 800
 tetris_panel_X = 250
 tetris_panel_Y = 25
 tetris_panel = pygame.Rect(tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height)
-hold_panel_width = 150
-hold_panel_height = 200
-hold_panel_X = 50
+hold_panel_width = 200
+hold_panel_height = 270
+hold_panel_X = 25
 hold_panel_Y = 50
 next_panel_width = 210
 next_panel_height = 500
@@ -93,7 +93,7 @@ def draw_tetris_panels(screen, score=None, lines=None) :
 	# Text
 	hold_string = 'HOLD'
 	hold_text = font_h2.render(hold_string, True, white)
-	screen.blit(hold_text, (hold_panel_X+40, hold_panel_Y+15))
+	screen.blit(hold_text, (hold_panel_X+65, hold_panel_Y+15))
 
 
 	# 	- SCORE / LINES
@@ -425,4 +425,36 @@ def draw_piece(screen, piece, pixelx=None, pixely=None):
 def draw_ui_pieces(screen, next_piece1, next_piece2, hold_piece):
 	if next_piece1 != None : draw_piece(screen, next_piece1,  pixelx=next_panel_X+15, pixely=next_panel_Y+90)
 	if next_piece2 != None : draw_piece(screen, next_piece2,  pixelx=next_panel_X+15, pixely=next_panel_Y+270)
-	if hold_piece != None : draw_piece(screen, hold_piece,  pixelx=hold_panel_X+15, pixely=hold_panel_Y+90)
+	if hold_piece != None : draw_piece(screen, hold_piece,  pixelx=hold_panel_X+20, pixely=hold_panel_Y+80)
+
+def remove_complete_lines(board):
+	removed_lines = 0
+	score = 0 
+	complete_line = True
+	y = ROWS - 1
+	while y >= 0:
+		for x in range(COLUMNS):
+			if board[x][y] == BLANK:
+				complete_line = False
+				break
+
+		if complete_line:
+			# Remove the line and pull blocks down
+			for pull_blocks_down in range(y, 0, -1):
+				for x in range(COLUMNS):
+					board[x][pull_blocks_down] = board[x][pull_blocks_down-1]
+			
+			for x in range(COLUMNS):
+				board[x][0] = BLANK
+			
+			removed_lines += 1
+		else:
+			complete_line = True
+			y -= 1
+
+	if removed_lines == 1 : score = 10
+	if removed_lines == 2 : score = 50
+	if removed_lines == 3 : score = 250
+	if removed_lines == 4 : score = 1000		
+
+	return [score, removed_lines]
