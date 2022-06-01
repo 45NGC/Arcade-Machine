@@ -124,8 +124,6 @@ def arcade_machine_menu() :
 
 def tetris_menu() :
 	menu_clock = pygame.time.Clock()
-	pause = False
-	play = False
 	button_width = 250
 	button_height = 80
 	play_button_X = 325
@@ -173,8 +171,6 @@ def tetris_game():
 	board = get_empty_board()
 	fall_timer = time.time()
 	moving_down = False
-	moving_left = False
-	moving_right = False
 	score = 0
 	lines = 0
 	fall = 0.35
@@ -183,6 +179,9 @@ def tetris_game():
 	next_piece1 = None
 	next_piece2 = get_piece()
 	hold_piece = None
+
+	hold_chance = True
+	hold_aux = None
 
 	pause_button_size = 100
 	pause_button_X = 725
@@ -219,11 +218,7 @@ def tetris_game():
 			
 			# KEYCONTROLS
 			if event.type == pygame.KEYUP:
-				if (event.key == pygame.K_LEFT) : 
-					moving_left = False
-				elif (event.key == pygame.K_RIGHT): 
-					moving_right = False
-				elif (event.key == pygame.K_DOWN): 
+				if (event.key == pygame.K_DOWN) : 
 					moving_down = False
 
 			elif event.type == pygame.KEYDOWN:
@@ -235,12 +230,8 @@ def tetris_game():
 				# move the piece sideways
 				if event.key == pygame.K_LEFT and is_valid_position(board, current_piece, ad_X=-1):
 					current_piece['x'] -= 1
-					moving_left = True
-					moving_right = False
 				elif event.key == pygame.K_RIGHT and is_valid_position(board, current_piece, ad_X=1):
 					current_piece['x'] += 1
-					moving_right = True
-					moving_left = False
 
 				# rotate piece
 				elif event.key == pygame.K_UP:
@@ -256,18 +247,27 @@ def tetris_game():
 
 				# move the current piece all the way down
 				elif event.key == pygame.K_SPACE:
-					moving_down = False
-					moving_left = False
-					moving_right = False
 					for i in range(1, 20):
 						if not is_valid_position(board, current_piece, ad_Y=i):
 							break
 					current_piece['y'] += i - 1
+
+				elif event.key == pygame.K_c:
+					if hold_chance == True:
+						if hold_piece == None  :
+							hold_piece = current_piece
+							current_piece = None
+							hold_chance = False
+						else:
+							hold_aux = hold_piece
+							hold_piece = current_piece
+							current_piece = hold_aux
+							current_piece['y'] = -4
+							current_piece['x'] = 3
+							hold_chance = False
+
+
 		
-		# if moving_left and is_valid_position(board, current_piece, ad_X=-1):
-		# 	current_piece['x'] -= 1
-		# elif moving_right and is_valid_position(board, current_piece, ad_X=1):
-		# 	current_piece['x'] += 1
 		if moving_down and is_valid_position(board, current_piece, ad_Y=1):
 			current_piece['y'] += 1
 		
@@ -275,6 +275,7 @@ def tetris_game():
             # check if the piece has avaiable space
 			if not is_valid_position(board, current_piece, ad_Y=1):
 				add_piece_to_board(board, current_piece)
+				hold_chance = True
 				current_piece = None
 			else:
 				# if the piece has space it continues to fall down
