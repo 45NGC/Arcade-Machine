@@ -423,6 +423,6 @@ def draw_piece(screen, piece, pixelx=None, pixely=None):
                 draw_block(screen, None, None, piece['color'], pixelx + (x * BLOCKSIZE), pixely + (y * BLOCKSIZE))
 
 def draw_ui_pieces(screen, next_piece1, next_piece2, hold_piece):
-	if next_piece1 != None : draw_piece(screen, next_piece2,  pixelx=next_panel_X+15, pixely=next_panel_Y+90)
+	if next_piece1 != None : draw_piece(screen, next_piece1,  pixelx=next_panel_X+15, pixely=next_panel_Y+90)
 	if next_piece2 != None : draw_piece(screen, next_piece2,  pixelx=next_panel_X+15, pixely=next_panel_Y+270)
 	if hold_piece != None : draw_piece(screen, hold_piece,  pixelx=hold_panel_X+15, pixely=hold_panel_Y+90)

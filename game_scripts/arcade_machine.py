@@ -1,5 +1,5 @@
 from game_scripts.utilities import draw_button1
-from game_scripts.tetris import draw_ui_pieces,draw_hold_piece, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause
+from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece
 from game_scripts.pong import draw_pong_menu, draw_pong_pause_button, draw_pong_pause_menu
 import sys
