@@ -49,7 +49,7 @@ BLANK = '.'
 
 
 # TETRIS UI FUNCTIONS
-def draw_tetris_panels(screen) :
+def draw_tetris_panels(screen, score=None, lines=None) :
 	tetris_panel_border = pygame.Rect(tetris_panel_X-2, tetris_panel_Y-2, tetris_panel_width+4, tetris_panel_height+4)
 	tetris_panel = pygame.Rect(tetris_panel_X, tetris_panel_Y, tetris_panel_width, tetris_panel_height)
 
@@ -111,10 +111,11 @@ def draw_tetris_panels(screen) :
 	screen.blit(score_text, (score_panel_X+30, score_panel_Y+15))
 	screen.blit(lines_text, (score_panel_X+35, score_panel_Y+175))
 
-	#score = font_h3.render(str(score).center(7), True, white)
-	#lines = font_h3.render(str(lines).center(7), True, white)
-	#screen.blit(score, (score_panel_X+30, score_panel_Y+70))
-	#screen.blit(lines, (score_panel_X+30, score_panel_Y+230))
+	if score != None and lines != None :
+		score = font_h3.render(str(score).center(7), True, white)
+		lines = font_h3.render(str(lines).center(7), True, white)
+		screen.blit(score, (score_panel_X+30, score_panel_Y+70))
+		screen.blit(lines, (score_panel_X+30, score_panel_Y+230))
 
 
 	# 	- NEXT
@@ -126,7 +127,7 @@ def draw_tetris_panels(screen) :
 	# Text
 	next_string = 'NEXT'
 	next_text = font_h2.render(next_string, True, white)
-	screen.blit(next_text, (next_panel_X+40, next_panel_Y+15))
+	screen.blit(next_text, (next_panel_X+70, next_panel_Y+15))
 
 
 	# 	- PAUSE
@@ -137,8 +138,10 @@ def draw_tetris_panels(screen) :
 	pygame.draw.rect(screen, white, pause_button_simbol_2)
 
 def draw_tetris_board(screen) :
-	cover_above_board = pygame.Rect(tetris_panel_X, 0, tetris_panel_width, 23)
-	pygame.draw.rect(screen, black, cover_above_board)
+	cover_above_board1 = pygame.Rect(tetris_panel_X, 0, tetris_panel_width, 23)
+	cover_above_board2 = pygame.Rect(tetris_panel_X, 23, tetris_panel_width, 2)
+	pygame.draw.rect(screen, black, cover_above_board1)
+	pygame.draw.rect(screen, pink, cover_above_board2)
 	for i in range(ROWS):
 			pygame.draw.line(screen, light_grey, (tetris_panel_X, tetris_panel_Y+ i*BLOCKSIZE), (tetris_panel_X + tetris_panel_width, tetris_panel_Y + i * BLOCKSIZE))
 			for j in range(COLUMNS):

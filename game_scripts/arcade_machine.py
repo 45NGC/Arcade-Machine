@@ -177,6 +177,7 @@ def tetris_game0():
 	moving_left = False
 	moving_right = False
 	score = 0
+	lines = 0
 	fall = 0.35
 	current_piece = get_piece()
 	next_piece1 = None
@@ -288,7 +289,7 @@ def tetris_game0():
 		screen.fill((0,0,0))
 
 		# Panels :
-		draw_tetris_panels(screen)
+		draw_tetris_panels(screen, score, lines)
 
 		# Game :
 		draw_board_blocks(screen, board)
