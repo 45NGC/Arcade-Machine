@@ -278,7 +278,7 @@ def tetris_game0():
 				# if the piece has space it continues to fall down
 				current_piece['y'] += 1
 				#print('piece x  ->'+str(current_piece['x']))
-				print('piece y  ->'+str(current_piece['y']))
+				#print('piece y  ->'+str(current_piece['y']))
 				fall_timer = time.time()
 		
 		

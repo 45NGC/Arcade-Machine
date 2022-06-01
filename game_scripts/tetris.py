@@ -1,5 +1,3 @@
-from tarfile import BLOCKSIZE
-from tkinter.tix import WINDOW
 from game_scripts.utilities import draw_button2
 import random
 import pygame
@@ -139,6 +137,8 @@ def draw_tetris_panels(screen) :
 	pygame.draw.rect(screen, white, pause_button_simbol_2)
 
 def draw_tetris_board(screen) :
+	cover_above_board = pygame.Rect(tetris_panel_X, 0, tetris_panel_width, 23)
+	pygame.draw.rect(screen, black, cover_above_board)
 	for i in range(ROWS):
 			pygame.draw.line(screen, light_grey, (tetris_panel_X, tetris_panel_Y+ i*BLOCKSIZE), (tetris_panel_X + tetris_panel_width, tetris_panel_Y + i * BLOCKSIZE))
 			for j in range(COLUMNS):
