@@ -361,12 +361,12 @@ COLORS = [green, red, blue, orange, turquoise, yellow, purple]
 
 def get_piece():
     shape = random.choice(list(PIECES.keys()))
-    newPiece = {'shape': shape,
-                'rotation': random.randint(0, len(PIECES[shape]) - 1),
-                'x': int(COLUMNS / 2) - int(TEMPLATEWIDTH / 2),
-                'y': -4, # start it above the board (i.e. less than 0)
-                'color': COLORS[list(PIECES.keys()).index(shape)]}
-    return newPiece
+    piece = {'shape': shape,
+			'rotation': random.randint(0, len(PIECES[shape]) - 1),
+			'x': int(COLUMNS / 2) - int(TEMPLATEWIDTH / 2),
+			'y': -4, # start it above the board (i.e. less than 0)
+			'color': COLORS[list(PIECES.keys()).index(shape)]}
+    return piece
 
 def get_empty_board():
 	# returns a 10x20 array filled with blanks (.)
@@ -390,7 +390,7 @@ def is_valid_position(board, piece, ad_X=0, ad_Y=0):
 def add_piece_to_board(board, piece):
     for x in range(TEMPLATEWIDTH):
         for y in range(TEMPLATEHEIGHT):
-            if PIECES[piece['shape']][piece['rotation']][x][y] != BLANK:
+            if PIECES[piece['shape']][piece['rotation']][y][x] != BLANK:
                 board[x + piece['x']][y + piece['y']] = piece['color']
 
 def draw_board_blocks(screen, board):
