@@ -177,7 +177,7 @@ def tetris_game0():
 	moving_left = False
 	moving_right = False
 	score = 0
-	fall = 0.27
+	fall = 0.35
 	current_piece = get_piece()
 	next_piece1 = None
 	next_piece2 = get_piece()
@@ -262,10 +262,10 @@ def tetris_game0():
 							break
 					current_piece['y'] += i - 1
 		
-		if moving_left and is_valid_position(board, current_piece, ad_X=-1):
-			current_piece['x'] -= 1
-		elif moving_right and is_valid_position(board, current_piece, ad_X=1):
-			current_piece['x'] += 1
+		# if moving_left and is_valid_position(board, current_piece, ad_X=-1):
+		# 	current_piece['x'] -= 1
+		# elif moving_right and is_valid_position(board, current_piece, ad_X=1):
+		# 	current_piece['x'] += 1
 		if moving_down and is_valid_position(board, current_piece, ad_Y=1):
 			current_piece['y'] += 1
 		
