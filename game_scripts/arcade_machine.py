@@ -171,7 +171,7 @@ def tetris_game():
 	board = get_empty_board()
 	fall_timer = time.time()
 	moving_down = False
-	score = 10000
+	score = 0
 	lines = 0
 	fall = 0.35
 
