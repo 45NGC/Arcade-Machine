@@ -1,5 +1,5 @@
 from game_scripts.utilities import draw_button1
-from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause
+from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu, draw_pong_pause_button, draw_pong_pause_menu
 import sys
@@ -171,7 +171,7 @@ def tetris_game():
 	board = get_empty_board()
 	fall_timer = time.time()
 	moving_down = False
-	score = 0
+	score = 10000
 	lines = 0
 	fall = 0.35
 
@@ -188,7 +188,6 @@ def tetris_game():
 	pause_button_Y = 650
 
 	run = True
-	end = False
 
 	while run :
 		game_clock.tick(25)
@@ -204,9 +203,6 @@ def tetris_game():
 			current_piece = next_piece1
 			next_piece1 = None
 			fall_timer = time.time()
-
-			if not is_valid_position(board, current_piece):
-				end = True
 		
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -274,12 +270,15 @@ def tetris_game():
 		if time.time() - fall_timer > fall:
             # check if the piece has avaiable space
 			if not is_valid_position(board, current_piece, ad_Y=1):
-				add_piece_to_board(board, current_piece)
-				update_score_lines = remove_complete_lines(board)
-				score += update_score_lines[0]
-				lines += update_score_lines[1]
-				hold_chance = True
-				current_piece = None
+				if current_piece['y'] < -1: 
+					tetris_game_over(score)
+				else:
+					add_piece_to_board(board, current_piece)
+					update_score_lines = remove_complete_lines(board)
+					score += update_score_lines[0]
+					lines += update_score_lines[1]
+					hold_chance = True
+					current_piece = None
 			else:
 				# if the piece has space it continues to fall down
 				current_piece['y'] += 1
@@ -304,6 +303,45 @@ def tetris_game():
 		if current_piece != None: draw_piece(screen, current_piece)
 		draw_tetris_board(screen)
 		
+		pygame.display.flip()
+
+def tetris_game_over(score):
+	game_over_clock = pygame.time.Clock()
+
+	button_width = 250
+	button_height = 80
+
+	restart_button_X = 180
+	restart_button_Y = 470
+	quit_button_X = 470
+	quit_button_Y = 470
+
+	game_over = True
+
+	while game_over:
+		game_over_clock.tick(30)
+		mouse = pygame.mouse.get_pos()
+
+		for event in pygame.event.get():
+
+			if event.type == pygame.QUIT:
+				sys.exit()
+
+			# KEYCONTROLS
+			if event.type == pygame.KEYDOWN:
+				keys_pressed = pygame.key.get_pressed()
+
+				if keys_pressed[pygame.K_SPACE] : tetris_game()
+				if keys_pressed[pygame.K_ESCAPE] : tetris_menu()
+
+			#MOUSECONTROLS
+			if (restart_button_X <= mouse[0] <= restart_button_X+button_width) and (restart_button_Y <= mouse[1] <= restart_button_Y+button_height) :
+				if event.type == pygame.MOUSEBUTTONDOWN : tetris_game()
+
+			if (quit_button_X <= mouse[0] <= quit_button_X+button_width) and (quit_button_Y <= mouse[1] <= quit_button_Y+button_height) :
+				if event.type == pygame.MOUSEBUTTONDOWN : tetris_menu()
+		
+		draw_tetris_game_over(screen, mouse, score)
 		pygame.display.flip()
 
 def tetris_pause(in_game) :

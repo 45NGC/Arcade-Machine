@@ -246,6 +246,33 @@ def draw_tetris_pause(screen, mouse) :
 	pygame.draw.rect(screen, pink, pause_button_simbol_1)
 	pygame.draw.rect(screen, pink, pause_button_simbol_2)
 
+def draw_tetris_game_over(screen, mouse, score) :
+	game_over_string = 'GAME OVER'
+	game_over_menu_width = 600
+	game_over_menu_height = 350
+	game_over_menu_X = 150
+	game_over_menu_Y = 220
+	game_over_menu_border = pygame.Rect(game_over_menu_X-2, game_over_menu_Y-2, game_over_menu_width+4, game_over_menu_height+4)
+	game_over_menu = pygame.Rect(game_over_menu_X, game_over_menu_Y, game_over_menu_width, game_over_menu_height)
+
+	pygame.draw.rect(screen, pink, game_over_menu_border)
+	pygame.draw.rect(screen, black, game_over_menu)
+
+	# Score
+	score_string = 'SCORE : '+str(score)
+	score_label = font_h1.render(score_string, True, white)
+	screen.blit(score_label, (game_over_menu_X+175, game_over_menu_Y+100))
+
+	# Buttons
+	restart_string = 'RESTART'
+	restart_button_X = 180
+	restart_button_Y = 470
+	quit_string = 'QUIT'
+	quit_button_X = 470
+	quit_button_Y = 470
+
+	draw_button2(screen, restart_button_X, restart_button_Y, restart_string, mouse)
+	draw_button2(screen, quit_button_X, quit_button_Y, quit_string, mouse)
 
 # TETRIS GAME FUNCTIONS
 
@@ -367,7 +394,7 @@ def get_piece():
     piece = {'shape': shape,
 			'rotation': random.randint(0, len(PIECES[shape]) - 1),
 			'x': int(COLUMNS / 2) - int(TEMPLATEWIDTH / 2),
-			'y': -4, # start it above the board (i.e. less than 0)
+			'y': -4, # start it above the board
 			'color': COLORS[list(PIECES.keys()).index(shape)]}
     return piece
 
@@ -379,16 +406,16 @@ def get_empty_board():
     return board
 
 def is_valid_position(board, piece, ad_X=0, ad_Y=0):
-    for x in range(TEMPLATEWIDTH):
-        for y in range(TEMPLATEHEIGHT):
-            above_board = y + piece['y'] + ad_Y < 0
-            if above_board or PIECES[piece['shape']][piece['rotation']][y][x] == BLANK:
-                continue
-            if not (0 <= (x + piece['x'] + ad_X) < COLUMNS and (y + piece['y'] + ad_Y) < ROWS):
-                return False
-            if board[x + piece['x'] + ad_X][y + piece['y'] + ad_Y] != BLANK:
-                return False
-    return True
+	for x in range(TEMPLATEWIDTH):
+		for y in range(TEMPLATEHEIGHT):
+			above_board = y + piece['y'] + ad_Y < 0
+			if (above_board and (0 <= (x + piece['x'] + ad_X) < COLUMNS)) or (PIECES[piece['shape']][piece['rotation']][y][x] == BLANK):
+				continue
+			if not (0 <= (x + piece['x'] + ad_X) < COLUMNS and (y + piece['y'] + ad_Y) < ROWS):
+				return False
+			if board[x + piece['x'] + ad_X][y + piece['y'] + ad_Y] != BLANK:
+				return False
+	return True
 
 def add_piece_to_board(board, piece):
     for x in range(TEMPLATEWIDTH):
