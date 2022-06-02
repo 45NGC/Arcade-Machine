@@ -173,7 +173,7 @@ def tetris_game():
 	moving_down = False
 	score = 0
 	lines = 0
-	fall = 0.35
+	fall = 0.4
 
 	current_piece = get_piece()
 	next_piece1 = None
@@ -286,7 +286,27 @@ def tetris_game():
 				#print('piece y  ->'+str(current_piece['y']))
 				fall_timer = time.time()
 		
-		
+		# The fall speed will depend on how many lines the player has completed
+		if lines > 10:
+			fall = 0.35
+		elif lines > 20:
+			fall = 0.3
+		elif lines > 30:
+			fall = 0.25
+		elif lines > 40:
+			fall = 0.2
+		elif lines > 50:
+			fall = 0.15
+		elif lines > 60:
+			fall = 0.1
+		elif lines > 70:
+			fall = 0.05
+		elif lines > 80:
+			fall = 0.03
+		elif lines > 90:
+			fall = 0.02
+		elif lines > 100:
+			fall = 0.01
 
 		# SCREEN ELEMENTS :
 
