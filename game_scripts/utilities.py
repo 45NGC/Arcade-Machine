@@ -3,6 +3,7 @@ pygame.init()
 
 # COLORS
 black = (0,0,0)
+grey = (60,60,60)
 white = (255,255,255)
 pink = (255, 153, 255)
 red_pink = (255, 0, 102)
@@ -18,6 +19,10 @@ button1_height = 74
 
 button2_width = 250
 button2_height = 80
+
+# TEXT INPUTS
+TEXT_INPUT_WIDTH = 400
+TEXT_INPUT_HEIGHT = 70
 
 def draw_button1(screen, x_axis, y_axis, text, mouse, i_text_animation) :
 	text = text.center(12)
@@ -49,3 +54,14 @@ def draw_button2(screen, x_axis, y_axis, text, mouse) :
 		pygame.draw.rect(screen, black, [x_axis, y_axis, button2_width, button2_height], border_radius = 20)
 		button = button2_font.render(text, True, white)
 		screen.blit(button, (x_axis, y_axis+20))
+
+
+
+def draw_text_input(screen, x_axis, y_axis, active):
+
+	if active :
+		pygame.draw.rect(screen, pink, [x_axis-2, y_axis-2, TEXT_INPUT_WIDTH+4, TEXT_INPUT_HEIGHT+4], border_radius = 5)
+		pygame.draw.rect(screen, black, [x_axis, y_axis, TEXT_INPUT_WIDTH, TEXT_INPUT_HEIGHT], border_radius = 5)
+	else:
+		pygame.draw.rect(screen, grey, [x_axis-5, y_axis-5, TEXT_INPUT_WIDTH+10, TEXT_INPUT_HEIGHT+10], border_radius = 5)
+		pygame.draw.rect(screen, black, [x_axis, y_axis, TEXT_INPUT_WIDTH, TEXT_INPUT_HEIGHT], border_radius = 5)

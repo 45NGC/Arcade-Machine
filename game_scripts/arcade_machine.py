@@ -1,7 +1,9 @@
-from game_scripts.utilities import draw_button1
+from atexit import register
+from game_scripts.utilities import draw_button1, draw_button2, draw_text_input
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu, draw_pong_pause_button, draw_pong_pause_menu
+from game_scripts.data import *
 import sys
 import time
 import random
@@ -9,9 +11,88 @@ import pygame
 pygame.init()
 
 # Create screen
-screen_size = (900,850)
+SCREEN_WIDTH = 900
+SCREEN_HEIGHT = 850
+screen_size = (SCREEN_WIDTH,SCREEN_HEIGHT)
 screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption('ARCADE MACHINE')
+USER_NAME = None
+
+
+
+# User register/login
+def arcade_machine_register_login():
+	clock = pygame.time.Clock()
+	global USER_NAME
+	register_string = 'REGISTER'
+	login_string = 'LOGIN'
+	user_name_string = 'NICKNAME'
+	password_string = 'PASSWORD'
+	font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 20)
+
+	user_name_label = font.render(user_name_string, True, (255,255,255))
+	password_label = font.render(password_string, True, (255,255,255))
+
+	input_user_name_active = False
+	input_password_active = False
+	input_user_name = ''
+	input_password = ''
+	max_length = 25
+
+	run = True
+
+	while run :
+		clock.tick(60)
+		mouse = pygame.mouse.get_pos()
+
+		for event in pygame.event.get():
+			print(event)
+			if event.type == pygame.QUIT:
+				sys.exit()
+
+			
+			# KEYCONTROLS
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_BACKSPACE:
+					if input_user_name_active : input_user_name = input_user_name[:-1]
+					if input_password_active : input_password = input_password[:-1]
+				else:
+					if input_user_name_active and len(input_user_name) < 25 : input_user_name += event.unicode
+					if input_password_active and len(input_password) < 25 : input_password += event.unicode
+			
+			# MOUSECONTROLS
+			if (350 <= mouse[0] <= 750) and (300 <= mouse[1] <= 370) :
+				if event.type == pygame.MOUSEBUTTONDOWN :
+					input_password_active = False
+					input_user_name_active = True
+			elif (150 <= mouse[0] <= 550) and (450 <= mouse[1] <= 520) :
+				if event.type == pygame.MOUSEBUTTONDOWN :
+					input_password_active = True
+					input_user_name_active = False
+
+			elif event.type ==  pygame.MOUSEBUTTONDOWN :
+				input_password_active = False
+				input_user_name_active = False
+
+
+		# SCREEN ELEMENTS
+		screen.fill((0,0,0))
+
+		screen.blit(user_name_label, (150,325))
+		screen.blit(password_label, (150,475))
+
+		draw_text_input(screen, 350, 300, input_user_name_active)
+		draw_text_input(screen, 350, 450, input_password_active)
+
+		user_name = font.render(input_user_name, True, (255,255,255))
+		password = font.render(input_password, True, (255,255,255))
+		screen.blit(user_name, (360,325))
+		screen.blit(password, (360,475))
+
+		draw_button2(screen, 150, 650, register_string, mouse)
+		draw_button2(screen, 500, 650, login_string, mouse)
+		
+		pygame.display.flip()
 
 ## MAIN LOOP ##
 # This loop will display a screen with the name 'Arcade Machine' and 6 buttons of the avaiable games :
@@ -288,7 +369,7 @@ def tetris_game():
 		
 		# The fall speed will depend on how many lines the player has completed
 		#print(str(lines))
-		print(str(fall))
+		#print(str(fall))
 		if 10 <= lines < 20:
 			fall = 0.3
 		elif 20 <= lines < 30:
