@@ -1,2 +1,2 @@
 pygame     2.1.2  
-PyMySQL    1.0.2 
+nums_from_string	0.1.2

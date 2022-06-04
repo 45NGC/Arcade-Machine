@@ -1,4 +1,3 @@
-from game_scripts.data import get_tetris_record1,get_tetris_record2,get_tetris_record3,get_tetris_record4,get_tetris_record5 
 from game_scripts.utilities import draw_button2
 import random
 import pygame
@@ -148,7 +147,7 @@ def draw_tetris_board(screen) :
 			for j in range(COLUMNS):
 					pygame.draw.line(screen, light_grey, (tetris_panel_X + j * BLOCKSIZE, tetris_panel_Y), (tetris_panel_X + j * BLOCKSIZE, tetris_panel_Y + tetris_panel_height))
 
-def draw_tetris_menu(screen, mouse) :
+def draw_tetris_menu(screen, mouse, record_1_string, record_2_string, record_3_string, record_4_string, record_5_string) :
 	# TETRIS LABEL
 	tetris_title_string = 'TETRIS'
 	tetris_label_width = 300
@@ -180,6 +179,7 @@ def draw_tetris_menu(screen, mouse) :
 
 	# HIGH SCORES TABLE
 	highscores_string = 'HIGH SCORES'
+	highscores_text = font_h1.render(highscores_string, True, white)
 	highscores_panel_width = 340
 	highscores_panel_height = 320
 	highscores_panel_X = 280
@@ -192,11 +192,11 @@ def draw_tetris_menu(screen, mouse) :
 	record_4 = pygame.Rect(highscores_panel_X+15, highscores_panel_Y+207, highscores_panel_width-30, 47)
 	record_5 = pygame.Rect(highscores_panel_X+15, highscores_panel_Y+256, highscores_panel_width-30, 47)
 
-	# record_1_string = get_tetris_record1(user) 
-	# record_2_string = get_tetris_record2(user)
-	# record_3_string = get_tetris_record3(user)
-	# record_4_string = get_tetris_record4(user)
-	# record_5_string = get_tetris_record5(user)
+	record1_text = font_h2.render(record_1_string, True, white)
+	record2_text = font_h2.render(record_2_string, True, white)
+	record3_text = font_h2.render(record_3_string, True, white)
+	record4_text = font_h2.render(record_4_string, True, white)
+	record5_text = font_h2.render(record_5_string, True, white)
 
 	pygame.draw.rect(screen, pink, highscores_panel_border)
 	pygame.draw.rect(screen, black, highscores_panel)
@@ -207,8 +207,12 @@ def draw_tetris_menu(screen, mouse) :
 	pygame.draw.rect(screen, light_grey, record_4)
 	pygame.draw.rect(screen, grey, record_5)
 
-	highscores_text = font_h1.render(highscores_string, True, white)
 	screen.blit(highscores_text, (highscores_panel_X+60, highscores_panel_Y+10))
+	screen.blit(record1_text, (highscores_panel_X+50, highscores_panel_Y+65,))
+	screen.blit(record2_text, (highscores_panel_X+50, highscores_panel_Y+114,))
+	screen.blit(record3_text, (highscores_panel_X+50, highscores_panel_Y+163))
+	screen.blit(record4_text, (highscores_panel_X+50, highscores_panel_Y+212))
+	screen.blit(record5_text, (highscores_panel_X+50, highscores_panel_Y+261))
 
 def draw_tetris_pause(screen, mouse) :
 	# Cover background

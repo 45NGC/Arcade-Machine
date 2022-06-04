@@ -6,6 +6,7 @@ from game_scripts.data import *
 import sys
 import time
 import random
+import nums_from_string
 import pygame
 pygame.init()
 
@@ -75,9 +76,18 @@ def arcade_machine_register_login():
 						add_user(input_user_name, input_password)
 						arcade_machine_menu(input_user_name)
 
-			elif (150 <= mouse[0] <= 550) and (450 <= mouse[1] <= 520) : # login_button
+			elif (500 <= mouse[0] <= 650) and (650 <= mouse[1] <= 730) : # login_button
 				if event.type == pygame.MOUSEBUTTONDOWN:
-					pass
+					if len(get_user_name(input_user_name)) == 0 :
+						print('USER DOES NOT EXIST')
+					else : 
+						user_password = str((get_user_password(input_user_name)))
+						formated_input = "[('"+str(input_password)+"',)]"
+
+						if user_password == formated_input:
+							arcade_machine_menu(input_user_name)
+						else :
+							print('INCORRECT PASSWORD')
 
 			elif event.type ==  pygame.MOUSEBUTTONDOWN :
 				input_password_active = False
@@ -197,23 +207,13 @@ def arcade_machine_menu(user_name) :
 		if i_text_animation < 9 : i_text_animation += 1
 		if i_text_animation == 9 : i_text_animation = 0
 
-		#tetris
-		draw_button1(screen, l_column, row_1, tetris_string, mouse, i_text_animation)
 		
-		#snake
-		draw_button1(screen, l_column, row_2, snake_string, mouse, i_text_animation)
-
-		#pong
-		draw_button1(screen, l_column, row_3, pong_string, mouse, i_text_animation)
-
-		#connect4
-		draw_button1(screen, r_column, row_1, connect4_string, mouse, i_text_animation)
-
-		#reaction
-		draw_button1(screen, r_column, row_2, reaction_string, mouse, i_text_animation)
-
-		#infection
-		draw_button1(screen, r_column, row_3, infection_string, mouse, i_text_animation)
+		draw_button1(screen, l_column, row_1, tetris_string, mouse, i_text_animation) #tetris
+		draw_button1(screen, l_column, row_2, snake_string, mouse, i_text_animation) #snake
+		draw_button1(screen, l_column, row_3, pong_string, mouse, i_text_animation) #pong
+		draw_button1(screen, r_column, row_1, connect4_string, mouse, i_text_animation) #connect4
+		draw_button1(screen, r_column, row_2, reaction_string, mouse, i_text_animation) #reaction
+		draw_button1(screen, r_column, row_3, infection_string, mouse, i_text_animation) #infection
 
 		pygame.display.flip()
 
@@ -231,6 +231,12 @@ def tetris_menu() :
 	pause_button_X = 725
 	pause_button_Y = 650
 	run = True
+
+	record_1_string = str(nums_from_string.get_nums(str(get_tetris_record1(USER)))[0])
+	record_2_string = str(nums_from_string.get_nums(str(get_tetris_record2(USER)))[0])
+	record_3_string = str(nums_from_string.get_nums(str(get_tetris_record3(USER)))[0])
+	record_4_string = str(nums_from_string.get_nums(str(get_tetris_record4(USER)))[0])
+	record_5_string = str(nums_from_string.get_nums(str(get_tetris_record5(USER)))[0])
 	
 	while run :
 		menu_clock.tick(30)
@@ -261,7 +267,7 @@ def tetris_menu() :
 
 		# Panels :
 		draw_tetris_panels(screen)
-		draw_tetris_menu(screen, mouse)
+		draw_tetris_menu(screen, mouse, record_1_string, record_2_string, record_3_string, record_4_string, record_5_string)
 
 		pygame.display.flip()
 
@@ -426,6 +432,7 @@ def tetris_game():
 
 def tetris_game_over(score):
 	game_over_clock = pygame.time.Clock()
+	game_score = score
 
 	button_width = 250
 	button_height = 80
@@ -434,6 +441,31 @@ def tetris_game_over(score):
 	restart_button_Y = 470
 	quit_button_X = 470
 	quit_button_Y = 470
+
+	record_1_string = str(nums_from_string.get_nums(str(get_tetris_record1(USER)))[0])
+	record_2_string = str(nums_from_string.get_nums(str(get_tetris_record2(USER)))[0])
+	record_3_string = str(nums_from_string.get_nums(str(get_tetris_record3(USER)))[0])
+	record_4_string = str(nums_from_string.get_nums(str(get_tetris_record4(USER)))[0])
+	record_5_string = str(nums_from_string.get_nums(str(get_tetris_record5(USER)))[0])
+
+	if score > int(record_1_string) : 
+		update_tetris_records(score, 1)
+		score = int(record_1_string)
+
+	if score > int(record_2_string) : 
+		update_tetris_records(score, 2)
+		score = int(record_2_string)
+
+	if score > int(record_3_string) : 
+		update_tetris_records(score, 3)
+		score = int(record_3_string)
+
+	if score > int(record_4_string) : 
+		update_tetris_records(score, 4)
+		score = int(record_4_string)
+
+	if score > int(record_5_string) : 
+		update_tetris_records(score, 5)
 
 	game_over = True
 
@@ -460,7 +492,7 @@ def tetris_game_over(score):
 			if (quit_button_X <= mouse[0] <= quit_button_X+button_width) and (quit_button_Y <= mouse[1] <= quit_button_Y+button_height) :
 				if event.type == pygame.MOUSEBUTTONDOWN : tetris_menu()
 		
-		draw_tetris_game_over(screen, mouse, score)
+		draw_tetris_game_over(screen, mouse, game_score)
 		pygame.display.flip()
 
 def tetris_pause(in_game) :
