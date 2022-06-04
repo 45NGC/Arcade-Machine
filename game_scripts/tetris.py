@@ -1,3 +1,4 @@
+from game_scripts.data import get_tetris_record1,get_tetris_record2,get_tetris_record3,get_tetris_record4,get_tetris_record5 
 from game_scripts.utilities import draw_button2
 import random
 import pygame
@@ -190,6 +191,12 @@ def draw_tetris_menu(screen, mouse) :
 	record_3 = pygame.Rect(highscores_panel_X+15, highscores_panel_Y+158, highscores_panel_width-30, 47)
 	record_4 = pygame.Rect(highscores_panel_X+15, highscores_panel_Y+207, highscores_panel_width-30, 47)
 	record_5 = pygame.Rect(highscores_panel_X+15, highscores_panel_Y+256, highscores_panel_width-30, 47)
+
+	# record_1_string = get_tetris_record1(user) 
+	# record_2_string = get_tetris_record2(user)
+	# record_3_string = get_tetris_record3(user)
+	# record_4_string = get_tetris_record4(user)
+	# record_5_string = get_tetris_record5(user)
 
 	pygame.draw.rect(screen, pink, highscores_panel_border)
 	pygame.draw.rect(screen, black, highscores_panel)

@@ -1,4 +1,3 @@
-from atexit import register
 from game_scripts.utilities import draw_button1, draw_button2, draw_text_input
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
@@ -16,7 +15,7 @@ SCREEN_HEIGHT = 850
 screen_size = (SCREEN_WIDTH,SCREEN_HEIGHT)
 screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption('ARCADE MACHINE')
-USER_NAME = None
+USER = None
 
 
 
@@ -37,7 +36,6 @@ def arcade_machine_register_login():
 	input_password_active = False
 	input_user_name = ''
 	input_password = ''
-	max_length = 25
 
 	run = True
 
@@ -46,11 +44,9 @@ def arcade_machine_register_login():
 		mouse = pygame.mouse.get_pos()
 
 		for event in pygame.event.get():
-			print(event)
 			if event.type == pygame.QUIT:
 				sys.exit()
 
-			
 			# KEYCONTROLS
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_BACKSPACE:
@@ -61,14 +57,27 @@ def arcade_machine_register_login():
 					if input_password_active and len(input_password) < 25 : input_password += event.unicode
 			
 			# MOUSECONTROLS
-			if (350 <= mouse[0] <= 750) and (300 <= mouse[1] <= 370) :
+			if (350 <= mouse[0] <= 750) and (300 <= mouse[1] <= 370) : # input_user_name
 				if event.type == pygame.MOUSEBUTTONDOWN :
-					input_password_active = False
 					input_user_name_active = True
-			elif (150 <= mouse[0] <= 550) and (450 <= mouse[1] <= 520) :
+					input_password_active = False
+
+			elif (150 <= mouse[0] <= 550) and (450 <= mouse[1] <= 520) : # input_password
 				if event.type == pygame.MOUSEBUTTONDOWN :
-					input_password_active = True
 					input_user_name_active = False
+					input_password_active = True
+
+			elif (150 <= mouse[0] <= 400) and (650 <= mouse[1] <= 730) : # register_button
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					if len(get_user_name(input_user_name)) != 0 :
+						print('USER ALREADY EXISTS')
+					else : 
+						add_user(input_user_name, input_password)
+						arcade_machine_menu(input_user_name)
+
+			elif (150 <= mouse[0] <= 550) and (450 <= mouse[1] <= 520) : # login_button
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					pass
 
 			elif event.type ==  pygame.MOUSEBUTTONDOWN :
 				input_password_active = False
@@ -105,7 +114,10 @@ def arcade_machine_register_login():
 
 # TODO
 # 	- Add music and sound effects to the buttons
-def arcade_machine_menu() :
+def arcade_machine_menu(user_name) :
+	global USER
+	USER = user_name
+
 	main_clock = pygame.time.Clock()
 
 	rainbow_i = 0
@@ -146,16 +158,34 @@ def arcade_machine_menu() :
 
 	while run:
 		main_clock.tick(15)
+		mouse = pygame.mouse.get_pos()
 
 		for event in pygame.event.get() :
 		
 			if event.type == pygame.QUIT :
 				sys.exit()
+
+			if (l_column <= mouse[0] <= l_column+button_width) and (row_1 <= mouse[1] <= row_1+button_height) :
+				if event.type == pygame.MOUSEBUTTONDOWN : tetris_menu()
+			
+			if (l_column <= mouse[0] <= l_column+button_width) and (row_2 <= mouse[1] <= row_2+button_height) :
+				if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 		
+			if (l_column <= mouse[0] <= l_column+button_width) and (row_3 <= mouse[1] <= row_3+button_height) :
+				if event.type == pygame.MOUSEBUTTONDOWN : pong_menu()
+
+			if (r_column <= mouse[0] <= r_column+button_width) and (row_1 <= mouse[1] <= row_1+button_height) :
+				if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
+
+			if (r_column <= mouse[0] <= r_column+button_width) and (row_2 <= mouse[1] <= row_2+button_height) :
+				if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
+
+			if (r_column <= mouse[0] <= r_column+button_width) and (row_3 <= mouse[1] <= row_3+button_height) :
+				if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
+
 		# SCREEN ELEMENTS :
 
 		screen.fill((0,0,0))
-		mouse = pygame.mouse.get_pos()
 
 		# Title:
 		rainbow_i += 1
@@ -169,33 +199,21 @@ def arcade_machine_menu() :
 
 		#tetris
 		draw_button1(screen, l_column, row_1, tetris_string, mouse, i_text_animation)
-		if (l_column <= mouse[0] <= l_column+button_width) and (row_1 <= mouse[1] <= row_1+button_height) :
-			if event.type == pygame.MOUSEBUTTONDOWN : tetris_menu()
 		
 		#snake
 		draw_button1(screen, l_column, row_2, snake_string, mouse, i_text_animation)
-		if (l_column <= mouse[0] <= l_column+button_width) and (row_2 <= mouse[1] <= row_2+button_height) :
-			if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 
 		#pong
 		draw_button1(screen, l_column, row_3, pong_string, mouse, i_text_animation)
-		if (l_column <= mouse[0] <= l_column+button_width) and (row_3 <= mouse[1] <= row_3+button_height) :
-			if event.type == pygame.MOUSEBUTTONDOWN : pong_menu()
 
 		#connect4
 		draw_button1(screen, r_column, row_1, connect4_string, mouse, i_text_animation)
-		if (r_column <= mouse[0] <= r_column+button_width) and (row_1 <= mouse[1] <= row_1+button_height) :
-			if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 
 		#reaction
 		draw_button1(screen, r_column, row_2, reaction_string, mouse, i_text_animation)
-		if (r_column <= mouse[0] <= r_column+button_width) and (row_2 <= mouse[1] <= row_2+button_height) :
-			if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 
 		#infection
 		draw_button1(screen, r_column, row_3, infection_string, mouse, i_text_animation)
-		if (r_column <= mouse[0] <= r_column+button_width) and (row_3 <= mouse[1] <= row_3+button_height) :
-			if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
 
 		pygame.display.flip()
 
@@ -494,7 +512,7 @@ def tetris_pause(in_game) :
 				if (quit_button_X <= mouse[0] <= quit_button_X+button_width) and (quit_button_Y <= mouse[1] <= quit_button_Y+button_height) :
 					if event.type == pygame.MOUSEBUTTONDOWN :
 							if in_game == True : tetris_menu()
-							if in_game == False : arcade_machine_menu()
+							if in_game == False : arcade_machine_menu(USER)
 
 		draw_tetris_pause(screen, mouse)
 
@@ -592,7 +610,7 @@ def pong_pause(in_game) :
 			if (quit_button_X <= mouse[0] <= pause_button_X+250) and (quit_button_Y <= mouse[1] <= quit_button_Y+80) :
 				if event.type == pygame.MOUSEBUTTONDOWN :
 					if in_game  == True : pong_menu()
-					if in_game  == False : arcade_machine_menu()
+					if in_game  == False : arcade_machine_menu(USER)
 			
 			#KEYCONTROLS
 			if event.type == pygame.KEYDOWN:
