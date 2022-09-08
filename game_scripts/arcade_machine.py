@@ -28,7 +28,7 @@ def arcade_machine_register_login():
 	login_string = 'LOGIN'
 	user_name_string = 'NICKNAME'
 	password_string = 'PASSWORD'
-	font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 20)
+	font = pygame.font.Font('resources/fonts/Gameplay.ttf', 20)
 
 	user_name_label = font.render(user_name_string, True, (255,255,255))
 	password_label = font.render(password_string, True, (255,255,255))
@@ -143,7 +143,7 @@ def arcade_machine_menu(user_name) :
 	(0, 191, 255),(0, 255, 255),(0, 255, 191),(0, 255, 128),
 	(0, 255, 64),(0, 255, 0),(64, 255, 0),(128, 255, 0),
 	(191, 255, 0),(255, 255, 0),(255, 191, 0),(255, 64, 0)]
-	title_font = pygame.font.Font('resources\\fonts\\ARCADECLASSIC.TTF', 100)
+	title_font = pygame.font.Font('resources/fonts/ARCADECLASSIC.TTF', 100)
 
 	i_text_animation = 0
 

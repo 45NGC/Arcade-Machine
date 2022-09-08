@@ -20,9 +20,9 @@ blue = (0, 64, 255)
 turquoise = (0, 255, 255)
 
 # FONTS
-font_h1 = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 30)
-font_h2 = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 25)
-font_h3 = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 20)
+font_h1 = pygame.font.Font('resources/fonts/Gameplay.ttf', 30)
+font_h2 = pygame.font.Font('resources/fonts/Gameplay.ttf', 25)
+font_h3 = pygame.font.Font('resources/fonts/Gameplay.ttf', 20)
 
 tetris_panel_width = 400  
 tetris_panel_height = 800
@@ -167,7 +167,7 @@ def draw_tetris_menu(screen, mouse, record_1_string, record_2_string, record_3_s
 	pygame.draw.rect(screen, black, [tetris_label_X, tetris_label_Y, tetris_label_width, tetris_label_height])
 	pygame.draw.rect(screen, black, [tetris_label_X+99, tetris_label_Y, tetris_label_height, tetris_label_width-100])
 
-	tetris_font = pygame.font.Font('resources\\fonts\\UniformBold.ttf', 100)
+	tetris_font = pygame.font.Font('resources/fonts/UniformBold.ttf', 100)
 	tetris_text = tetris_font.render(tetris_title_string, True, white)
 	screen.blit(tetris_text, (tetris_label_X+18, tetris_label_Y))
 
