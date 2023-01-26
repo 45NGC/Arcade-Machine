@@ -16,7 +16,7 @@ def draw_pong_menu(screen, mouse) :
 	pygame.draw.ellipse(screen, white, pong_label_background1)
 	pygame.draw.ellipse(screen, black, pong_label_background2)
 
-	pong_title_font = pygame.font.Font('resources\\fonts\\ARCADECLASSIC.TTF', 100)
+	pong_title_font = pygame.font.Font('resources/fonts/ARCADECLASSIC.TTF', 100)
 	pong_title = pong_title_font.render(pong_title_string, True, white)
 	screen.blit(pong_title, (345,105))
 
@@ -60,7 +60,7 @@ def draw_pong_pause_menu(screen, mouse):
 	pygame.draw.rect(screen, black, pause_menu)
 
 	pause_string = 'PAUSE'
-	pause_font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 30)
+	pause_font = pygame.font.Font('resources/fonts/Gameplay.ttf', 30)
 	pause_title = pause_font.render(pause_string, True, white)
 	screen.blit(pause_title, (400,240))
 	

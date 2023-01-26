@@ -676,7 +676,7 @@ def pong_game(game_mode) :
 
 	player1_score = 0
 	player2_score = 0
-	score_font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 25)
+	score_font = pygame.font.Font('resources/fonts/Gameplay.ttf', 25)
 
 	# BALL
 	ball_start = True
@@ -687,7 +687,7 @@ def pong_game(game_mode) :
 	# TIMER
 	timer1 = pygame.time.get_ticks()
 	timer2 = 0
-	timer_font = pygame.font.Font('resources\\fonts\\Gameplay.ttf', 35)
+	timer_font = pygame.font.Font('resources/fonts/Gameplay.ttf', 35)
 
 	# PAUSE BUTTON
 	pause_button_X = 425
