@@ -2,12 +2,14 @@ from game_scripts.utilities import draw_button1, draw_button2, draw_text_input
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu, draw_pong_pause_button, draw_pong_pause_menu
+from game_scripts.chess import draw_chess_menu, draw_chess_pieces
 from game_scripts.data import *
 import sys
 import time
 import random
 import nums_from_string
 import pygame
+from pygame import image
 pygame.init()
 
 # Create screen
@@ -158,7 +160,7 @@ def arcade_machine_menu(user_name) :
 
 	title_string 		= 'ARCADE   MACHINE'
 	tetris_string 		= '   TETRIS'
-	snake_string 		= '    SNAKE'
+	chess_string 		= '    CHESS'
 	pong_string 		= '     PONG'
 	connect4_string 	= 'CONNECT 4'
 	reaction_string 	= ' REACTION'
@@ -179,7 +181,7 @@ def arcade_machine_menu(user_name) :
 				if event.type == pygame.MOUSEBUTTONDOWN : tetris_menu()
 			
 			if (l_column <= mouse[0] <= l_column+button_width) and (row_2 <= mouse[1] <= row_2+button_height) :
-				if event.type == pygame.MOUSEBUTTONDOWN : print('NOT AVAILABLE')
+				if event.type == pygame.MOUSEBUTTONDOWN : chess_menu()
 		
 			if (l_column <= mouse[0] <= l_column+button_width) and (row_3 <= mouse[1] <= row_3+button_height) :
 				if event.type == pygame.MOUSEBUTTONDOWN : pong_menu()
@@ -209,7 +211,7 @@ def arcade_machine_menu(user_name) :
 
 		
 		draw_button1(screen, l_column, row_1, tetris_string, mouse, i_text_animation) #tetris
-		draw_button1(screen, l_column, row_2, snake_string, mouse, i_text_animation) #snake
+		draw_button1(screen, l_column, row_2, chess_string, mouse, i_text_animation) #snake
 		draw_button1(screen, l_column, row_3, pong_string, mouse, i_text_animation) #pong
 		draw_button1(screen, r_column, row_1, connect4_string, mouse, i_text_animation) #connect4
 		draw_button1(screen, r_column, row_2, reaction_string, mouse, i_text_animation) #reaction
@@ -870,5 +872,61 @@ def pong_game(game_mode) :
 
 		pygame.display.flip()
 
-
 ############################################################## </PONG> ################################################################
+
+############################################################## <CHESS> #################################################################
+
+
+def chess_menu():
+	menu_clock = pygame.time.Clock()
+	play_button_X = 330
+	play_button_Y = 330
+	run = True
+
+	while run :
+		menu_clock.tick(30)
+		mouse = pygame.mouse.get_pos()
+
+		for event in pygame.event.get():
+
+			if event.type == pygame.QUIT:
+				sys.exit()
+			
+			#MOUSECONTROLS
+			if (play_button_X <= mouse[0] <= play_button_X+250) and (play_button_Y <= mouse[1] <= play_button_Y+80) :
+				if event.type == pygame.MOUSEBUTTONDOWN : chess_game()
+		
+
+		screen.fill((0,0,0))
+		draw_chess_menu(screen, mouse)
+		pygame.display.flip()
+
+
+def chess_game():
+	game_clock = pygame.time.Clock()
+	play_button_X = 50
+	play_button_Y = 50
+	board = image.load('resources/chess-images/medium-board.png')
+	run = True
+
+	while run :
+		game_clock.tick(30)
+		mouse = pygame.mouse.get_pos()
+
+		for event in pygame.event.get():
+
+			if event.type == pygame.QUIT:
+				sys.exit()
+			
+			#MOUSECONTROLS
+			# if (play_button_X <= mouse[0] <= play_button_X+50) and (play_button_X <= mouse[1] <= play_button_X+50) :
+			# 	if event.type == pygame.MOUSEBUTTONDOWN : chess_game()
+
+		screen.fill((40,40,40))
+		screen.blit(board, (50,50))
+		draw_chess_pieces(screen, mouse)
+		pygame.display.flip()
+
+
+
+############################################################## </CHESS> ################################################################
