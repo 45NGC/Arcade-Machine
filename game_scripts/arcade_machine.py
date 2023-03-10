@@ -2,7 +2,7 @@ from game_scripts.utilities import draw_button1, draw_button2, draw_text_input
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu, draw_pong_pause_button, draw_pong_pause_menu
-from game_scripts.chess import draw_chess_menu, draw_chess_pieces
+from game_scripts.chess import draw_chess_menu, draw_pieces
 from game_scripts.data import *
 import sys
 import time
@@ -904,9 +904,26 @@ def chess_menu():
 
 def chess_game():
 	game_clock = pygame.time.Clock()
-	play_button_X = 50
-	play_button_Y = 50
 	board = image.load('resources/chess-images/medium-board.png')
+
+	# PIECES :
+	# Pawn 				= 1 / -1
+	# Knight 			= 2 / -2
+	# Bishop 			= 3 / -3
+	# Rook 				= 4 / -4
+	# Queen				= 5 / -5
+	# King 				= 6 / -6
+	# Attacked squares 	= 7 / -7
+ 
+	board_piece_positions = [[-4, -2, -3, -5, -6, -3, -2, -4],
+					   		[-1, -1, -1, -1, -1, -1, -1, -1],
+					   		[-7, -7, -7, -7, -7, -7, -7, -7],
+					   		[0, 0, 0, 0, 0, 0, 0, 0],
+					   		[0, 0, 0, 0, 0, 0, 0, 0],
+					   		[7, 7, 7, 7, 7, 7, 7, 7],
+					   		[1, 1, 1, 1, 1, 1, 1, 1],
+					   		[4, 2, 3, 5, 6, 3, 2, 4]]
+
 	run = True
 
 	while run :
@@ -924,7 +941,7 @@ def chess_game():
 
 		screen.fill((40,40,40))
 		screen.blit(board, (50,50))
-		draw_chess_pieces(screen, mouse)
+		draw_pieces(screen, board_piece_positions)
 		pygame.display.flip()
 
 

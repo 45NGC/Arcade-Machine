@@ -9,6 +9,27 @@ white = (255,255,255)
 pink = (255, 153, 255)
 purple = (153,0,255)
 
+# CHESS PIECES
+
+w_pawn = image.load('resources/chess-images/pieces/white/Wpawn.png')
+w_knight = image.load('resources/chess-images/pieces/white/Wknight.png')
+w_bishop = image.load('resources/chess-images/pieces/white/Wbishop.png')
+w_rook = image.load('resources/chess-images/pieces/white/Wrook.png')
+w_queen = image.load('resources/chess-images/pieces/white/Wqueen.png')
+w_king = image.load('resources/chess-images/pieces/white/Wking.png')
+
+white_pieces = [w_pawn, w_knight, w_bishop, w_rook, w_queen, w_king]
+
+
+b_pawn = image.load('resources/chess-images/pieces/black/Bpawn.png')
+b_knight = image.load('resources/chess-images/pieces/black/Bknight.png')
+b_bishop = image.load('resources/chess-images/pieces/black/Bbishop.png')
+b_rook = image.load('resources/chess-images/pieces/black/Brook.png')
+b_queen = image.load('resources/chess-images/pieces/black/Bqueen.png')
+b_king = image.load('resources/chess-images/pieces/black/Bking.png')
+black_pieces = [b_pawn, b_knight, b_bishop, b_rook, b_queen, b_king]
+
+
 def draw_chess_menu(screen, mouse) :
 	# Title
 	chess_title_string = 'CHESS'
@@ -25,86 +46,18 @@ def draw_chess_menu(screen, mouse) :
 	mode1_string  = '1 vs 1'
 	draw_button2(screen, 330, 330, mode1_string, mouse)
 
-def draw_chess_pieces(screen, mouse):
+
+def draw_pieces(screen, board_piece_positions):
 	piece_coordinates = [65, 140, 215, 290, 365, 440, 515, 590]
-	square_center_coordinates = []
-	# PAWN
-	w_pawn1 = image.load('resources/chess-images/pieces/white/Wpawn.png')
-	w_pawn2 = image.load('resources/chess-images/pieces/white/Wpawn.png')
-	w_pawn3 = image.load('resources/chess-images/pieces/white/Wpawn.png')
-	w_pawn4 = image.load('resources/chess-images/pieces/white/Wpawn.png')
-	w_pawn5 = image.load('resources/chess-images/pieces/white/Wpawn.png')
-	w_pawn6 = image.load('resources/chess-images/pieces/white/Wpawn.png')
-	w_pawn7 = image.load('resources/chess-images/pieces/white/Wpawn.png')
-	w_pawn8 = image.load('resources/chess-images/pieces/white/Wpawn.png')
+	positions = [0, 1, 2, 3, 4, 5, 6, 7]
 
-	w_knight1 = image.load('resources/chess-images/pieces/white/Wknight.png')
-	w_knight2 = image.load('resources/chess-images/pieces/white/Wknight.png')
+	for x in zip(board_piece_positions, positions):
+		for y in zip(x[0], positions):
 
-	w_bishop1 = image.load('resources/chess-images/pieces/white/Wbishop.png')
-	w_bishop2 = image.load('resources/chess-images/pieces/white/Wbishop.png')
-
-	w_rook1 = image.load('resources/chess-images/pieces/white/Wrook.png')
-	w_rook2 = image.load('resources/chess-images/pieces/white/Wrook.png')
-
-	w_queen = image.load('resources/chess-images/pieces/white/Wqueen.png')
-	w_king = image.load('resources/chess-images/pieces/white/Wking.png')
-
-
-	b_pawn1 = image.load('resources/chess-images/pieces/black/Bpawn.png')
-	b_pawn2 = image.load('resources/chess-images/pieces/black/Bpawn.png')
-	b_pawn3 = image.load('resources/chess-images/pieces/black/Bpawn.png')
-	b_pawn4 = image.load('resources/chess-images/pieces/black/Bpawn.png')
-	b_pawn5 = image.load('resources/chess-images/pieces/black/Bpawn.png')
-	b_pawn6 = image.load('resources/chess-images/pieces/black/Bpawn.png')
-	b_pawn7 = image.load('resources/chess-images/pieces/black/Bpawn.png')
-	b_pawn8 = image.load('resources/chess-images/pieces/black/Bpawn.png')
-
-	b_knight1 = image.load('resources/chess-images/pieces/black/Bknight.png')
-	b_knight2 = image.load('resources/chess-images/pieces/black/Bknight.png')
-
-	b_bishop1 = image.load('resources/chess-images/pieces/black/Bbishop.png')
-	b_bishop2 = image.load('resources/chess-images/pieces/black/Bbishop.png')
-
-	b_rook1 = image.load('resources/chess-images/pieces/black/Brook.png')
-	b_rook2 = image.load('resources/chess-images/pieces/black/Brook.png')
-
-	b_queen = image.load('resources/chess-images/pieces/black/Bqueen.png')
-	b_king = image.load('resources/chess-images/pieces/black/Bking.png')
-
-
-	screen.blit(w_pawn1, (piece_coordinates[0], piece_coordinates[6]))
-	screen.blit(w_pawn2, (piece_coordinates[1], piece_coordinates[6]))
-	screen.blit(w_pawn3, (piece_coordinates[2], piece_coordinates[6]))
-	screen.blit(w_pawn4, (piece_coordinates[3], piece_coordinates[6]))
-	screen.blit(w_pawn5, (piece_coordinates[4], piece_coordinates[6]))
-	screen.blit(w_pawn6, (piece_coordinates[5], piece_coordinates[6]))
-	screen.blit(w_pawn7, (piece_coordinates[6], piece_coordinates[6]))
-	screen.blit(w_pawn8, (piece_coordinates[7], piece_coordinates[6]))
-
-	screen.blit(w_rook1, 	(piece_coordinates[0], piece_coordinates[7]))
-	screen.blit(w_knight1, 	(piece_coordinates[1], piece_coordinates[7]))
-	screen.blit(w_bishop1, 	(piece_coordinates[2], piece_coordinates[7]))
-	screen.blit(w_queen, 	(piece_coordinates[3], piece_coordinates[7]))
-	screen.blit(w_king, 	(piece_coordinates[4], piece_coordinates[7]))
-	screen.blit(w_bishop2, 	(piece_coordinates[5], piece_coordinates[7]))
-	screen.blit(w_knight2, 	(piece_coordinates[6], piece_coordinates[7]))
-	screen.blit(w_rook2, 	(piece_coordinates[7], piece_coordinates[7]))
-
-	screen.blit(b_pawn1, (piece_coordinates[0], piece_coordinates[1]))
-	screen.blit(b_pawn2, (piece_coordinates[1], piece_coordinates[1]))
-	screen.blit(b_pawn3, (piece_coordinates[2], piece_coordinates[1]))
-	screen.blit(b_pawn4, (piece_coordinates[3], piece_coordinates[1]))
-	screen.blit(b_pawn5, (piece_coordinates[4], piece_coordinates[1]))
-	screen.blit(b_pawn6, (piece_coordinates[5], piece_coordinates[1]))
-	screen.blit(b_pawn7, (piece_coordinates[6], piece_coordinates[1]))
-	screen.blit(b_pawn8, (piece_coordinates[7], piece_coordinates[1]))
-
-	screen.blit(b_rook1, 	(piece_coordinates[0], piece_coordinates[0]))
-	screen.blit(b_knight1, 	(piece_coordinates[1], piece_coordinates[0]))
-	screen.blit(b_bishop1, 	(piece_coordinates[2], piece_coordinates[0]))
-	screen.blit(b_queen, 	(piece_coordinates[3], piece_coordinates[0]))
-	screen.blit(b_king, 	(piece_coordinates[4], piece_coordinates[0]))
-	screen.blit(b_bishop2, 	(piece_coordinates[5], piece_coordinates[0]))
-	screen.blit(b_knight2, 	(piece_coordinates[6], piece_coordinates[0]))
-	screen.blit(b_rook2, 	(piece_coordinates[7], piece_coordinates[0]))
+			if y[0] < 0 and y[0] > -7:
+				screen.blit(black_pieces[(y[0]*-1)-1], (piece_coordinates[y[1]], piece_coordinates[x[1]]))
+			elif y[0] > 0 and y[0] < 7:
+				screen.blit(white_pieces[(y[0])-1], (piece_coordinates[y[1]], piece_coordinates[x[1]]))
+			else:
+				pass
+	
