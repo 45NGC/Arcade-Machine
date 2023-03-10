@@ -2,7 +2,7 @@ from game_scripts.utilities import draw_button1, draw_button2, draw_text_input
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu, draw_pong_pause_button, draw_pong_pause_menu
-from game_scripts.chess import draw_chess_menu, draw_pieces
+from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square
 from game_scripts.data import *
 import sys
 import time
@@ -906,6 +906,11 @@ def chess_game():
 	game_clock = pygame.time.Clock()
 	board = image.load('resources/chess-images/medium-board.png')
 
+	clicked_square = None
+	transparent_square = pygame.Surface((75,75))
+	transparent_square.set_alpha(130)  
+	transparent_square.fill((0, 255, 0))
+
 	# PIECES :
 	# Pawn 				= 1 / -1
 	# Knight 			= 2 / -2
@@ -936,14 +941,19 @@ def chess_game():
 				sys.exit()
 			
 			#MOUSECONTROLS
-			# if (play_button_X <= mouse[0] <= play_button_X+50) and (play_button_X <= mouse[1] <= play_button_X+50) :
-			# 	if event.type == pygame.MOUSEBUTTONDOWN : chess_game()
+			if event.type == pygame.MOUSEBUTTONDOWN : 
+				clicked_square = selected_square(mouse[0], mouse[1])
+
+
 
 		screen.fill((40,40,40))
 		screen.blit(board, (50,50))
 		draw_pieces(screen, board_piece_positions)
+
+		if clicked_square != None:
+			#print(str(clicked_square))
+			screen.blit(transparent_square, (clicked_square[0], clicked_square[1]))
+	
 		pygame.display.flip()
-
-
 
 ############################################################## </CHESS> ################################################################

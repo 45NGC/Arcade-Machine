@@ -17,9 +17,7 @@ w_bishop = image.load('resources/chess-images/pieces/white/Wbishop.png')
 w_rook = image.load('resources/chess-images/pieces/white/Wrook.png')
 w_queen = image.load('resources/chess-images/pieces/white/Wqueen.png')
 w_king = image.load('resources/chess-images/pieces/white/Wking.png')
-
 white_pieces = [w_pawn, w_knight, w_bishop, w_rook, w_queen, w_king]
-
 
 b_pawn = image.load('resources/chess-images/pieces/black/Bpawn.png')
 b_knight = image.load('resources/chess-images/pieces/black/Bknight.png')
@@ -43,7 +41,7 @@ def draw_chess_menu(screen, mouse) :
 	screen.blit(chess_title, (350,120))
 
 	# Game modes buttons
-	mode1_string  = '1 vs 1'
+	mode1_string  = 'PLAY'
 	draw_button2(screen, 330, 330, mode1_string, mouse)
 
 
@@ -60,4 +58,33 @@ def draw_pieces(screen, board_piece_positions):
 				screen.blit(white_pieces[(y[0])-1], (piece_coordinates[y[1]], piece_coordinates[x[1]]))
 			else:
 				pass
+
+def selected_square(x_coordinate, y_coordinate):
+	square_coordinates = [50, 125, 200, 275, 350, 425, 500, 575]
+
+	selected_square_x = None
+	selected_square_y = None
+
+	if x_coordinate > 50 and y_coordinate > 50 and x_coordinate < 650 and y_coordinate < 650:
+
+		for x_square_coordinate in square_coordinates:
+			
+			if x_coordinate >= x_square_coordinate and x_coordinate < x_square_coordinate+75:
+				selected_square_x = x_square_coordinate
+
+		for y_square_coordinate in square_coordinates:
+			
+			if y_coordinate >= y_square_coordinate and y_coordinate < y_square_coordinate+75:
+				selected_square_y = y_square_coordinate
+		
+	else:
+		return None
+	
+	# print('x_coordinate : '+str(x_coordinate))
+	# print('y_coordinate : '+str(y_coordinate))	
+	# print('selected_square_x : '+str(selected_square_x))
+	# print('selected_square_y : '+str(selected_square_y))
+
+	return selected_square_x, selected_square_y
+		
 	
