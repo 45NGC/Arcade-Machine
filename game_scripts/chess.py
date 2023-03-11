@@ -27,6 +27,9 @@ b_queen = image.load('resources/chess-images/pieces/black/Bqueen.png')
 b_king = image.load('resources/chess-images/pieces/black/Bking.png')
 black_pieces = [b_pawn, b_knight, b_bishop, b_rook, b_queen, b_king]
 
+square_coordinates = [50, 125, 200, 275, 350, 425, 500, 575]
+
+
 
 def draw_chess_menu(screen, mouse) :
 	# Title
@@ -60,10 +63,10 @@ def draw_pieces(screen, board_piece_positions):
 				pass
 
 def selected_square(x_coordinate, y_coordinate):
-	square_coordinates = [50, 125, 200, 275, 350, 425, 500, 575]
-
 	selected_square_x = None
 	selected_square_y = None
+	x_square_index = None
+	y_square_index = None
 
 	if x_coordinate > 50 and y_coordinate > 50 and x_coordinate < 650 and y_coordinate < 650:
 
@@ -71,11 +74,13 @@ def selected_square(x_coordinate, y_coordinate):
 			
 			if x_coordinate >= x_square_coordinate and x_coordinate < x_square_coordinate+75:
 				selected_square_x = x_square_coordinate
+				x_square_index = square_coordinates.index(selected_square_x)
 
 		for y_square_coordinate in square_coordinates:
 			
 			if y_coordinate >= y_square_coordinate and y_coordinate < y_square_coordinate+75:
 				selected_square_y = y_square_coordinate
+				y_square_index = square_coordinates.index(selected_square_y)
 		
 	else:
 		return None
@@ -85,6 +90,24 @@ def selected_square(x_coordinate, y_coordinate):
 	# print('selected_square_x : '+str(selected_square_x))
 	# print('selected_square_y : '+str(selected_square_y))
 
-	return selected_square_x, selected_square_y
+	return selected_square_x, selected_square_y, x_square_index, y_square_index
+
+def avaiable_squares(piece, piece_square, board_piece_positions):
+	x = piece_square[1]
+	y = piece_square[0]
+	avaiable_squares = []
+
+	if piece == 1:
+
+		# PUSH
+		if board_piece_positions[y-1][x] == 0:
+			avaiable_squares.append((square_coordinates[y-1],square_coordinates[x]))
+			
+		# FIRST PUSH 
+		if y == 6 and board_piece_positions[y-1][x] == 0 and board_piece_positions[y-2][x] == 0:
+			avaiable_squares.append((square_coordinates[y-2],square_coordinates[x]))
+
+	return avaiable_squares
+
 		
 	
