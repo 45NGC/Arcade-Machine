@@ -97,15 +97,45 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 	y = piece_square[0]
 	avaiable_squares = []
 
-	if piece == 1:
+	if piece == 1 or piece == -1:
 
 		# PUSH
-		if board_piece_positions[y-1][x] == 0:
-			avaiable_squares.append((square_coordinates[y-1],square_coordinates[x]))
+		if board_piece_positions[y-piece][x] == 0:
+			avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x]))
 			
 		# FIRST PUSH 
-		if y == 6 and board_piece_positions[y-1][x] == 0 and board_piece_positions[y-2][x] == 0:
-			avaiable_squares.append((square_coordinates[y-2],square_coordinates[x]))
+		if ((y == 6 and piece == 1) or (y == 1 and piece == -1)) and board_piece_positions[y-piece][x] == 0 and board_piece_positions[y-(piece*2)][x] == 0:
+			avaiable_squares.append((square_coordinates[y-(piece*2)],square_coordinates[x]))
+		
+		# NORMAL CAPTURE
+		if x != 0 and x != 7:
+
+			if board_piece_positions[y-piece][x+1] < 0 and piece == 1:
+				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x+1]))
+			if board_piece_positions[y-piece][x-1] < 0 and piece == 1:
+				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x-1]))
+
+			if board_piece_positions[y-piece][x+1] > 0 and piece == -1:
+				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x+1]))
+			if board_piece_positions[y-piece][x-1] > 0 and piece == -1:
+				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x-1]))
+
+		else:
+
+			if x == 0 and board_piece_positions[y-piece][x+1] < 0 and piece == 1:
+				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x+1]))
+			if x == 7 and board_piece_positions[y-piece][x-1] < 0 and piece == 1:
+				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x-1]))
+
+			if x == 0 and board_piece_positions[y-piece][x+1] > 0 and piece == -1:
+				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x+1]))
+			if x == 7 and board_piece_positions[y-piece][x-1] > 0 and piece == -1:
+				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x-1]))
+		
+		# ON PEASANT CAPTURE
+
+		# PROMOTION
+
 
 	return avaiable_squares
 
