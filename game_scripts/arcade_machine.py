@@ -966,8 +966,8 @@ def chess_game():
 		draw_pieces(screen, board_piece_positions)
 
 		if clicked_square != None:
-			piece = board_piece_positions[clicked_square[3]][clicked_square[2]]
-			piece_square = [clicked_square[3],clicked_square[2]]
+			piece = board_piece_positions[clicked_square.y_index][clicked_square.x_index]
+			piece_square = [clicked_square.y_index,clicked_square.x_index]
 
 			#print('clicked_square : '+str(clicked_square))
 			#print('piece is : '+str(piece))

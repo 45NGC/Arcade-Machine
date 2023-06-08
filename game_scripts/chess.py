@@ -90,7 +90,16 @@ def selected_square(x_coordinate, y_coordinate):
 	# print('selected_square_x : '+str(selected_square_x))
 	# print('selected_square_y : '+str(selected_square_y))
 
-	return selected_square_x, selected_square_y, x_square_index, y_square_index
+	selected_square = SelectedSquare(selected_square_x, selected_square_y, x_square_index, y_square_index)
+
+	return selected_square
+
+class SelectedSquare:
+  def __init__(self, x_coordinate, y_coordinate, x_index, y_index):
+    self.x_coordinate = x_coordinate
+    self.y_coordinate = y_coordinate
+    self.x_index = x_index
+    self.y_index = y_index
 
 def avaiable_squares(piece, piece_square, board_piece_positions):
 	x = piece_square[1]
