@@ -902,9 +902,10 @@ def chess_menu():
 		pygame.display.flip()
 
 
+
 def chess_game():
 	game_clock = pygame.time.Clock()
-	board = image.load('resources/chess-images/medium-board.png')
+	board_image = image.load('resources/chess-images/medium-green-board.png')
 
 	clicked_square = None
 	avaiable_squares_positions = None
@@ -926,23 +927,14 @@ def chess_game():
 	# King 				= 6 / -6
 	# Attacked squares 	= 7 / -7
  
-	board_piece_positions = [[-4, -2, -3, -5, -6, -3, -2, -4],
-					   		[-1, -1, -1, -1, -1, -1, -1, -1],
-					   		[1, 0, 0, 0, 0, 0, 0, 1],
-					   		[0, 0, -1, 0, 0, 0, 0, 0],
-					   		[0, 0, 0, 1, 0, 0, 0, 0],
-					   		[-1, 0, 1, 0, 0, 0, 0, -1],
-					   		[1, 1, 1, 1, 1, 1, 1, 1],
-					   		[4, 2, 3, 5, 6, 3, 2, 4]]
-	
-	board_attacked_positions = [[0, 0, 0, 0, 0, 0, 0, 0],
-					   		[0, 0, 0, 0, 0, 0, 0, 0],
-					   		[-1, -1, -1, -1, -1, -1, -1, -1],
-					   		[0, 0, 0, 0, 0, 0, 0, 0],
-					   		[0, 0, 0, 0, 0, 0, 0, 0],
-					   		[1, 1, 1, 1, 1, 1, 1, 1],
-					   		[0, 0, 0, 0, 0, 0, 0, 0],
-					   		[0, 0, 0, 0, 0, 0, 0, 0]]
+	board = [[-4, -2, -3, -5, -6, -3, -2, -4],
+			[-1, -1, -1, -1, -1, -1, -1, -1],
+			[1, 0, 0, 0, 0, 0, 0, 1],
+			[0, 0, -1, 0, 0, 0, 0, 0],
+			[0, 0, 0, 1, 0, 0, 0, 0],
+			[-1, 0, 1, 0, 0, 0, 0, -1],
+			[1, 1, 1, 1, 1, 1, 1, 1],
+			[4, 2, 3, 5, 6, 3, 2, 4]]
 
 	run = True
 
@@ -962,20 +954,20 @@ def chess_game():
 
 
 		screen.fill((40,40,40))
-		screen.blit(board, (50,50))
-		draw_pieces(screen, board_piece_positions)
+		screen.blit(board_image, (50,50))
+		draw_pieces(screen, board)
 
 		if clicked_square != None:
-			piece = board_piece_positions[clicked_square.y_index][clicked_square.x_index]
+			piece = board[clicked_square.y_index][clicked_square.x_index]
 			piece_square = [clicked_square.y_index,clicked_square.x_index]
 
 			#print('clicked_square : '+str(clicked_square))
 			#print('piece is : '+str(piece))
 
-			avaiable_squares_positions = avaiable_squares(piece, piece_square, board_piece_positions)
+			avaiable_squares_positions = avaiable_squares(piece, piece_square, board)
 			for square in avaiable_squares_positions:
 				screen.blit(avaiable_square_surface, (square[1], square[0]))
-			screen.blit(selected_square_surface, (clicked_square[0], clicked_square[1]))
+			screen.blit(selected_square_surface, (clicked_square.x_coordinate, clicked_square.y_coordinate))
 	
 		pygame.display.flip()
 

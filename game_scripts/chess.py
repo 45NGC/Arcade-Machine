@@ -11,6 +11,8 @@ purple = (153,0,255)
 
 # CHESS PIECES
 
+# IMAGES
+
 w_pawn = image.load('resources/chess-images/pieces/white/Wpawn.png')
 w_knight = image.load('resources/chess-images/pieces/white/Wknight.png')
 w_bishop = image.load('resources/chess-images/pieces/white/Wbishop.png')
@@ -27,9 +29,49 @@ b_queen = image.load('resources/chess-images/pieces/black/Bqueen.png')
 b_king = image.load('resources/chess-images/pieces/black/Bking.png')
 black_pieces = [b_pawn, b_knight, b_bishop, b_rook, b_queen, b_king]
 
-square_coordinates = [50, 125, 200, 275, 350, 425, 500, 575]
+# CLASSES
+class SelectedSquare:
+  def __init__(self, x_coordinate, y_coordinate, x_index, y_index):
+    self.x_coordinate = x_coordinate
+    self.y_coordinate = y_coordinate
+    self.x_index = x_index
+    self.y_index = y_index
+
+class Piece():
+	def __init__(self, color, image, x_index, y_index):
+		self.color = color
+		self.image = image
+		self.x_index = x_index
+		self.y_index = y_index
 
 
+class Pawn(Piece):
+	def __init__(self, available_squares):
+		self.available_squares = available_squares
+
+		def move():
+			pass
+
+		def promote():
+			pass
+
+		def captured():
+			pass
+
+class Knight(Piece):
+	pass
+
+class Bishop(Piece):
+	pass
+
+class Rook(Piece):
+	pass
+
+class Queen(Piece):
+	pass
+
+class King(Piece):
+	pass
 
 def draw_chess_menu(screen, mouse) :
 	# Title
@@ -61,6 +103,9 @@ def draw_pieces(screen, board_piece_positions):
 				screen.blit(white_pieces[(y[0])-1], (piece_coordinates[y[1]], piece_coordinates[x[1]]))
 			else:
 				pass
+
+
+square_coordinates = [50, 125, 200, 275, 350, 425, 500, 575]
 
 def selected_square(x_coordinate, y_coordinate):
 	selected_square_x = None
@@ -94,12 +139,6 @@ def selected_square(x_coordinate, y_coordinate):
 
 	return selected_square
 
-class SelectedSquare:
-  def __init__(self, x_coordinate, y_coordinate, x_index, y_index):
-    self.x_coordinate = x_coordinate
-    self.y_coordinate = y_coordinate
-    self.x_index = x_index
-    self.y_index = y_index
 
 def avaiable_squares(piece, piece_square, board_piece_positions):
 	x = piece_square[1]
