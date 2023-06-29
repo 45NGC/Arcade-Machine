@@ -908,7 +908,12 @@ def chess_game():
 	board_image = image.load('resources/chess-images/medium-green-board.png')
 
 	clicked_square = None
-	avaiable_squares_positions = None
+	clicked_avaiable_square = None
+	avaiable_squares_showed = False
+	avaiable_squares_list = {
+		'coordinates' 	: [],
+		'indexes'		: []
+	}
 
 	avaiable_square_surface = pygame.Surface((75,75))
 	avaiable_square_surface.set_alpha(130)
@@ -929,10 +934,10 @@ def chess_game():
  
 	board = [[-4, -2, -3, -5, -6, -3, -2, -4],
 			[-1, -1, -1, -1, -1, -1, -1, -1],
-			[1, 0, 0, 0, 0, 0, 0, 1],
-			[0, 0, -1, 0, 0, 0, 0, 0],
-			[0, 0, 0, 1, 0, 0, 0, 0],
-			[-1, 0, 1, 0, 0, 0, 0, -1],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
 			[1, 1, 1, 1, 1, 1, 1, 1],
 			[4, 2, 3, 5, 6, 3, 2, 4]]
 
@@ -948,8 +953,16 @@ def chess_game():
 				sys.exit()
 			
 			#MOUSECONTROLS
-			if event.type == pygame.MOUSEBUTTONDOWN : 
-				clicked_square = selected_square(mouse[0], mouse[1])
+			if event.type == pygame.MOUSEBUTTONDOWN :
+
+				if avaiable_squares_showed:
+					clicked_avaiable_square = selected_square(mouse[0], mouse[1], board)
+
+					if clicked_avaiable_square == None :
+						clicked_square = None
+				
+				else:
+					clicked_square = selected_square(mouse[0], mouse[1], board)
 
 
 
@@ -961,13 +974,36 @@ def chess_game():
 			piece = board[clicked_square.y_index][clicked_square.x_index]
 			piece_square = [clicked_square.y_index,clicked_square.x_index]
 
-			#print('clicked_square : '+str(clicked_square))
-			#print('piece is : '+str(piece))
+			avaiable_squares_list = avaiable_squares(piece, piece_square, board)
 
-			avaiable_squares_positions = avaiable_squares(piece, piece_square, board)
-			for square in avaiable_squares_positions:
-				screen.blit(avaiable_square_surface, (square[1], square[0]))
+			if len(avaiable_squares_list['coordinates']) == 0:
+				avaiable_squares_showed = False
+			else :
+				avaiable_squares_showed = True
+
+			if avaiable_squares_showed:
+				for square in avaiable_squares_list['coordinates']:
+					screen.blit(avaiable_square_surface, (square[1], square[0]))
+
 			screen.blit(selected_square_surface, (clicked_square.x_coordinate, clicked_square.y_coordinate))
+		
+		if clicked_avaiable_square != None:
+			# Move piece :
+			if [clicked_avaiable_square.x_index, clicked_avaiable_square.y_index] in avaiable_squares_list['indexes']:
+
+				board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
+				board[clicked_square.y_index][clicked_square.x_index] = 0
+
+				avaiable_squares_showed = False
+				clicked_square = None
+				clicked_avaiable_square = None
+			
+			# Select different square
+			else:
+				clicked_square = clicked_avaiable_square
+				clicked_avaiable_square = None
+				
+
 	
 		pygame.display.flip()
 

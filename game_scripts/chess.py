@@ -31,47 +31,18 @@ black_pieces = [b_pawn, b_knight, b_bishop, b_rook, b_queen, b_king]
 
 # CLASSES
 class SelectedSquare:
-  def __init__(self, x_coordinate, y_coordinate, x_index, y_index):
-    self.x_coordinate = x_coordinate
-    self.y_coordinate = y_coordinate
-    self.x_index = x_index
-    self.y_index = y_index
-
-class Piece():
-	def __init__(self, color, image, x_index, y_index):
-		self.color = color
-		self.image = image
+	def __init__(self, x_coordinate, y_coordinate, x_index, y_index, value):
+		self.x_coordinate = x_coordinate
+		self.y_coordinate = y_coordinate
 		self.x_index = x_index
 		self.y_index = y_index
+		self.value = value
+	
+	def __str__(self):
+		return "coordenadas : x -> "+str(self.x_coordinate)+" = "+str(self.x_index)+"    y -> "+str(self.y_coordinate)+" = "+str(self.y_index)
+    
 
 
-class Pawn(Piece):
-	def __init__(self, available_squares):
-		self.available_squares = available_squares
-
-		def move():
-			pass
-
-		def promote():
-			pass
-
-		def captured():
-			pass
-
-class Knight(Piece):
-	pass
-
-class Bishop(Piece):
-	pass
-
-class Rook(Piece):
-	pass
-
-class Queen(Piece):
-	pass
-
-class King(Piece):
-	pass
 
 def draw_chess_menu(screen, mouse) :
 	# Title
@@ -107,7 +78,7 @@ def draw_pieces(screen, board_piece_positions):
 
 square_coordinates = [50, 125, 200, 275, 350, 425, 500, 575]
 
-def selected_square(x_coordinate, y_coordinate):
+def selected_square(x_coordinate, y_coordinate, board):
 	selected_square_x = None
 	selected_square_y = None
 	x_square_index = None
@@ -135,7 +106,7 @@ def selected_square(x_coordinate, y_coordinate):
 	# print('selected_square_x : '+str(selected_square_x))
 	# print('selected_square_y : '+str(selected_square_y))
 
-	selected_square = SelectedSquare(selected_square_x, selected_square_y, x_square_index, y_square_index)
+	selected_square = SelectedSquare(selected_square_x, selected_square_y, x_square_index, y_square_index, board[y_square_index][x_square_index])
 
 	return selected_square
 
@@ -143,47 +114,54 @@ def selected_square(x_coordinate, y_coordinate):
 def avaiable_squares(piece, piece_square, board_piece_positions):
 	x = piece_square[1]
 	y = piece_square[0]
-	avaiable_squares = []
+
+	avaiable_squares = {
+		'coordinates' 	: [],
+		'indexes'		: []
+	}
 
 	if piece == 1 or piece == -1:
 
 		# PUSH
 		if board_piece_positions[y-piece][x] == 0:
-			avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x]))
+			avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x]))
 			
 		# FIRST PUSH 
 		if ((y == 6 and piece == 1) or (y == 1 and piece == -1)) and board_piece_positions[y-piece][x] == 0 and board_piece_positions[y-(piece*2)][x] == 0:
-			avaiable_squares.append((square_coordinates[y-(piece*2)],square_coordinates[x]))
+			avaiable_squares['coordinates'].append((square_coordinates[y-(piece*2)],square_coordinates[x]))
 		
 		# NORMAL CAPTURE
 		if x != 0 and x != 7:
 
 			if board_piece_positions[y-piece][x+1] < 0 and piece == 1:
-				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x+1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
 			if board_piece_positions[y-piece][x-1] < 0 and piece == 1:
-				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x-1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
 			if board_piece_positions[y-piece][x+1] > 0 and piece == -1:
-				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x+1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
 			if board_piece_positions[y-piece][x-1] > 0 and piece == -1:
-				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x-1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
 		else:
 
 			if x == 0 and board_piece_positions[y-piece][x+1] < 0 and piece == 1:
-				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x+1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
 			if x == 7 and board_piece_positions[y-piece][x-1] < 0 and piece == 1:
-				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x-1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
 			if x == 0 and board_piece_positions[y-piece][x+1] > 0 and piece == -1:
-				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x+1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
 			if x == 7 and board_piece_positions[y-piece][x-1] > 0 and piece == -1:
-				avaiable_squares.append((square_coordinates[y-piece],square_coordinates[x-1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 		
 		# ON PEASANT CAPTURE
 
 		# PROMOTION
 
+		# INDEX
+		for coordinate in avaiable_squares['coordinates']:
+			avaiable_squares['indexes'].append([square_coordinates.index(coordinate[1]), square_coordinates.index(coordinate[0])])
 
 	return avaiable_squares
 
