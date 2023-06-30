@@ -120,13 +120,17 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 		'indexes'		: []
 	}
 
+	# PAWN
 	if piece == 1 or piece == -1:
 
 		# PUSH
 		if board_piece_positions[y-piece][x] == 0:
 			avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x]))
 			
-		# FIRST PUSH 
+		# FIRST PUSH
+		# TODO: 
+		# Add a conditional if the pawn has some other pawn next to it when the first push is made to make 
+		# the pawn next to it able to capture on peasant
 		if ((y == 6 and piece == 1) or (y == 1 and piece == -1)) and board_piece_positions[y-piece][x] == 0 and board_piece_positions[y-(piece*2)][x] == 0:
 			avaiable_squares['coordinates'].append((square_coordinates[y-(piece*2)],square_coordinates[x]))
 		
@@ -159,9 +163,35 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 
 		# PROMOTION
 
-		# INDEX
-		for coordinate in avaiable_squares['coordinates']:
-			avaiable_squares['indexes'].append([square_coordinates.index(coordinate[1]), square_coordinates.index(coordinate[0])])
+	# WHIGHT KNIGHT
+	if piece == 2 :
+
+		# JUMP
+		if 0 <= x+2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x+2] <= 0 : avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
+		if 0 <= x+2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x+2] <= 0 : avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
+		if 0 <= x-2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x-2] <= 0 : avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
+		if 0 <= x-2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x-2] <= 0 : avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
+		if 0 <= x+1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x+1] <= 0 : avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
+		if 0 <= x+1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x+1] <= 0 : avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
+		if 0 <= x-1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x-1] <= 0 : avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
+		if 0 <= x-1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x-1] <= 0 : avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
+
+	# BLACK KNIGHT
+	if piece == -2 :
+
+		# JUMP
+		if 0 <= x+2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x+2] >= 0 : avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
+		if 0 <= x+2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x+2] >= 0 : avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
+		if 0 <= x-2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x-2] >= 0 : avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
+		if 0 <= x-2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x-2] >= 0 : avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
+		if 0 <= x+1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x+1] >= 0 : avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
+		if 0 <= x+1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x+1] >= 0 : avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
+		if 0 <= x-1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x-1] >= 0 : avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
+		if 0 <= x-1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x-1] >= 0 : avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
+
+	# INDEX
+	for coordinate in avaiable_squares['coordinates']:
+		avaiable_squares['indexes'].append([square_coordinates.index(coordinate[1]), square_coordinates.index(coordinate[0])])
 
 	return avaiable_squares
 
