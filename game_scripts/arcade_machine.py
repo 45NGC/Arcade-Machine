@@ -371,9 +371,6 @@ def tetris_game():
 
 
 		
-		if moving_down and is_valid_position(board, current_piece, ad_Y=1):
-			current_piece['y'] += 1
-		
 		if time.time() - fall_timer > fall:
             # check if the piece has avaiable space
 			if not is_valid_position(board, current_piece, ad_Y=1):
