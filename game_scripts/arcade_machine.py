@@ -1,7 +1,7 @@
-from game_scripts.utilities import draw_button1, draw_button2, draw_text_input
+from game_scripts.utilities import draw_button1, draw_button2, draw_text_input, draw_pause_button, draw_pause_menu
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
-from game_scripts.pong import draw_pong_menu, draw_pong_pause_button, draw_pong_pause_menu
+from game_scripts.pong import draw_pong_menu
 from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, avaiable_squares
 from game_scripts.data import *
 import sys
@@ -601,7 +601,7 @@ def pong_menu() :
 		# SCREEN ELEMENTS
 		screen.fill((0,0,0))
 		draw_pong_menu(screen, mouse)
-		draw_pong_pause_button(screen)
+		draw_pause_button(screen, pause_button_X, pause_button_Y)
 
 		pygame.display.flip()
 
@@ -648,7 +648,7 @@ def pong_pause(in_game) :
 				if event.key == pygame.K_ESCAPE : paused = False
 				if event.key == pygame.K_SPACE : paused = False
 
-		draw_pong_pause_menu(screen, mouse)
+		draw_pause_menu(screen, pause_button_X, pause_button_Y, mouse)
 		pygame.display.flip()
 
 def pong_game(game_mode) :
@@ -865,7 +865,7 @@ def pong_game(game_mode) :
 				screen.blit(one,(game_area_width/2-10, 30))
 		
 		# Pause button
-		draw_pong_pause_button(screen)
+		draw_pause_button(screen, pause_button_X, pause_button_Y)
 
 		pygame.display.flip()
 

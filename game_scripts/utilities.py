@@ -65,3 +65,45 @@ def draw_text_input(screen, x_axis, y_axis, active):
 	else:
 		pygame.draw.rect(screen, grey, [x_axis-5, y_axis-5, TEXT_INPUT_WIDTH+10, TEXT_INPUT_HEIGHT+10], border_radius = 5)
 		pygame.draw.rect(screen, black, [x_axis, y_axis, TEXT_INPUT_WIDTH, TEXT_INPUT_HEIGHT], border_radius = 5)
+
+def draw_pause_button(screen, x_axis, y_axis) :
+	button_border = pygame.Rect(x_axis-2, y_axis-2, 54, 54)
+	pause_button = pygame.Rect(x_axis, y_axis, 50, 50)
+	stick_1 = pygame.Rect(x_axis+10, y_axis+5, 5, 40)
+	stick_2 = pygame.Rect(x_axis+35, y_axis+5, 5, 40)
+
+	pygame.draw.rect(screen, pink, button_border, border_radius = 10)
+	pygame.draw.rect(screen, black, pause_button, border_radius = 10)
+	pygame.draw.rect(screen, white, stick_1)
+	pygame.draw.rect(screen, white, stick_2)
+
+def draw_pause_menu(screen, x_axis, y_axis, mouse):
+	button_border = pygame.Rect(x_axis-2, y_axis-2, 54, 54)
+	pause_button = pygame.Rect(x_axis, y_axis, 50, 50)
+	stick_1 = pygame.Rect(x_axis+10, y_axis+5, 5, 40)
+	stick_2 = pygame.Rect(x_axis+35, y_axis+5, 5, 40)
+
+	# Change pause button color
+	pygame.draw.rect(screen, purple, button_border, border_radius = 10)
+	pygame.draw.rect(screen, black, pause_button, border_radius = 10)
+	pygame.draw.rect(screen, pink, stick_1)
+	pygame.draw.rect(screen, pink, stick_2)
+
+	# Pause menu
+	pause_menu_background = pygame.Rect(273, 218, 354, 354)
+	pause_menu = pygame.Rect(275, 220, 350, 350)
+	pygame.draw.rect(screen, pink, pause_menu_background)
+	pygame.draw.rect(screen, black, pause_menu)
+
+	pause_string = 'PAUSE'
+	pause_font = pygame.font.Font('resources/fonts/Gameplay.ttf', 30)
+	pause_title = pause_font.render(pause_string, True, white)
+	screen.blit(pause_title, (400,240))
+	
+	# Buttons
+	resume_string = '  RESUME'
+	controls_string = 'CONTROLS'
+	quit_string = '     QUIT'
+	draw_button2(screen, 325, 300, resume_string, mouse)
+	draw_button2(screen, 325, 390, controls_string, mouse)
+	draw_button2(screen, 325, 480, quit_string, mouse)
