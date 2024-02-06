@@ -277,7 +277,7 @@ def tetris_game():
 	game_clock = pygame.time.Clock()
 	board = get_empty_board()
 	fall_timer = time.time()
-	moving_down = False
+	
 	score = 0
 	lines = 0
 	fall = 0.35
@@ -320,11 +320,7 @@ def tetris_game():
 				if event.type == pygame.MOUSEBUTTONDOWN : tetris_pause(in_game=True)
 			
 			# KEYCONTROLS
-			if event.type == pygame.KEYUP:
-				if (event.key == pygame.K_DOWN) : 
-					moving_down = False
-
-			elif event.type == pygame.KEYDOWN:
+			if event.type == pygame.KEYDOWN:
 				# pause
 				if event.key == pygame.K_ESCAPE :
 					tetris_pause(in_game=True)
@@ -344,7 +340,6 @@ def tetris_game():
 
 				# move piece down
 				elif event.key == pygame.K_DOWN:
-					moving_down = True
 					if is_valid_position(board, current_piece, ad_Y=1):
 						current_piece['y'] += 1
 
