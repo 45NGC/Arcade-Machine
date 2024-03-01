@@ -919,19 +919,37 @@ def chess_game():
 	# Pawn 				= 1 / -1
 	# Knight 			= 2 / -2
 	# Bishop 			= 3 / -3
-	# Rook 				= 4 / -4
-	# Queen				= 5 / -5
-	# King 				= 6 / -6
-	# Attacked squares 	= 7 / -7
+	# Rook 				= 4 / -4	5 / -5	(short-castle	long-castle)
+	# Queen				= 6 / -6
+	# King 				= 7 / -7
+	# Attacked squares 	= 10 / -10
  
-	board = [[-4, -2, -3, -5, -6, -3, -2, -4],
+	board = [[-5, -2, -3, -6, -7, -3, -2, -4],
 			[-1, -1, -1, -1, -1, -1, -1, -1],
 			[0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0],
 			[1, 1, 1, 1, 1, 1, 1, 1],
-			[4, 2, 3, 5, 6, 3, 2, 4]]
+			[5, 2, 3, 6, 7, 3, 2, 4]]
+	
+
+	# CASTLE :
+	# 0		->		available but not enabled
+	# 1		->		available and enabled
+	# 2		->		disabled
+
+	# castle = {
+	# 	'white-short' 	: 0,
+	# 	'white-long'	: 0,
+	# 	'black-short' 	: 0,
+	# 	'black-long'	: 0
+	# }
+
+	# TURN :
+	# 1		->		white turn
+	# -1	->		black turn
+	turn = 1
 
 	run = True
 
@@ -964,20 +982,22 @@ def chess_game():
 
 		if clicked_square != None:
 			piece = board[clicked_square.y_index][clicked_square.x_index]
-			piece_square = [clicked_square.y_index,clicked_square.x_index]
 
-			avaiable_squares_list = avaiable_squares(piece, piece_square, board)
+			if (piece > 0 and turn == 1) or (piece < 0 and turn == -1):
+				piece_square = [clicked_square.y_index,clicked_square.x_index]
 
-			if len(avaiable_squares_list['coordinates']) == 0:
-				avaiable_squares_showed = False
-			else :
-				avaiable_squares_showed = True
+				avaiable_squares_list = avaiable_squares(piece, piece_square, board)
 
-			if avaiable_squares_showed:
-				for square in avaiable_squares_list['coordinates']:
-					screen.blit(avaiable_square_surface, (square[1], square[0]))
+				if len(avaiable_squares_list['coordinates']) == 0:
+					avaiable_squares_showed = False
+				else :
+					avaiable_squares_showed = True
 
-			screen.blit(selected_square_surface, (clicked_square.x_coordinate, clicked_square.y_coordinate))
+				if avaiable_squares_showed:
+					for square in avaiable_squares_list['coordinates']:
+						screen.blit(avaiable_square_surface, (square[1], square[0]))
+
+				screen.blit(selected_square_surface, (clicked_square.x_coordinate, clicked_square.y_coordinate))
 		
 		if clicked_avaiable_square != None:
 			# Move piece :
@@ -989,6 +1009,9 @@ def chess_game():
 				avaiable_squares_showed = False
 				clicked_square = None
 				clicked_avaiable_square = None
+
+				# Change turn :
+				turn = turn * -1
 			
 			# Select different square
 			else:

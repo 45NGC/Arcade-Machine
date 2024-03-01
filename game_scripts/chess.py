@@ -19,7 +19,7 @@ w_bishop = image.load('resources/chess-images/pieces/white/Wbishop.png')
 w_rook = image.load('resources/chess-images/pieces/white/Wrook.png')
 w_queen = image.load('resources/chess-images/pieces/white/Wqueen.png')
 w_king = image.load('resources/chess-images/pieces/white/Wking.png')
-white_pieces = [w_pawn, w_knight, w_bishop, w_rook, w_queen, w_king]
+white_pieces = [w_pawn, w_knight, w_bishop, w_rook, w_rook, w_queen, w_king]
 
 b_pawn = image.load('resources/chess-images/pieces/black/Bpawn.png')
 b_knight = image.load('resources/chess-images/pieces/black/Bknight.png')
@@ -27,7 +27,7 @@ b_bishop = image.load('resources/chess-images/pieces/black/Bbishop.png')
 b_rook = image.load('resources/chess-images/pieces/black/Brook.png')
 b_queen = image.load('resources/chess-images/pieces/black/Bqueen.png')
 b_king = image.load('resources/chess-images/pieces/black/Bking.png')
-black_pieces = [b_pawn, b_knight, b_bishop, b_rook, b_queen, b_king]
+black_pieces = [b_pawn, b_knight, b_bishop, b_rook, b_rook, b_queen, b_king]
 
 # CLASSES
 class SelectedSquare:
@@ -39,7 +39,7 @@ class SelectedSquare:
 		self.value = value
 	
 	def __str__(self):
-		return "coordenadas : x -> "+str(self.x_coordinate)+" = "+str(self.x_index)+"    y -> "+str(self.y_coordinate)+" = "+str(self.y_index)
+		return "coordinates : x -> "+str(self.x_coordinate)+" = "+str(self.x_index)+"    y -> "+str(self.y_coordinate)+" = "+str(self.y_index)
     
 
 
@@ -68,9 +68,9 @@ def draw_pieces(screen, board_piece_positions):
 	for x in zip(board_piece_positions, positions):
 		for y in zip(x[0], positions):
 
-			if y[0] < 0 and y[0] > -7:
+			if y[0] < 0 and y[0] > -8:
 				screen.blit(black_pieces[(y[0]*-1)-1], (piece_coordinates[y[1]], piece_coordinates[x[1]]))
-			elif y[0] > 0 and y[0] < 7:
+			elif y[0] > 0 and y[0] < 8:
 				screen.blit(white_pieces[(y[0])-1], (piece_coordinates[y[1]], piece_coordinates[x[1]]))
 			else:
 				pass
@@ -206,7 +206,7 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 			avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
 	
 	# WHITE BISHOP + WHITE QUEEN
-	if piece == 3 or piece == 5:
+	if piece == 3 or piece == 6:
 			
 		for index in range(1,8):
 			if (0 > y-index) or (y-index > 7) or (0 > x+index) or (x+index > 7) : break
@@ -248,7 +248,7 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 			except IndexError: break
 
 	# BLACK BISHOP + BLACK QUEEN
-	if piece == -3 or piece == -5:
+	if piece == -3 or piece == -6:
 			
 		for index in range(1,8):
 			if (0 > y-index) or (y-index > 7) or (0 > x+index) or (x+index > 7) : break
@@ -291,7 +291,7 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 	
 
 	# WHITE ROOK + WHITE QUEEN
-	if piece == 4 or piece == 5:
+	if piece == 4 or piece == 5 or piece == 6:
 		
 		for index in range(1,8):
 			if (0 > x+index) or (x+index > 7) : break
@@ -334,7 +334,7 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 	
 
 	# BLACK ROOK + BLACK QUEEN
-	if piece == -4 or piece == -5:
+	if piece == -4 or piece == -5 or piece == -6:
 		
 		for index in range(1,8):
 			if (0 > x+index) or (x+index > 7) : break
@@ -376,7 +376,7 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 			except IndexError: break
 	
 	# WHITE KING
-	if piece == 6:	
+	if piece == 7:	
 
 		if y+1 <= 7:
 			if board_piece_positions[y+1][x] <= 0 :
@@ -412,7 +412,7 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 
 
 	# BLACK KING
-	if piece == -6:	
+	if piece == -7:	
 
 		if y+1 <= 7:
 			if board_piece_positions[y+1][x] >= 0 :
