@@ -463,7 +463,7 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 			for index in range(1,8):
 				if (0 > x-index) : break
 				
-				if board_piece_positions[y][x+index] != 0 :
+				if board_piece_positions[y][x-index] != 0 :
 					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-index]))
 					break
 				else:
