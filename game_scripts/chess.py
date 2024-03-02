@@ -111,7 +111,7 @@ def selected_square(x_coordinate, y_coordinate, board):
 	return selected_square
 
 
-def avaiable_squares(piece, piece_square, board_piece_positions):
+def avaiable_squares(piece, piece_square, board_piece_positions, attacked_squares):
 	x = piece_square[1]
 	y = piece_square[0]
 
@@ -120,331 +120,397 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 		'indexes'		: []
 	}
 
-	# PAWN
-	if piece == 1 or piece == -1:
 
-		# PUSH
-		if board_piece_positions[y-piece][x] == 0:
-			avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x]))
+	if attacked_squares == False:
+
+		# PAWN
+		if piece in [1, -1]:
+
+			# PUSH
+			if board_piece_positions[y-piece][x] == 0:
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x]))
+				
+			# FIRST PUSH
+			# TODO: 
+			# Add index conditional if the pawn has some other pawn next to it when the first push is made to make 
+			# the pawn next to it able to capture on peasant
+			if ((y == 6 and piece == 1) or (y == 1 and piece == -1)) and board_piece_positions[y-piece][x] == 0 and board_piece_positions[y-(piece*2)][x] == 0:
+				avaiable_squares['coordinates'].append((square_coordinates[y-(piece*2)],square_coordinates[x]))
 			
-		# FIRST PUSH
-		# TODO: 
-		# Add index conditional if the pawn has some other pawn next to it when the first push is made to make 
-		# the pawn next to it able to capture on peasant
-		if ((y == 6 and piece == 1) or (y == 1 and piece == -1)) and board_piece_positions[y-piece][x] == 0 and board_piece_positions[y-(piece*2)][x] == 0:
-			avaiable_squares['coordinates'].append((square_coordinates[y-(piece*2)],square_coordinates[x]))
-		
-		# NORMAL CAPTURE
-		if x != 0 and x != 7:
+			# NORMAL CAPTURE
+			if x != 0 and x != 7 :
 
-			if board_piece_positions[y-piece][x+1] < 0 and piece == 1:
-				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
-			if board_piece_positions[y-piece][x-1] < 0 and piece == 1:
-				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
+				if board_piece_positions[y-piece][x+1] < 0 and piece == 1:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+				if board_piece_positions[y-piece][x-1] < 0 and piece == 1:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
-			if board_piece_positions[y-piece][x+1] > 0 and piece == -1:
-				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
-			if board_piece_positions[y-piece][x-1] > 0 and piece == -1:
-				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
+				if board_piece_positions[y-piece][x+1] > 0 and piece == -1:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+				if board_piece_positions[y-piece][x-1] > 0 and piece == -1:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
-		else:
+			else:
 
-			if x == 0 and board_piece_positions[y-piece][x+1] < 0 and piece == 1:
-				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
-			if x == 7 and board_piece_positions[y-piece][x-1] < 0 and piece == 1:
-				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
+				if x == 0 and board_piece_positions[y-piece][x+1] < 0 and piece == 1:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+				if x == 7 and board_piece_positions[y-piece][x-1] < 0 and piece == 1:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
-			if x == 0 and board_piece_positions[y-piece][x+1] > 0 and piece == -1:
-				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
-			if x == 7 and board_piece_positions[y-piece][x-1] > 0 and piece == -1:
-				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
-		
-		# ON PEASANT CAPTURE
-
-		# PROMOTION
-
-	# WHIGHT KNIGHT
-	if piece == 2 :
-
-		# JUMP
-		if 0 <= x+2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x+2] <= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
-		if 0 <= x+2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x+2] <= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
-		if 0 <= x-2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x-2] <= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
-		if 0 <= x-2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x-2] <= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
-		if 0 <= x+1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x+1] <= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
-		if 0 <= x+1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x+1] <= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
-		if 0 <= x-1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x-1] <= 0 :
-			avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
-		if 0 <= x-1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x-1] <= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
-
-	# BLACK KNIGHT
-	if piece == -2 :
-
-		# JUMP
-		if 0 <= x+2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x+2] >= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
-		if 0 <= x+2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x+2] >= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
-		if 0 <= x-2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x-2] >= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
-		if 0 <= x-2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x-2] >= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
-		if 0 <= x+1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x+1] >= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
-		if 0 <= x+1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x+1] >= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
-		if 0 <= x-1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x-1] >= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
-		if 0 <= x-1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x-1] >= 0 : 
-			avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
-	
-	# WHITE BISHOP + WHITE QUEEN
-	if piece == 3 or piece == 6:
+				if x == 0 and board_piece_positions[y-piece][x+1] > 0 and piece == -1:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+				if x == 7 and board_piece_positions[y-piece][x-1] > 0 and piece == -1:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 			
-		for index in range(1,8):
-			if (0 > y-index) or (y-index > 7) or (0 > x+index) or (x+index > 7) : break
+			# ON PEASANT CAPTURE
 
-			try:
+			# PROMOTION
+
+
+		# WHITE KNIGHT
+		if piece == 2 :
+
+			# JUMP
+			if 0 <= x+2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x+2] <= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
+			if 0 <= x+2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x+2] <= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
+			if 0 <= x-2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x-2] <= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
+			if 0 <= x-2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x-2] <= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
+			if 0 <= x+1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x+1] <= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
+			if 0 <= x+1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x+1] <= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
+			if 0 <= x-1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x-1] <= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
+			if 0 <= x-1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x-1] <= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
+
+
+		# BLACK KNIGHT
+		if piece == -2 :
+
+			# JUMP
+			if 0 <= x+2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x+2] >= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
+			if 0 <= x+2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x+2] >= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
+			if 0 <= x-2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x-2] >= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
+			if 0 <= x-2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x-2] >= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
+			if 0 <= x+1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x+1] >= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
+			if 0 <= x+1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x+1] >= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
+			if 0 <= x-1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x-1] >= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
+			if 0 <= x-1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x-1] >= 0 : 
+				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
+
+		
+		# WHITE BISHOP + WHITE QUEEN
+		if piece in [3, 6]:
+				
+			for index in range(1,8):
+				if (0 > y-index) or (x+index > 7) : break
+
 				if board_piece_positions[y-index][x+index] > 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x+index]))
 				if board_piece_positions[y-index][x+index] < 0 : break
-			except IndexError: break
-		
 
-		for index in range(1,8):
-			if (0 > y+index) or (y+index > 7) or (0 > x-index) or (x-index > 7) : break
+			
 
-			try:
+			for index in range(1,8):
+				if (y+index > 7) or (0 > x-index) : break
+
 				if board_piece_positions[y+index][x-index] > 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x-index]))
 				if board_piece_positions[y+index][x-index] < 0 : break
-			except IndexError: break
-		
+				
+			
 
-		for index in range(1,8):
-			if (0 > y-index) or (y-index > 7) or (0 > x-index) or (x-index > 7) : break
+			for index in range(1,8):
+				if (0 > y-index) or (0 > x-index) : break
 
-			try:
 				if board_piece_positions[y-index][x-index] > 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x-index]))
 				if board_piece_positions[y-index][x-index] < 0 : break
-			except IndexError: break
-		
+				
+			
 
-		for index in range(1,8):
-			if (0 > y+index) or (y+index > 7) or (0 > x+index) or (x+index > 7) : break
-
-			try:
+			for index in range(1,8):
+				if (y+index > 7) or (x+index > 7) : break
+				
 				if board_piece_positions[y+index][x+index] > 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x+index]))
 				if board_piece_positions[y+index][x+index] < 0 : break
-			except IndexError: break
 
-	# BLACK BISHOP + BLACK QUEEN
-	if piece == -3 or piece == -6:
-			
-		for index in range(1,8):
-			if (0 > y-index) or (y-index > 7) or (0 > x+index) or (x+index > 7) : break
 
-			try:
+		# BLACK BISHOP + BLACK QUEEN
+		if piece in [-3, -6]:
+				
+			for index in range(1,8):
+				if (0 > y-index) or (x+index > 7) : break
+
 				if board_piece_positions[y-index][x+index] < 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x+index]))
 				if board_piece_positions[y-index][x+index] > 0 : break
-			except IndexError: break
-		
+				
+			
 
-		for index in range(1,8):
-			if (0 > y+index) or (y+index > 7) or (0 > x-index) or (x-index > 7) : break
+			for index in range(1,8):
+				if (y+index > 7) or (0 > x-index) : break
 
-			try:
 				if board_piece_positions[y+index][x-index] < 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x-index]))
 				if board_piece_positions[y+index][x-index] > 0 : break
-			except IndexError: break
-		
+				
+			
 
-		for index in range(1,8):
-			if (0 > y-index) or (y-index > 7) or (0 > x-index) or (x-index > 7) : break
-
-			try:
+			for index in range(1,8):
+				if (0 > y-index) or (0 > x-index) : break
+				
 				if board_piece_positions[y-index][x-index] < 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x-index]))
 				if board_piece_positions[y-index][x-index] > 0 : break
-			except IndexError: break
-		
+				
+			
 
-		for index in range(1,8):
-			if (0 > y+index) or (y+index > 7) or (0 > x+index) or (x+index > 7) : break
+			for index in range(1,8):
+				if (y+index > 7) or (x+index > 7) : break
 
-			try:
 				if board_piece_positions[y+index][x+index] < 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x+index]))
 				if board_piece_positions[y+index][x+index] > 0 : break
-			except IndexError: break
-	
-
-	# WHITE ROOK + WHITE QUEEN
-	if piece == 4 or piece == 5 or piece == 6:
+				
 		
-		for index in range(1,8):
-			if (0 > x+index) or (x+index > 7) : break
 
-			try:
+		# WHITE ROOK + WHITE QUEEN
+		if piece in [4, 5, 6]:
+			
+			for index in range(1,8):
+				if (0 > x+index) or (x+index > 7) : break
+				
 				if board_piece_positions[y][x+index] > 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+index]))
 				if board_piece_positions[y][x+index] < 0 : break
-			except IndexError: break
+				
 
-		
-		for index in range(1,8):
-			if (0 > x-index) or (x-index > 7) : break
-
-			try:
+			
+			for index in range(1,8):
+				if (0 > x-index) or (x-index > 7) : break
+				
 				if board_piece_positions[y][x-index] > 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-index]))
 				if board_piece_positions[y][x-index] < 0 : break
-			except IndexError: break
-		
+				
+			
 
-		for index in range(1,8):
-			if (0 > y+index) or (y+index > 7) : break
-
-			try:
+			for index in range(1,8):
+				if (0 > y+index) or (y+index > 7) : break
+				
 				if board_piece_positions[y+index][x] > 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x]))
 				if board_piece_positions[y+index][x] < 0 : break
-			except IndexError: break
-		
+				
+			
 
-		for index in range(1,8):
-			if (0 > y-index) or (y-index > 7) : break
-
-			try:
+			for index in range(1,8):
+				if (0 > y-index) or (y-index > 7) : break
+				
 				if board_piece_positions[y-index][x] > 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x]))
 				if board_piece_positions[y-index][x] < 0 : break
-			except IndexError: break
-	
-
-	# BLACK ROOK + BLACK QUEEN
-	if piece == -4 or piece == -5 or piece == -6:
+				
 		
-		for index in range(1,8):
-			if (0 > x+index) or (x+index > 7) : break
 
-			try:
+		# BLACK ROOK + BLACK QUEEN
+		if piece in [-4, -5, -6]:
+			
+			for index in range(1,8):
+				if (x+index > 7) : break
+				
 				if board_piece_positions[y][x+index] < 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+index]))
 				if board_piece_positions[y][x+index] > 0 : break
-			except IndexError: break
+				
 
-		
-		for index in range(1,8):
-			if (0 > x-index) or (x-index > 7) : break
-
-			try:
+			
+			for index in range(1,8):
+				if (0 > x-index) : break
+				
 				if board_piece_positions[y][x-index] < 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-index]))
 				if board_piece_positions[y][x-index] > 0 : break
-			except IndexError: break
-		
+				
+			
 
-		for index in range(1,8):
-			if (0 > y+index) or (y+index > 7) : break
-
-			try:
+			for index in range(1,8):
+				if (y+index > 7) : break
+				
 				if board_piece_positions[y+index][x] < 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x]))
 				if board_piece_positions[y+index][x] > 0 : break
-			except IndexError: break
-		
+				
+			
 
-		for index in range(1,8):
-			if (0 > y-index) or (y-index > 7) : break
-
-			try:
+			for index in range(1,8):
+				if (0 > y-index) : break
+				
 				if board_piece_positions[y-index][x] < 0 : break
 				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x]))
 				if board_piece_positions[y-index][x] > 0 : break
-			except IndexError: break
-	
-	# WHITE KING
-	if piece == 7:	
+			
 
-		if y+1 <= 7:
-			if board_piece_positions[y+1][x] <= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x]))
+	else:
+		# Only shows attacked squares
+
+		# PAWN
+		if piece in [1, -1]:
+
+			if x != 0 and x != 7 :
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
+			else:
+				if x == 0:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+				if x == 7:
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 		
-		if x+1 <= 7:
-			if board_piece_positions[y][x+1] <= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+1]))
+		# KNIGHT
+		if piece in [2, -2]:
+
+			if 0 <= x+2 <= 7 and 0 <= y+1 <= 7: 
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
+			if 0 <= x+2 <= 7 and 0 <= y-1 <= 7: 
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
+			if 0 <= x-2 <= 7 and 0 <= y+1 <= 7: 
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
+			if 0 <= x-2 <= 7 and 0 <= y-1 <= 7: 
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
+			if 0 <= x+1 <= 7 and 0 <= y+2 <= 7: 
+				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
+			if 0 <= x+1 <= 7 and 0 <= y-2 <= 7: 
+				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
+			if 0 <= x-1 <= 7 and 0 <= y+2 <= 7:
+				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
+			if 0 <= x-1 <= 7 and 0 <= y-2 <= 7: 
+				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
+
+		# BISHOP / QUEEN
+		if piece in [3, -3, 6, -6]:
+
+			for index in range(1,8):
+				if (0 > y-index) or (x+index > 7) : break
+				
+				if board_piece_positions[y-index][x+index] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x+index]))
+					break
+				else:
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x+index]))
+
+			for index in range(1,8):
+				if (y+index > 7) or (0 > x-index) : break
+				
+				if board_piece_positions[y+index][x-index] != 0 : 
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x-index]))
+					break
+				else:
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x-index]))
+
+			for index in range(1,8):
+				if (0 > y-index) or (0 > x-index) : break
+				
+				if board_piece_positions[y-index][x-index] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x-index]))
+					break
+				else:
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x-index]))
+
+			for index in range(1,8):
+				if (y+index > 7) or (x+index > 7) : break
+				
+				if board_piece_positions[y+index][x+index] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x+index]))
+					break
+				else:
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x+index]))
 		
-		if y-1 >= 0:
-			if board_piece_positions[y-1][x] <= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x]))
+		# ROOK / QUEEN
+		if piece in [4, -4, 5, -5, 6, -6]:
+
+			for index in range(1,8):
+				if (x+index > 7) : break
+				
+				if board_piece_positions[y][x+index] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+index]))
+					break
+				else:
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+index]))
+			
+			for index in range(1,8):
+				if (y+index > 7) : break
+				
+				if board_piece_positions[y+index][x] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x]))
+					break
+				else:
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x]))
+			
+			for index in range(1,8):
+				if (0 > x-index) : break
+				
+				if board_piece_positions[y][x+index] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-index]))
+					break
+				else:
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-index]))
+			
+			for index in range(1,8):
+				if (0 > y-index) : break
+				
+				if board_piece_positions[y-index][x] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x]))
+					break
+				else:
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x]))
 		
-		if x-1 >= 0:
-			if board_piece_positions[y][x-1] <= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-1]))
+		# KING
+		if piece in [7, -7]:
+			if y+1 <= 7:
+				if board_piece_positions[y+1][x] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x]))
+			
+			if x+1 <= 7:
+				if board_piece_positions[y][x+1] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+1]))
+			
+			if y-1 >= 0:
+				if board_piece_positions[y-1][x] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x]))
+			
+			if x-1 >= 0:
+				if board_piece_positions[y][x-1] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-1]))
 
-		if y+1 <= 7 and x+1 <= 7:
-			if board_piece_positions[y+1][x+1] <= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+1]))
+			if y+1 <= 7 and x+1 <= 7:
+				if board_piece_positions[y+1][x+1] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+1]))
 
-		if y+1 <= 7 and x-1 >= 0:
-			if board_piece_positions[y+1][x-1] <= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-1]))
+			if y+1 <= 7 and x-1 >= 0:
+				if board_piece_positions[y+1][x-1] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-1]))
 
-		if y-1 >= 0 and x+1 <= 7:
-			if board_piece_positions[y-1][x+1] <= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+1]))
+			if y-1 >= 0 and x+1 <= 7:
+				if board_piece_positions[y-1][x+1] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+1]))
 
-		if y-1 >= 0 and x-1 >= 0:
-			if board_piece_positions[y-1][x-1] <= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-1]))
-
-
-	# BLACK KING
-	if piece == -7:	
-
-		if y+1 <= 7:
-			if board_piece_positions[y+1][x] >= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x]))
-		
-		if x+1 <= 7:
-			if board_piece_positions[y][x+1] >= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+1]))
-		
-		if y-1 >= 0:
-			if board_piece_positions[y-1][x] >= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x]))
-		
-		if x-1 >= 0:
-			if board_piece_positions[y][x-1] >= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-1]))
-
-		if y+1 <= 7 and x+1 <= 7:
-			if board_piece_positions[y+1][x+1] >= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+1]))
-
-		if y+1 <= 7 and x-1 >= 0:
-			if board_piece_positions[y+1][x-1] >= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-1]))
-
-		if y-1 >= 0 and x+1 <= 7:
-			if board_piece_positions[y-1][x+1] >= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+1]))
-
-		if y-1 >= 0 and x-1 >= 0:
-			if board_piece_positions[y-1][x-1] >= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-1]))
+			if y-1 >= 0 and x-1 >= 0:
+				if board_piece_positions[y-1][x-1] != 0 :
+					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-1]))
 
 
 	# INDEX
@@ -453,5 +519,28 @@ def avaiable_squares(piece, piece_square, board_piece_positions):
 
 	return avaiable_squares
 
+
+def get_attacked_squares(board, turn):
+
+	attacked_squares_list = []
+	positions = [0, 1, 2, 3, 4, 5, 6, 7]
+
+	for line in zip(board, positions):
+		for square in zip(line[0], positions):
+
+			if square[0] != 0:
+				if (turn == 1 and square[0] < 0) or (turn == -1 and square[0] > 0):
+
+					piece_square = [line[1], square[1]]
+					#print(str(piece_square))
+
+					attacked_squares = avaiable_squares(square[0], piece_square, board, True)
+
+					for attacked_square in attacked_squares['coordinates']: #indexes
+						attacked_squares_list.append([attacked_square[1], attacked_square[0]])
+
+	#print(str(attacked_squares))
+
+	return attacked_squares_list
 		
 	

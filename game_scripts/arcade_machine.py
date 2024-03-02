@@ -2,7 +2,7 @@ from game_scripts.utilities import draw_button1, draw_button2, draw_text_input, 
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu
-from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, avaiable_squares
+from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, avaiable_squares, get_attacked_squares
 from game_scripts.data import *
 import sys
 import time
@@ -924,14 +924,14 @@ def chess_game():
 	# King 				= 7 / -7
 	# Attacked squares 	= 10 / -10
  
-	board = [[-5, -2, -3, -6, -7, -3, -2, -4],
-			[-1, -1, -1, -1, -1, -1, -1, -1],
+	board = [[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, -1, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 3, 3, -3, -3],
+			[0, 0, 0, 0, 0, -3, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0],
-			[1, 1, 1, 1, 1, 1, 1, 1],
-			[5, 2, 3, 6, 7, 3, 2, 4]]
+			[1, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0]]
 	
 
 	# CASTLE :
@@ -980,13 +980,21 @@ def chess_game():
 		screen.blit(board_image, (50,50))
 		draw_pieces(screen, board)
 
+
+		####################### SHOW OPONENT ATTACKED SQUARES #######################
+		# attacked_squares = get_attacked_squares(board, turn)
+		# #print(str(attacked_squares))
+		# for square in attacked_squares:
+		# 	screen.blit(avaiable_square_surface, (square[0], square[1]))
+		#############################################################################
+
 		if clicked_square != None:
 			piece = board[clicked_square.y_index][clicked_square.x_index]
 
 			if (piece > 0 and turn == 1) or (piece < 0 and turn == -1):
 				piece_square = [clicked_square.y_index,clicked_square.x_index]
 
-				avaiable_squares_list = avaiable_squares(piece, piece_square, board)
+				avaiable_squares_list = avaiable_squares(piece, piece_square, board, False)
 
 				if len(avaiable_squares_list['coordinates']) == 0:
 					avaiable_squares_showed = False
