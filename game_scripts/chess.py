@@ -481,36 +481,21 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 		# KING
 		if piece in [7, -7]:
 			if y+1 <= 7:
-				if board_piece_positions[y+1][x] != 0 :
-					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x]))
-			
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x]))
 			if x+1 <= 7:
-				if board_piece_positions[y][x+1] != 0 :
-					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+1]))
-			
+				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+1]))
 			if y-1 >= 0:
-				if board_piece_positions[y-1][x] != 0 :
-					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x]))
-			
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x]))
 			if x-1 >= 0:
-				if board_piece_positions[y][x-1] != 0 :
-					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-1]))
-
+				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-1]))
 			if y+1 <= 7 and x+1 <= 7:
-				if board_piece_positions[y+1][x+1] != 0 :
-					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+1]))
-
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+1]))
 			if y+1 <= 7 and x-1 >= 0:
-				if board_piece_positions[y+1][x-1] != 0 :
-					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-1]))
-
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-1]))
 			if y-1 >= 0 and x+1 <= 7:
-				if board_piece_positions[y-1][x+1] != 0 :
-					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+1]))
-
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+1]))
 			if y-1 >= 0 and x-1 >= 0:
-				if board_piece_positions[y-1][x-1] != 0 :
-					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-1]))
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-1]))
 
 
 	# INDEX
@@ -520,9 +505,15 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 	return avaiable_squares
 
 
+
+# Function that shows what squares are being attacked by the opponent
 def get_attacked_squares(board, turn):
 
-	attacked_squares_list = []
+	attacked_squares_list = {
+		'coordinates' 	: [],
+		'indexes'		: []
+	}
+
 	positions = [0, 1, 2, 3, 4, 5, 6, 7]
 
 	for line in zip(board, positions):
@@ -532,15 +523,121 @@ def get_attacked_squares(board, turn):
 				if (turn == 1 and square[0] < 0) or (turn == -1 and square[0] > 0):
 
 					piece_square = [line[1], square[1]]
-					#print(str(piece_square))
 
 					attacked_squares = avaiable_squares(square[0], piece_square, board, True)
 
-					for attacked_square in attacked_squares['coordinates']: #indexes
-						attacked_squares_list.append([attacked_square[1], attacked_square[0]])
-
-	#print(str(attacked_squares))
+					for attacked_square in zip(attacked_squares['indexes'], attacked_squares['coordinates']):
+						attacked_squares_list['indexes'].append(attacked_square[0])
+						attacked_squares_list['coordinates'].append(attacked_square[1])
 
 	return attacked_squares_list
+
+
+
+def king_avaiable_squares(piece, piece_square, board_piece_positions, attacked_squares):
+	x = piece_square[1]
+	y = piece_square[0]
+
+	avaiable_squares = {
+		'coordinates' 	: [],
+		'indexes'		: []
+	}
+	
+	# White
+	if piece > 0:
+
+
+		if y+1 <= 7:
+			if board_piece_positions[y+1][x] <= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x]))
+			
+		if x+1 <= 7:
+			if board_piece_positions[y][x+1] <= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+1]))
+		
+		if y-1 >= 0:
+			if board_piece_positions[y-1][x] <= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x]))
+		
+		if x-1 >= 0:
+			if board_piece_positions[y][x-1] <= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-1]))
+
+		if y+1 <= 7 and x+1 <= 7:
+			if board_piece_positions[y+1][x+1] <= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+1]))
+
+		if y+1 <= 7 and x-1 >= 0:
+			if board_piece_positions[y+1][x-1] <= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-1]))
+
+		if y-1 >= 0 and x+1 <= 7:
+			if board_piece_positions[y-1][x+1] <= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+1]))
+
+		if y-1 >= 0 and x-1 >= 0:
+			if board_piece_positions[y-1][x-1] <= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-1]))
+
+	# Black
+	else:
+		if y+1 <= 7:
+			if board_piece_positions[y+1][x] >= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x]))
+			
+		if x+1 <= 7:
+			if board_piece_positions[y][x+1] >= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+1]))
+		
+		if y-1 >= 0:
+			if board_piece_positions[y-1][x] >= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x]))
+		
+		if x-1 >= 0:
+			if board_piece_positions[y][x-1] >= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-1]))
+
+		if y+1 <= 7 and x+1 <= 7:
+			if board_piece_positions[y+1][x+1] >= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+1]))
+
+		if y+1 <= 7 and x-1 >= 0:
+			if board_piece_positions[y+1][x-1] >= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-1]))
+
+		if y-1 >= 0 and x+1 <= 7:
+			if board_piece_positions[y-1][x+1] >= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+1]))
+
+		if y-1 >= 0 and x-1 >= 0:
+			if board_piece_positions[y-1][x-1] >= 0 :
+				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-1]))
+
+	# INDEX
+	for coordinate in avaiable_squares['coordinates']:
+		avaiable_squares['indexes'].append([square_coordinates.index(coordinate[1]), square_coordinates.index(coordinate[0])])
+
+	
+	# Remove attacked squares indexes of the avaiable_squares
+	elements_to_delete = []
+	for index in avaiable_squares['indexes']:
+		if index in attacked_squares['indexes']:
+			elements_to_delete.append(index)
+
+	for element in elements_to_delete:
+		avaiable_squares['indexes'].remove(element)
+
+
+	# Remove attacked squares coordinates of the avaiable_squares
+	elements_to_delete = []
+	for coordinate in avaiable_squares['coordinates']:
+		if coordinate in attacked_squares['coordinates']:
+			elements_to_delete.append(coordinate)
+	
+	for element in elements_to_delete:
+		avaiable_squares['coordinates'].remove(element)
+
+
+	return avaiable_squares
 		
 	

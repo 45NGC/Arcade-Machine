@@ -2,7 +2,7 @@ from game_scripts.utilities import draw_button1, draw_button2, draw_text_input, 
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu
-from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, avaiable_squares, get_attacked_squares
+from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, avaiable_squares, get_attacked_squares, king_avaiable_squares
 from game_scripts.data import *
 import sys
 import time
@@ -908,11 +908,11 @@ def chess_game():
 	}
 
 	avaiable_square_surface = pygame.Surface((75,75))
-	avaiable_square_surface.set_alpha(130)
+	avaiable_square_surface.set_alpha(90)
 	avaiable_square_surface.fill((255, 0, 0))
 
 	selected_square_surface = pygame.Surface((75,75))
-	selected_square_surface.set_alpha(130)  
+	selected_square_surface.set_alpha(90)  
 	selected_square_surface.fill((0, 255, 0))
 
 	# PIECES :
@@ -932,6 +932,15 @@ def chess_game():
 			[0, 0, 0, 0, 0, 0, 0, 0],
 			[1, 1, 1, 1, 1, 1, 1, 1],
 			[5, 2, 3, 6, 7, 3, 2, 4]]
+	
+	# board = [[-5, 0, 0, 0, 0, 0, 0, -4],
+	# 		[0, 0, 0, 0, 0, 0, 0, 0],
+	# 		[0, 0, 0, -7, 0, 0, 0, 0],
+	# 		[0, 0, 0, 0, 0, 0, 0, 0],
+	# 		[0, 0, 0, 7, 0, 0, 0, 0],
+	# 		[0, 0, 0, 0, 0, 0, 0, 0],
+	# 		[0, 0, 0, 0, 0, 0, 0, 0],
+	# 		[5, 0, 0, 0, 0, 0, 0, 4]]
 	
 
 	# CASTLE :
@@ -981,11 +990,13 @@ def chess_game():
 		draw_pieces(screen, board)
 
 
+		# Variable that shows opponent attacked squares
+		attacked_squares = get_attacked_squares(board, turn)
+
+
 		####################### SHOW OPONENT ATTACKED SQUARES #######################
-		# attacked_squares = get_attacked_squares(board, turn)
-		# #print(str(attacked_squares))
-		# for square in attacked_squares:
-		# 	screen.blit(avaiable_square_surface, (square[0], square[1]))
+		# for coordinate in attacked_squares['coordinates']:
+		# 	screen.blit(avaiable_square_surface, (coordinate[1], coordinate[0]))
 		#############################################################################
 
 		if clicked_square != None:
@@ -994,7 +1005,10 @@ def chess_game():
 			if (piece > 0 and turn == 1) or (piece < 0 and turn == -1):
 				piece_square = [clicked_square.y_index,clicked_square.x_index]
 
-				avaiable_squares_list = avaiable_squares(piece, piece_square, board, False)
+				if piece in [7, -7]:
+					avaiable_squares_list = king_avaiable_squares(piece, piece_square, board, attacked_squares)
+				else:
+					avaiable_squares_list = avaiable_squares(piece, piece_square, board, False)
 
 				if len(avaiable_squares_list['coordinates']) == 0:
 					avaiable_squares_showed = False
