@@ -639,5 +639,18 @@ def king_avaiable_squares(piece, piece_square, board_piece_positions, attacked_s
 
 
 	return avaiable_squares
+
+def search_king_square(board, turn):
+	for line in board:
+		for piece in line:
+			if piece == 7*turn:
+				king_square = [line.index(7*turn), board.index(line)]
+				return king_square
+
+def is_king_on_check(king_square, attacked_squares):
+	if king_square in attacked_squares['indexes']:
+		return True
+	else:
+		return False	
 		
 	

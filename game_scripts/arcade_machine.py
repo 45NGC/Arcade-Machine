@@ -1,8 +1,9 @@
+import copy
 from game_scripts.utilities import draw_button1, draw_button2, draw_text_input, draw_pause_button, draw_pause_menu
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu
-from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, avaiable_squares, get_attacked_squares, king_avaiable_squares
+from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, avaiable_squares, get_attacked_squares, king_avaiable_squares, search_king_square, is_king_on_check
 from game_scripts.data import *
 import sys
 import time
@@ -989,11 +990,6 @@ def chess_game():
 		screen.blit(board_image, (50,50))
 		draw_pieces(screen, board)
 
-
-		# Variable that shows opponent attacked squares
-		attacked_squares = get_attacked_squares(board, turn)
-
-
 		####################### SHOW OPONENT ATTACKED SQUARES #######################
 		# for coordinate in attacked_squares['coordinates']:
 		# 	screen.blit(avaiable_square_surface, (coordinate[1], coordinate[0]))
@@ -1006,6 +1002,7 @@ def chess_game():
 				piece_square = [clicked_square.y_index,clicked_square.x_index]
 
 				if piece in [7, -7]:
+					attacked_squares = get_attacked_squares(board, turn)
 					avaiable_squares_list = king_avaiable_squares(piece, piece_square, board, attacked_squares)
 				else:
 					avaiable_squares_list = avaiable_squares(piece, piece_square, board, False)
@@ -1021,20 +1018,43 @@ def chess_game():
 
 				screen.blit(selected_square_surface, (clicked_square.x_coordinate, clicked_square.y_coordinate))
 		
+
+
 		if clicked_avaiable_square != None:
 			# Move piece :
 			if [clicked_avaiable_square.x_index, clicked_avaiable_square.y_index] in avaiable_squares_list['indexes']:
+				# We have to make sure that after the move that we are about to make our king is not in check,
+				# otherwise this would be an illegal move.
+				# To make sure that this is not our case, we try the move on an backup board, if in the backup board the king is checked we
+				# do not make the move. If after the move in the backup board the king is safe we make the move.
 
-				board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
-				board[clicked_square.y_index][clicked_square.x_index] = 0
+				# Make the move on the backup board:
+				backup_board = copy.deepcopy(board)
 
-				avaiable_squares_showed = False
-				clicked_square = None
-				clicked_avaiable_square = None
+				backup_board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
+				backup_board[clicked_square.y_index][clicked_square.x_index] = 0
 
-				# Change turn :
-				turn = turn * -1
-			
+				backup_king_square = search_king_square(backup_board, turn)
+				backup_attacked_squares = get_attacked_squares(backup_board, turn)
+				backup_king_on_check = is_king_on_check(backup_king_square, backup_attacked_squares)
+
+				if backup_king_on_check:
+					# In case that after the movement our king is in check, we do not make the move and we do not change turns 
+					avaiable_squares_showed = False
+					clicked_square = None
+					clicked_avaiable_square = None
+				else:
+					# In case that after the movement our king is not in check, we make the move and change turns 
+					board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
+					board[clicked_square.y_index][clicked_square.x_index] = 0
+
+					avaiable_squares_showed = False
+					clicked_square = None
+					clicked_avaiable_square = None
+
+					# Change turn
+					turn = turn*-1
+					
 			# Select different square
 			else:
 				clicked_square = clicked_avaiable_square
