@@ -1,3 +1,4 @@
+import copy
 import pygame
 from game_scripts.utilities import draw_button2
 from pygame import image
@@ -115,6 +116,11 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 	x = piece_square[1]
 	y = piece_square[0]
 
+	if piece < 0:
+		turn = -1
+	else: 
+		turn = 1
+
 	avaiable_squares = {
 		'coordinates' 	: [],
 		'indexes'		: []
@@ -128,39 +134,49 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 
 			# PUSH
 			if board_piece_positions[y-piece][x] == 0:
-				avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x]))
 				
 			# FIRST PUSH
 			# TODO: 
 			# Add index conditional if the pawn has some other pawn next to it when the first push is made to make 
 			# the pawn next to it able to capture on peasant
 			if ((y == 6 and piece == 1) or (y == 1 and piece == -1)) and board_piece_positions[y-piece][x] == 0 and board_piece_positions[y-(piece*2)][x] == 0:
-				avaiable_squares['coordinates'].append((square_coordinates[y-(piece*2)],square_coordinates[x]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-(piece*2), x], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-(piece*2)],square_coordinates[x]))
 			
 			# NORMAL CAPTURE
 			if x != 0 and x != 7 :
 
 				if board_piece_positions[y-piece][x+1] < 0 and piece == 1:
-					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x+1], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
 				if board_piece_positions[y-piece][x-1] < 0 and piece == 1:
-					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x-1], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
 				if board_piece_positions[y-piece][x+1] > 0 and piece == -1:
-					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x+1], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
 				if board_piece_positions[y-piece][x-1] > 0 and piece == -1:
-					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
 			else:
 
 				if x == 0 and board_piece_positions[y-piece][x+1] < 0 and piece == 1:
-					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
 				if x == 7 and board_piece_positions[y-piece][x-1] < 0 and piece == 1:
-					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
 				if x == 0 and board_piece_positions[y-piece][x+1] > 0 and piece == -1:
-					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
 				if x == 7 and board_piece_positions[y-piece][x-1] > 0 and piece == -1:
-					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 			
 			# ON PEASANT CAPTURE
 
@@ -171,22 +187,30 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 		if piece == 2 :
 
 			# JUMP
-			if 0 <= x+2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x+2] <= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
-			if 0 <= x+2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x+2] <= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
+			if 0 <= x+2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x+2] <= 0 :
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+1, x+2], piece): 
+					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
+			if 0 <= x+2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x+2] <= 0 :
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-1, x+2], piece): 
+					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
 			if 0 <= x-2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x-2] <= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+1, x-2], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
 			if 0 <= x-2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x-2] <= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-1, x-2], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
 			if 0 <= x+1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x+1] <= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+2, x+1], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
 			if 0 <= x+1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x+1] <= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-2, x+1], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
 			if 0 <= x-1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x-1] <= 0 :
-				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+2, x-1], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
 			if 0 <= x-1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x-1] <= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-2, x-1], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
 
 
 		# BLACK KNIGHT
@@ -194,21 +218,29 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 
 			# JUMP
 			if 0 <= x+2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x+2] >= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+1, x+2], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x+2]))
 			if 0 <= x+2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x+2] >= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-1, x+2], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x+2]))
 			if 0 <= x-2 <= 7 and 0 <= y+1 <= 7  and board_piece_positions[y+1][x-2] >= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+1, x-2], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+1], square_coordinates[x-2]))
 			if 0 <= x-2 <= 7 and 0 <= y-1 <= 7  and board_piece_positions[y-1][x-2] >= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-1, x-2], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-1], square_coordinates[x-2]))
 			if 0 <= x+1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x+1] >= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+2, x+1], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x+1]))
 			if 0 <= x+1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x+1] >= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-2, x+1], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x+1]))
 			if 0 <= x-1 <= 7 and 0 <= y+2 <= 7  and board_piece_positions[y+2][x-1] >= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+2, x-1], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+2], square_coordinates[x-1]))
 			if 0 <= x-1 <= 7 and 0 <= y-2 <= 7  and board_piece_positions[y-2][x-1] >= 0 : 
-				avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-2, x-1], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-2], square_coordinates[x-1]))
 
 		
 		# WHITE BISHOP + WHITE QUEEN
@@ -218,7 +250,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > y-index) or (x+index > 7) : break
 
 				if board_piece_positions[y-index][x+index] > 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x+index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-index, x+index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x+index]))
 				if board_piece_positions[y-index][x+index] < 0 : break
 
 			
@@ -227,7 +260,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (y+index > 7) or (0 > x-index) : break
 
 				if board_piece_positions[y+index][x-index] > 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x-index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+index, x-index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x-index]))
 				if board_piece_positions[y+index][x-index] < 0 : break
 				
 			
@@ -236,7 +270,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > y-index) or (0 > x-index) : break
 
 				if board_piece_positions[y-index][x-index] > 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x-index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-index, x-index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x-index]))
 				if board_piece_positions[y-index][x-index] < 0 : break
 				
 			
@@ -245,7 +280,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (y+index > 7) or (x+index > 7) : break
 				
 				if board_piece_positions[y+index][x+index] > 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x+index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+index, x+index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x+index]))
 				if board_piece_positions[y+index][x+index] < 0 : break
 
 
@@ -256,7 +292,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > y-index) or (x+index > 7) : break
 
 				if board_piece_positions[y-index][x+index] < 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x+index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-index, x+index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x+index]))
 				if board_piece_positions[y-index][x+index] > 0 : break
 				
 			
@@ -265,7 +302,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (y+index > 7) or (0 > x-index) : break
 
 				if board_piece_positions[y+index][x-index] < 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x-index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+index, x-index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x-index]))
 				if board_piece_positions[y+index][x-index] > 0 : break
 				
 			
@@ -274,7 +312,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > y-index) or (0 > x-index) : break
 				
 				if board_piece_positions[y-index][x-index] < 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x-index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-index, x-index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x-index]))
 				if board_piece_positions[y-index][x-index] > 0 : break
 				
 			
@@ -283,7 +322,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (y+index > 7) or (x+index > 7) : break
 
 				if board_piece_positions[y+index][x+index] < 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x+index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+index, x+index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x+index]))
 				if board_piece_positions[y+index][x+index] > 0 : break
 				
 		
@@ -295,7 +335,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > x+index) or (x+index > 7) : break
 				
 				if board_piece_positions[y][x+index] > 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y, x+index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+index]))
 				if board_piece_positions[y][x+index] < 0 : break
 				
 
@@ -304,7 +345,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > x-index) or (x-index > 7) : break
 				
 				if board_piece_positions[y][x-index] > 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y, x-index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-index]))
 				if board_piece_positions[y][x-index] < 0 : break
 				
 			
@@ -313,7 +355,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > y+index) or (y+index > 7) : break
 				
 				if board_piece_positions[y+index][x] > 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+index, x], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x]))
 				if board_piece_positions[y+index][x] < 0 : break
 				
 			
@@ -322,7 +365,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > y-index) or (y-index > 7) : break
 				
 				if board_piece_positions[y-index][x] > 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-index, x], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x]))
 				if board_piece_positions[y-index][x] < 0 : break
 				
 		
@@ -334,7 +378,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (x+index > 7) : break
 				
 				if board_piece_positions[y][x+index] < 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y, x+index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x+index]))
 				if board_piece_positions[y][x+index] > 0 : break
 				
 
@@ -343,7 +388,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > x-index) : break
 				
 				if board_piece_positions[y][x-index] < 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-index]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y, x-index], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y], square_coordinates[x-index]))
 				if board_piece_positions[y][x-index] > 0 : break
 				
 			
@@ -352,7 +398,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (y+index > 7) : break
 				
 				if board_piece_positions[y+index][x] < 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+index, x], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x]))
 				if board_piece_positions[y+index][x] > 0 : break
 				
 			
@@ -361,7 +408,8 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 				if (0 > y-index) : break
 				
 				if board_piece_positions[y-index][x] < 0 : break
-				avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x]))
+				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-index, x], piece):
+					avaiable_squares['coordinates'].append((square_coordinates[y-index], square_coordinates[x]))
 				if board_piece_positions[y-index][x] > 0 : break
 			
 
@@ -653,4 +701,23 @@ def is_king_on_check(king_square, attacked_squares):
 	else:
 		return False	
 		
-	
+def is_king_on_check_after_move(board, turn, piece_square, piece_square_after_move, piece):
+	# We have to make sure that after the move that we are about to make our king is not in check,
+	# otherwise this would be an illegal move.
+	# To make sure that this is not our case, we try the move on an backup board, if in the backup board the king is checked we
+	# do not make the move. If after the move in the backup board the king is safe we make the move.
+
+	# Make the move on the backup board:
+	backup_board = copy.deepcopy(board)
+
+	backup_board[piece_square_after_move[0]][piece_square_after_move[1]] = piece
+	backup_board[piece_square[0]][piece_square[1]] = 0
+
+	backup_king_square = search_king_square(backup_board, turn)
+	backup_attacked_squares = get_attacked_squares(backup_board, turn)
+	backup_king_on_check = is_king_on_check(backup_king_square, backup_attacked_squares)
+
+	if backup_king_on_check:
+		return True
+	else:
+		return False

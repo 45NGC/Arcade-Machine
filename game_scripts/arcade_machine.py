@@ -945,15 +945,12 @@ def chess_game():
 	
 
 	# CASTLE :
-	# 0		->		available but not enabled
-	# 1		->		available and enabled
-	# 2		->		disabled
 
-	# castle = {
-	# 	'white-short' 	: 0,
-	# 	'white-long'	: 0,
-	# 	'black-short' 	: 0,
-	# 	'black-long'	: 0
+	# rook_moves = {
+	# 	'white-short-moved' 	: False,
+	# 	'white-long-moved'		: False,
+	# 	'black-short-moved' 	: False,
+	# 	'black-long-moved'		: False
 	# }
 
 	# TURN :
@@ -1023,28 +1020,7 @@ def chess_game():
 		if clicked_avaiable_square != None:
 			# Move piece :
 			if [clicked_avaiable_square.x_index, clicked_avaiable_square.y_index] in avaiable_squares_list['indexes']:
-				# We have to make sure that after the move that we are about to make our king is not in check,
-				# otherwise this would be an illegal move.
-				# To make sure that this is not our case, we try the move on an backup board, if in the backup board the king is checked we
-				# do not make the move. If after the move in the backup board the king is safe we make the move.
-
-				# Make the move on the backup board:
-				backup_board = copy.deepcopy(board)
-
-				backup_board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
-				backup_board[clicked_square.y_index][clicked_square.x_index] = 0
-
-				backup_king_square = search_king_square(backup_board, turn)
-				backup_attacked_squares = get_attacked_squares(backup_board, turn)
-				backup_king_on_check = is_king_on_check(backup_king_square, backup_attacked_squares)
-
-				if backup_king_on_check:
-					# In case that after the movement our king is in check, we do not make the move and we do not change turns 
-					avaiable_squares_showed = False
-					clicked_square = None
-					clicked_avaiable_square = None
-				else:
-					# In case that after the movement our king is not in check, we make the move and change turns 
+				
 					board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
 					board[clicked_square.y_index][clicked_square.x_index] = 0
 
