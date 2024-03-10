@@ -925,33 +925,37 @@ def chess_game():
 	# King 				= 7 / -7
 	# Attacked squares 	= 10 / -10
  
-	# board = [[-5, -2, -3, -6, -7, -3, -2, -4],
-	# 		[-1, -1, -1, -1, -1, -1, -1, -1],
-	# 		[0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[1, 1, 1, 1, 1, 1, 1, 1],
-	# 		[5, 2, 3, 6, 7, 3, 2, 4]]
+	board = [[-5, -2, -3, -6, -7, -3, -2, -4],
+			[-1, -1, -1, -1, -1, -1, -1, -1],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0],
+			[1, 1, 1, 1, 1, 1, 1, 1],
+			[5, 2, 3, 6, 7, 3, 2, 4]]
 	
-	board = [[0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, -7, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0],
-			[7, 0, 0, 3, 0, 0, 0, 0],
-			[0, 0, 0, 5, 0, 0, 0, 4]]
+	# board = [[0, 0, 0, 0, 0, 0, 0, 0],
+	# 		[0, 0, 0, 0, 0, 0, 0, 0],
+	# 		[0, 0, 0, -7, 0, 0, 0, 0],
+	# 		[0, 0, 0, 0, 0, 0, 0, 0],
+	# 		[0, 0, 0, 0, 0, 0, 0, 0],
+	# 		[0, 0, 0, 0, 0, 0, 0, 0],
+	# 		[7, 0, 0, 3, 0, 0, 0, 0],
+	# 		[0, 0, 0, 5, 0, 0, 0, 4]]
 	
 
 	# CASTLE :
 
-	# rook_moves = {
-	# 	'white-short-moved' 	: False,
-	# 	'white-long-moved'		: False,
-	# 	'black-short-moved' 	: False,
-	# 	'black-long-moved'		: False
-	# }
+	castling = {
+		'white-king-moved'		: False,
+		# 'white-castled'			: False,
+		'white-short-moved' 	: False,
+		'white-long-moved'		: False,
+		'black-king-moved'		: False,
+		# 'black-castled'			: False,
+		'black-short-moved' 	: False,
+		'black-long-moved'		: False
+	}
 
 	# TURN :
 	# 1		->		white turn
@@ -988,6 +992,7 @@ def chess_game():
 		draw_pieces(screen, board)
 
 		####################### SHOW OPONENT ATTACKED SQUARES #######################
+		# attacked_squares = get_attacked_squares(board, turn)
 		# for coordinate in attacked_squares['coordinates']:
 		# 	screen.blit(avaiable_square_surface, (coordinate[1], coordinate[0]))
 		#############################################################################
@@ -1000,7 +1005,7 @@ def chess_game():
 
 				if piece in [7, -7]:
 					attacked_squares = get_attacked_squares(board, turn)
-					avaiable_squares_list = king_avaiable_squares(piece, piece_square, board, attacked_squares)
+					avaiable_squares_list = king_avaiable_squares(piece, piece_square, board, attacked_squares, castling)
 				else:
 					avaiable_squares_list = avaiable_squares(piece, piece_square, board, False)
 
@@ -1020,9 +1025,38 @@ def chess_game():
 		if clicked_avaiable_square != None:
 			# Move piece :
 			if [clicked_avaiable_square.x_index, clicked_avaiable_square.y_index] in avaiable_squares_list['indexes']:
-				
+					
+					# Check if the rooks  moved to determinate the castling posibilities of each player
+					piece = board[clicked_square.y_index][clicked_square.x_index]
+					if piece in [4, 5, -4, -5]:
+						if piece == 4 and castling['white-short-moved'] != True :
+							castling['white-short-moved'] = True
+						if piece == 5 and castling['white-long-moved'] != True :
+							castling['white-long-moved'] = True
+						if piece == -4 and castling['black-short-moved'] != True:
+							castling['black-short-moved'] = True
+						if piece == -5 and castling['black-short-moved'] != True:
+							castling['black-long-moved'] = True
+
+							
+					# WHITE-SHORT-CASTLE
+					if piece == 7 and castling['white-king-moved'] != True:
+						if clicked_avaiable_square.y_index == 7 and clicked_avaiable_square.x_index == 6:
+							# Castle move:
+							board[7][7] = 0
+							board[7][5] = 4
+
+							castling['white-king-moved'] = True
+
+					
+					# Make the move
 					board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
 					board[clicked_square.y_index][clicked_square.x_index] = 0
+
+					if board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == 7:
+						castling['white-king-moved'] = True
+					if board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == -7:
+						castling['black-king-moved'] = True
 
 					avaiable_squares_showed = False
 					clicked_square = None
