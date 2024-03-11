@@ -1047,6 +1047,34 @@ def chess_game():
 							board[7][5] = 4
 
 							castling['white-king-moved'] = True
+					
+					# WHITE-LONG-CASTLE
+					if piece == 7 and castling['white-king-moved'] != True:
+						if clicked_avaiable_square.y_index == 7 and clicked_avaiable_square.x_index == 2:
+							# Castle move:
+							board[7][0] = 0
+							board[7][3] = 5
+
+							castling['white-king-moved'] = True
+					
+
+					# BLACK-SHORT-CASTLE
+					if piece == -7 and castling['black-king-moved'] != True:
+						if clicked_avaiable_square.y_index == 0 and clicked_avaiable_square.x_index == 6:
+							# Castle move:
+							board[0][7] = 0
+							board[0][5] = -4
+
+							castling['black-king-moved'] = True
+					
+					# BLACK-LONG-CASTLE
+					if piece == -7 and castling['white-king-moved'] != True:
+						if clicked_avaiable_square.y_index == 0 and clicked_avaiable_square.x_index == 2:
+							# Castle move:
+							board[0][0] = 0
+							board[0][3] = -5
+
+							castling['black-king-moved'] = True
 
 					
 					# Make the move

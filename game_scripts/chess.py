@@ -589,7 +589,7 @@ def king_avaiable_squares(piece, king_square, board_piece_positions, attacked_sq
 					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+move[0], x+move[1]], piece):
 						avaiable_squares['coordinates'].append((square_coordinates[y+move[0]], square_coordinates[x+move[1]]))
 
-
+		# We do not use the original king square because the coordinates are inverted, when we use the search_king_square function we invert those coordinates.
 		new_king_square = search_king_square(board_piece_positions, turn)
 		king_on_check = is_king_on_check(new_king_square, attacked_squares)
 		#  CASTLE:
@@ -597,9 +597,16 @@ def king_avaiable_squares(piece, king_square, board_piece_positions, attacked_sq
 			
 			# SHORT CASTLE
 			if castling['white-short-moved'] == False:
-				if board_piece_positions[7][5] == 0 and board_piece_positions[7][6] == 0 and board_piece_positions[7][7] == 4 and ([7, 5] not in attacked_squares['indexes']) :
+				if board_piece_positions[7][5] == 0 and board_piece_positions[7][6] == 0 and board_piece_positions[7][7] == 4 and [5, 7] not in attacked_squares['indexes'] :
 					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [7, 6], piece):
 						avaiable_squares['coordinates'].append((square_coordinates[7], square_coordinates[6]))
+			
+			# LONG CASTLE
+			if castling['white-long-moved'] == False:
+				if board_piece_positions[7][3] == 0 and board_piece_positions[7][2] == 0 and board_piece_positions[7][1] == 0 and board_piece_positions[7][0] == 5 and [3, 7] not in attacked_squares['indexes'] :
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [7, 2], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[7], square_coordinates[2]))
+
 
 	# Black
 	else:
@@ -610,6 +617,25 @@ def king_avaiable_squares(piece, king_square, board_piece_positions, attacked_sq
 				if board_piece_positions[y+move[0]][x+move[1]] >= 0 :
 					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+move[0], x+move[1]], piece):
 						avaiable_squares['coordinates'].append((square_coordinates[y+move[0]], square_coordinates[x+move[1]]))
+
+		new_king_square = search_king_square(board_piece_positions, turn)
+		king_on_check = is_king_on_check(new_king_square, attacked_squares)
+		#  CASTLE:
+		if castling['black-king-moved'] != True and king_on_check != True:
+			
+			# SHORT CASTLE
+			if castling['black-short-moved'] == False:
+				if board_piece_positions[0][5] == 0 and board_piece_positions[0][6] == 0 and board_piece_positions[0][7] == -4 and [5, 0] not in attacked_squares['indexes'] :
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [0, 6], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[0], square_coordinates[6]))
+			
+			# LONG CASTLE
+			if castling['black-long-moved'] == False:
+				if board_piece_positions[0][3] == 0 and board_piece_positions[0][2] == 0 and board_piece_positions[0][1] == 0 and board_piece_positions[0][0] == -5 and [3, 0] not in attacked_squares['indexes'] :
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [0, 2], piece):
+						avaiable_squares['coordinates'].append((square_coordinates[0], square_coordinates[2]))
+
+
 
 	# INDEX
 	for coordinate in avaiable_squares['coordinates']:
