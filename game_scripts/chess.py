@@ -588,8 +588,10 @@ def king_avaiable_squares(piece, king_square, board_piece_positions, attacked_sq
 				if board_piece_positions[y+move[0]][x+move[1]] <= 0 :
 					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y+move[0], x+move[1]], piece):
 						avaiable_squares['coordinates'].append((square_coordinates[y+move[0]], square_coordinates[x+move[1]]))
-		
-		king_on_check = is_king_on_check(king_square, attacked_squares)
+
+
+		new_king_square = search_king_square(board_piece_positions, turn)
+		king_on_check = is_king_on_check(new_king_square, attacked_squares)
 		#  CASTLE:
 		if castling['white-king-moved'] != True and king_on_check != True:
 			
