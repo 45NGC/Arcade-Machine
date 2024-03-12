@@ -184,20 +184,29 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 						#White
 						if (0 <= y+turn <= 7) and (x+1 <= 7) and (x-1 >= 0):
 							if board_piece_positions[y+turn][x+1] == turn:
-								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x+1], [y, x], piece):
+								# Backup board is necesary because we have to manually delete the pawn that is captured on it for then make sure that the king is safe
+								backup_board = copy.deepcopy(board_piece_positions)
+								backup_board[y+turn][x] = 0
+								if  not is_king_on_check_after_move(backup_board, turn, [y+turn, x+1], [y, x], piece):
 									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
 
 							if board_piece_positions[y+turn][x-1] == turn:
+								backup_board = copy.deepcopy(board_piece_positions)
+								backup_board[y+turn][x] = 0
 								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x-1], [y, x], piece):
 									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
 					else:
 						#Black
 						if (0 <= y+turn <= 7) and (x+1 <= 7) and (x-1 >= 0):
 							if board_piece_positions[y+turn][x+1] == turn:
+								backup_board = copy.deepcopy(board_piece_positions)
+								backup_board[y+turn][x] = 0
 								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x+1], [y, x], piece):
 									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
 
 							if board_piece_positions[y+turn][x-1] == turn:
+								backup_board = copy.deepcopy(board_piece_positions)
+								backup_board[y+turn][x] = 0
 								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x-1], [y, x], piece):
 									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
 
