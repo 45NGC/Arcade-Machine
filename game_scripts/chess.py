@@ -193,7 +193,7 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 							if board_piece_positions[y+turn][x-1] == turn:
 								backup_board = copy.deepcopy(board_piece_positions)
 								backup_board[y+turn][x] = 0
-								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x-1], [y, x], piece):
+								if  not is_king_on_check_after_move(backup_board, turn, [y+turn, x-1], [y, x], piece):
 									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
 					else:
 						#Black
@@ -201,13 +201,13 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 							if board_piece_positions[y+turn][x+1] == turn:
 								backup_board = copy.deepcopy(board_piece_positions)
 								backup_board[y+turn][x] = 0
-								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x+1], [y, x], piece):
+								if  not is_king_on_check_after_move(backup_board, turn, [y+turn, x+1], [y, x], piece):
 									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
 
 							if board_piece_positions[y+turn][x-1] == turn:
 								backup_board = copy.deepcopy(board_piece_positions)
 								backup_board[y+turn][x] = 0
-								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x-1], [y, x], piece):
+								if  not is_king_on_check_after_move(backup_board, turn, [y+turn, x-1], [y, x], piece):
 									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
 
 			# PROMOTION
