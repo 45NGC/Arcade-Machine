@@ -948,14 +948,16 @@ def chess_game():
 
 	castling = {
 		'white-king-moved'		: False,
-		# 'white-castled'			: False,
 		'white-short-moved' 	: False,
 		'white-long-moved'		: False,
 		'black-king-moved'		: False,
-		# 'black-castled'			: False,
 		'black-short-moved' 	: False,
 		'black-long-moved'		: False
 	}
+
+	#[[square], turn]
+	on_peasant_avaiable_square = []
+	on_peasant_active = False
 
 	# TURN :
 	# 1		->		white turn
@@ -984,6 +986,7 @@ def chess_game():
 				
 				else:
 					clicked_square = selected_square(mouse[0], mouse[1], board)
+					#print(clicked_square.__str__())
 
 
 
@@ -1007,7 +1010,7 @@ def chess_game():
 					attacked_squares = get_attacked_squares(board, turn)
 					avaiable_squares_list = king_avaiable_squares(piece, piece_square, board, attacked_squares, castling)
 				else:
-					avaiable_squares_list = avaiable_squares(piece, piece_square, board, False)
+					avaiable_squares_list = avaiable_squares(piece, piece_square, board, False, on_peasant_avaiable_square)
 
 				if len(avaiable_squares_list['coordinates']) == 0:
 					avaiable_squares_showed = False
@@ -1027,71 +1030,95 @@ def chess_game():
 			if [clicked_avaiable_square.x_index, clicked_avaiable_square.y_index] in avaiable_squares_list['indexes']:
 					
 					# Check if the rooks  moved to determinate the castling posibilities of each player
-					piece = board[clicked_square.y_index][clicked_square.x_index]
-					if piece in [4, 5, -4, -5]:
-						if piece == 4 and castling['white-short-moved'] != True :
-							castling['white-short-moved'] = True
-						if piece == 5 and castling['white-long-moved'] != True :
-							castling['white-long-moved'] = True
-						if piece == -4 and castling['black-short-moved'] != True:
-							castling['black-short-moved'] = True
-						if piece == -5 and castling['black-short-moved'] != True:
-							castling['black-long-moved'] = True
+					if clicked_square != None:
+						piece = board[clicked_square.y_index][clicked_square.x_index]
+						if piece in [4, 5, -4, -5]:
+							if piece == 4 and castling['white-short-moved'] != True :
+								castling['white-short-moved'] = True
+							if piece == 5 and castling['white-long-moved'] != True :
+								castling['white-long-moved'] = True
+							if piece == -4 and castling['black-short-moved'] != True:
+								castling['black-short-moved'] = True
+							if piece == -5 and castling['black-short-moved'] != True:
+								castling['black-long-moved'] = True
 
+								
+						# WHITE-SHORT-CASTLE
+						if piece == 7 and castling['white-king-moved'] != True:
+							if clicked_avaiable_square.y_index == 7 and clicked_avaiable_square.x_index == 6:
+								# Castle move:
+								board[7][7] = 0
+								board[7][5] = 4
+
+								castling['white-king-moved'] = True
+						
+						# WHITE-LONG-CASTLE
+						if piece == 7 and castling['white-king-moved'] != True:
+							if clicked_avaiable_square.y_index == 7 and clicked_avaiable_square.x_index == 2:
+								# Castle move:
+								board[7][0] = 0
+								board[7][3] = 5
+
+								castling['white-king-moved'] = True
+						
+
+						# BLACK-SHORT-CASTLE
+						if piece == -7 and castling['black-king-moved'] != True:
+							if clicked_avaiable_square.y_index == 0 and clicked_avaiable_square.x_index == 6:
+								# Castle move:
+								board[0][7] = 0
+								board[0][5] = -4
+
+								castling['black-king-moved'] = True
+						
+						# BLACK-LONG-CASTLE
+						if piece == -7 and castling['white-king-moved'] != True:
+							if clicked_avaiable_square.y_index == 0 and clicked_avaiable_square.x_index == 2:
+								# Castle move:
+								board[0][0] = 0
+								board[0][3] = -5
+
+								castling['black-king-moved'] = True
+
+						
+						# If the move was a on peasant capture we have to delete the pawn that was captured, because the square of the piece that
+						# was captured  in this move is not the same square as the piece that captured it
+								
+						# First we check if the move was a pawn move then we look if the square were the pawn is going is empty and finally we check
+						# if the move was a capture or not by checking if the x index is different. If the move was a pawn capture and the square were
+						# the pawn is going is empty, we know that we are dealing with an on peasant capture.
+						
+						if piece in [1, -1] and board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == 0 and clicked_square.x_index != clicked_avaiable_square.x_index:
+							board[clicked_avaiable_square.y_index+turn][clicked_avaiable_square.x_index] = 0
+
+						# Make the move
+						board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
+						board[clicked_square.y_index][clicked_square.x_index] = 0
+
+						if on_peasant_active:
+							on_peasant_avaiable_square = []
+							on_peasant_active = False
+
+
+						# If the piece that we just moved was a king we change the variable 'king-moved' of the respective color in the 'castling' diccionary
+						if board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == 7:
+							castling['white-king-moved'] = True
+						if board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == -7:
+							castling['black-king-moved'] = True
+
+						#If the piece that we just moved was a pawn and we moved it 2 squares we change the variable 'on_peasant_avaiable_square' to the square behind the pawn
+						if clicked_square.value in [1, -1] and (clicked_avaiable_square.y_index - clicked_square.y_index) in [2, -2]:
+							on_peasant_avaiable_square = [[clicked_avaiable_square.y_index+clicked_square.value, clicked_avaiable_square.x_index], turn*-1]
+							on_peasant_active = True
 							
-					# WHITE-SHORT-CASTLE
-					if piece == 7 and castling['white-king-moved'] != True:
-						if clicked_avaiable_square.y_index == 7 and clicked_avaiable_square.x_index == 6:
-							# Castle move:
-							board[7][7] = 0
-							board[7][5] = 4
 
-							castling['white-king-moved'] = True
-					
-					# WHITE-LONG-CASTLE
-					if piece == 7 and castling['white-king-moved'] != True:
-						if clicked_avaiable_square.y_index == 7 and clicked_avaiable_square.x_index == 2:
-							# Castle move:
-							board[7][0] = 0
-							board[7][3] = 5
 
-							castling['white-king-moved'] = True
-					
+						avaiable_squares_showed = False
+						clicked_square = None
+						clicked_avaiable_square = None
 
-					# BLACK-SHORT-CASTLE
-					if piece == -7 and castling['black-king-moved'] != True:
-						if clicked_avaiable_square.y_index == 0 and clicked_avaiable_square.x_index == 6:
-							# Castle move:
-							board[0][7] = 0
-							board[0][5] = -4
-
-							castling['black-king-moved'] = True
-					
-					# BLACK-LONG-CASTLE
-					if piece == -7 and castling['white-king-moved'] != True:
-						if clicked_avaiable_square.y_index == 0 and clicked_avaiable_square.x_index == 2:
-							# Castle move:
-							board[0][0] = 0
-							board[0][3] = -5
-
-							castling['black-king-moved'] = True
-
-					
-					# Make the move
-					board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
-					board[clicked_square.y_index][clicked_square.x_index] = 0
-
-					if board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == 7:
-						castling['white-king-moved'] = True
-					if board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == -7:
-						castling['black-king-moved'] = True
-
-					avaiable_squares_showed = False
-					clicked_square = None
-					clicked_avaiable_square = None
-
-					# Change turn
-					turn = turn*-1
+						# Change turn
+						turn = turn*-1
 					
 			# Select different square
 			else:

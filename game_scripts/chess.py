@@ -112,7 +112,7 @@ def selected_square(x_coordinate, y_coordinate, board):
 	return selected_square
 
 
-def avaiable_squares(piece, piece_square, board_piece_positions, attacked_squares):
+def avaiable_squares(piece, piece_square, board_piece_positions, attacked_squares, on_peasant_square):
 	x = piece_square[1]
 	y = piece_square[0]
 
@@ -138,9 +138,6 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 					avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x]))
 				
 			# FIRST PUSH
-			# TODO: 
-			# Add index conditional if the pawn has some other pawn next to it when the first push is made to make 
-			# the pawn next to it able to capture on peasant
 			if ((y == 6 and piece == 1) or (y == 1 and piece == -1)) and board_piece_positions[y-piece][x] == 0 and board_piece_positions[y-(piece*2)][x] == 0:
 				if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-(piece*2), x], piece):
 					avaiable_squares['coordinates'].append((square_coordinates[y-(piece*2)],square_coordinates[x]))
@@ -179,6 +176,30 @@ def avaiable_squares(piece, piece_square, board_piece_positions, attacked_square
 						avaiable_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 			
 			# ON PEASANT CAPTURE
+			if on_peasant_square != []:
+				if on_peasant_square[1] == turn:
+					x = on_peasant_square[0][1]
+					y = on_peasant_square[0][0]
+					if turn == 1:
+						#White
+						if (0 <= y+turn <= 7) and (x+1 <= 7) and (x-1 >= 0):
+							if board_piece_positions[y+turn][x+1] == turn:
+								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x+1], [y, x], piece):
+									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
+
+							if board_piece_positions[y+turn][x-1] == turn:
+								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x-1], [y, x], piece):
+									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
+					else:
+						#Black
+						if (0 <= y+turn <= 7) and (x+1 <= 7) and (x-1 >= 0):
+							if board_piece_positions[y+turn][x+1] == turn:
+								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x+1], [y, x], piece):
+									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
+
+							if board_piece_positions[y+turn][x-1] == turn:
+								if  not is_king_on_check_after_move(board_piece_positions, turn, [y+turn, x-1], [y, x], piece):
+									avaiable_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
 
 			# PROMOTION
 
@@ -561,7 +582,7 @@ def get_attacked_squares(board, turn):
 
 					piece_square = [line[1], square[1]]
 
-					attacked_squares = avaiable_squares(square[0], piece_square, board, True)
+					attacked_squares = avaiable_squares(square[0], piece_square, board, True, [])
 
 					for attacked_square in zip(attacked_squares['indexes'], attacked_squares['coordinates']):
 						attacked_squares_list['indexes'].append(attacked_square[0])
