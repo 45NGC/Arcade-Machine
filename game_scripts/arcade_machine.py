@@ -1072,7 +1072,7 @@ def chess_game():
 								castling['black-king-moved'] = True
 						
 						# BLACK-LONG-CASTLE
-						if piece == -7 and castling['white-king-moved'] != True:
+						if piece == -7 and castling['black-king-moved'] != True:
 							if clicked_avaiable_square.y_index == 0 and clicked_avaiable_square.x_index == 2:
 								# Castle move:
 								board[0][0] = 0
