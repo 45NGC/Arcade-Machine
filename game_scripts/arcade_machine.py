@@ -3,7 +3,7 @@ from game_scripts.utilities import draw_button1, draw_button2, draw_text_input, 
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu
-from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, avaiable_squares, get_attacked_squares, king_avaiable_squares, search_king_square, is_king_on_check
+from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, available_squares, get_attacked_squares, king_available_squares, search_king_square, is_king_on_check, get_available_squares
 from game_scripts.data import *
 import sys
 import time
@@ -117,7 +117,7 @@ def arcade_machine_register_login():
 		pygame.display.flip()
 
 ## MAIN LOOP ##
-# This loop will display a screen with the name 'Arcade Machine' and 6 buttons of the avaiable games :
+# This loop will display a screen with the name 'Arcade Machine' and 6 buttons of the available games :
 # 	- Tetris
 # 	- Snake	
 # 	- Pong 
@@ -368,7 +368,7 @@ def tetris_game():
 
 		
 		if time.time() - fall_timer > fall:
-            # check if the piece has avaiable space
+            # check if the piece has available space
 			if not is_valid_position(board, current_piece, ad_Y=1):
 				if current_piece['y'] < -1: 
 					tetris_game_over(score)
@@ -901,16 +901,16 @@ def chess_game():
 	board_image = image.load('resources/chess-images/medium-green-board.png')
 
 	clicked_square = None
-	clicked_avaiable_square = None
-	avaiable_squares_showed = False
-	avaiable_squares_list = {
+	clicked_available_square = None
+	available_squares_showed = False
+	available_squares_list = {
 		'coordinates' 	: [],
 		'indexes'		: []
 	}
 
-	avaiable_square_surface = pygame.Surface((75,75))
-	avaiable_square_surface.set_alpha(90)
-	avaiable_square_surface.fill((255, 0, 0))
+	available_square_surface = pygame.Surface((75,75))
+	available_square_surface.set_alpha(90)
+	available_square_surface.fill((255, 0, 0))
 
 	selected_square_surface = pygame.Surface((75,75))
 	selected_square_surface.set_alpha(90)  
@@ -956,7 +956,7 @@ def chess_game():
 	}
 
 	#[[square], turn]
-	on_peasant_avaiable_square = []
+	on_peasant_available_square = []
 	on_peasant_active = False
 
 	# TURN :
@@ -964,11 +964,41 @@ def chess_game():
 	# -1	->		black turn
 	turn = 1
 
+	# MATE / FLAGGED
+	mate = False
+	flagged = False
+
 	run = True
 
 	while run :
 		game_clock.tick(30)
 		mouse = pygame.mouse.get_pos()
+
+		# MOVES AVAILABLE (all pieces but the king)
+		attacked_squares = get_attacked_squares(board, turn)
+		move_list = get_available_squares(board, turn, on_peasant_available_square)
+
+		# KING MOVES AVAILABLE
+		king_square = search_king_square(board, turn)
+		king_on_check = is_king_on_check(king_square, attacked_squares)
+		king_available_moves = king_available_squares(7*turn, king_square, board, attacked_squares, castling)
+
+		# If there are no moves available and the king is being attacked it is mate
+		print('pieces -> '+str(move_list))
+		print('king -> '+str(king_available_moves))
+		print('king_square -> '+str(king_square))
+		print('king check -> '+str(king_on_check))
+		if king_on_check and move_list['indexes'] == [] and king_available_moves['indexes'] == []:
+			mate = True
+			if turn == 1:
+				print('BLACK WON')
+			else:
+				print('WHITE WON')
+
+		# If there are no moves available and the king is not being attacked it is a draw
+		elif king_on_check == False and move_list['indexes'] == [] and king_available_moves['indexes'] == []:
+			flagged = True
+			print('DRAW')
 
 		for event in pygame.event.get():
 
@@ -978,10 +1008,10 @@ def chess_game():
 			#MOUSECONTROLS
 			if event.type == pygame.MOUSEBUTTONDOWN :
 
-				if avaiable_squares_showed:
-					clicked_avaiable_square = selected_square(mouse[0], mouse[1], board)
+				if available_squares_showed:
+					clicked_available_square = selected_square(mouse[0], mouse[1], board)
 
-					if clicked_avaiable_square == None :
+					if clicked_available_square == None :
 						clicked_square = None
 				
 				else:
@@ -997,7 +1027,7 @@ def chess_game():
 		####################### SHOW OPONENT ATTACKED SQUARES #######################
 		# attacked_squares = get_attacked_squares(board, turn)
 		# for coordinate in attacked_squares['coordinates']:
-		# 	screen.blit(avaiable_square_surface, (coordinate[1], coordinate[0]))
+		# 	screen.blit(available_square_surface, (coordinate[1], coordinate[0]))
 		#############################################################################
 
 		if clicked_square != None:
@@ -1007,27 +1037,26 @@ def chess_game():
 				piece_square = [clicked_square.y_index,clicked_square.x_index]
 
 				if piece in [7, -7]:
-					attacked_squares = get_attacked_squares(board, turn)
-					avaiable_squares_list = king_avaiable_squares(piece, piece_square, board, attacked_squares, castling)
+					available_squares_list = king_available_squares(piece, piece_square, board, attacked_squares, castling)
 				else:
-					avaiable_squares_list = avaiable_squares(piece, piece_square, board, False, on_peasant_avaiable_square)
+					available_squares_list = available_squares(piece, piece_square, board, False, on_peasant_available_square)
 
-				if len(avaiable_squares_list['coordinates']) == 0:
-					avaiable_squares_showed = False
+				if len(available_squares_list['coordinates']) == 0:
+					available_squares_showed = False
 				else :
-					avaiable_squares_showed = True
+					available_squares_showed = True
 
-				if avaiable_squares_showed:
-					for square in avaiable_squares_list['coordinates']:
-						screen.blit(avaiable_square_surface, (square[1], square[0]))
+				if available_squares_showed:
+					for square in available_squares_list['coordinates']:
+						screen.blit(available_square_surface, (square[1], square[0]))
 
 				screen.blit(selected_square_surface, (clicked_square.x_coordinate, clicked_square.y_coordinate))
 		
 
 
-		if clicked_avaiable_square != None:
+		if clicked_available_square != None:
 			# Move piece :
-			if [clicked_avaiable_square.x_index, clicked_avaiable_square.y_index] in avaiable_squares_list['indexes']:
+			if [clicked_available_square.x_index, clicked_available_square.y_index] in available_squares_list['indexes']:
 					
 					# Check if the rooks  moved to determinate the castling posibilities of each player
 					if clicked_square != None:
@@ -1045,7 +1074,7 @@ def chess_game():
 								
 						# WHITE-SHORT-CASTLE
 						if piece == 7 and castling['white-king-moved'] != True:
-							if clicked_avaiable_square.y_index == 7 and clicked_avaiable_square.x_index == 6:
+							if clicked_available_square.y_index == 7 and clicked_available_square.x_index == 6:
 								# Castle move:
 								board[7][7] = 0
 								board[7][5] = 4
@@ -1054,7 +1083,7 @@ def chess_game():
 						
 						# WHITE-LONG-CASTLE
 						if piece == 7 and castling['white-king-moved'] != True:
-							if clicked_avaiable_square.y_index == 7 and clicked_avaiable_square.x_index == 2:
+							if clicked_available_square.y_index == 7 and clicked_available_square.x_index == 2:
 								# Castle move:
 								board[7][0] = 0
 								board[7][3] = 5
@@ -1064,7 +1093,7 @@ def chess_game():
 
 						# BLACK-SHORT-CASTLE
 						if piece == -7 and castling['black-king-moved'] != True:
-							if clicked_avaiable_square.y_index == 0 and clicked_avaiable_square.x_index == 6:
+							if clicked_available_square.y_index == 0 and clicked_available_square.x_index == 6:
 								# Castle move:
 								board[0][7] = 0
 								board[0][5] = -4
@@ -1073,7 +1102,7 @@ def chess_game():
 						
 						# BLACK-LONG-CASTLE
 						if piece == -7 and castling['black-king-moved'] != True:
-							if clicked_avaiable_square.y_index == 0 and clicked_avaiable_square.x_index == 2:
+							if clicked_available_square.y_index == 0 and clicked_available_square.x_index == 2:
 								# Castle move:
 								board[0][0] = 0
 								board[0][3] = -5
@@ -1088,42 +1117,42 @@ def chess_game():
 						# if the move was a capture or not by checking if the x index is different. If the move was a pawn capture and the square were
 						# the pawn is going is empty, we know that we are dealing with an on peasant capture.
 						
-						if piece in [1, -1] and board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == 0 and clicked_square.x_index != clicked_avaiable_square.x_index:
-							board[clicked_avaiable_square.y_index+turn][clicked_avaiable_square.x_index] = 0
+						if piece in [1, -1] and board[clicked_available_square.y_index][clicked_available_square.x_index] == 0 and clicked_square.x_index != clicked_available_square.x_index:
+							board[clicked_available_square.y_index+turn][clicked_available_square.x_index] = 0
 
 						# Make the move
-						board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] = clicked_square.value
+						board[clicked_available_square.y_index][clicked_available_square.x_index] = clicked_square.value
 						board[clicked_square.y_index][clicked_square.x_index] = 0
 
 						if on_peasant_active:
-							on_peasant_avaiable_square = []
+							on_peasant_available_square = []
 							on_peasant_active = False
 
 
 						# If the piece that we just moved was a king we change the variable 'king-moved' of the respective color in the 'castling' diccionary
-						if board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == 7:
+						if board[clicked_available_square.y_index][clicked_available_square.x_index] == 7:
 							castling['white-king-moved'] = True
-						if board[clicked_avaiable_square.y_index][clicked_avaiable_square.x_index] == -7:
+						if board[clicked_available_square.y_index][clicked_available_square.x_index] == -7:
 							castling['black-king-moved'] = True
 
-						#If the piece that we just moved was a pawn and we moved it 2 squares we change the variable 'on_peasant_avaiable_square' to the square behind the pawn
-						if clicked_square.value in [1, -1] and (clicked_avaiable_square.y_index - clicked_square.y_index) in [2, -2]:
-							on_peasant_avaiable_square = [[clicked_avaiable_square.y_index+clicked_square.value, clicked_avaiable_square.x_index], turn*-1]
+						#If the piece that we just moved was a pawn and we moved it 2 squares we change the variable 'on_peasant_available_square' to the square behind the pawn
+						if clicked_square.value in [1, -1] and (clicked_available_square.y_index - clicked_square.y_index) in [2, -2]:
+							on_peasant_available_square = [[clicked_available_square.y_index+clicked_square.value, clicked_available_square.x_index], turn*-1]
 							on_peasant_active = True
 							
 
 
-						avaiable_squares_showed = False
+						available_squares_showed = False
 						clicked_square = None
-						clicked_avaiable_square = None
+						clicked_available_square = None
 
 						# Change turn
 						turn = turn*-1
 					
 			# Select different square
 			else:
-				clicked_square = clicked_avaiable_square
-				clicked_avaiable_square = None
+				clicked_square = clicked_available_square
+				clicked_available_square = None
 				
 
 	
