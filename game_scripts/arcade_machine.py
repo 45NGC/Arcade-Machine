@@ -979,15 +979,15 @@ def chess_game():
 		move_list = get_available_squares(board, turn, on_peasant_available_square)
 
 		# KING MOVES AVAILABLE
+		new_king_square = [king_square[1], king_square[0]]
+		king_available_moves = king_available_squares(7*turn, new_king_square, board, attacked_squares, castling)
+
+		# KING ON CHECK
 		king_square = search_king_square(board, turn)
 		king_on_check = is_king_on_check(king_square, attacked_squares)
-		king_available_moves = king_available_squares(7*turn, king_square, board, attacked_squares, castling)
+		
 
 		# If there are no moves available and the king is being attacked it is mate
-		print('pieces -> '+str(move_list))
-		print('king -> '+str(king_available_moves))
-		print('king_square -> '+str(king_square))
-		print('king check -> '+str(king_on_check))
 		if king_on_check and move_list['indexes'] == [] and king_available_moves['indexes'] == []:
 			mate = True
 			if turn == 1:
