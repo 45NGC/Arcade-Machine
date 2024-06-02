@@ -9,26 +9,38 @@ black = (0,0,0)
 white = (255,255,255)
 pink = (255, 153, 255)
 purple = (153,0,255)
+dark_grey = (40,40,40)
+green = (125, 148, 93)
+bone_color = (238, 238, 213)
 
 # CHESS PIECES
 
 # IMAGES
 
-w_pawn = image.load('resources/chess-images/pieces/white/Wpawn.png')
-w_knight = image.load('resources/chess-images/pieces/white/Wknight.png')
-w_bishop = image.load('resources/chess-images/pieces/white/Wbishop.png')
-w_rook = image.load('resources/chess-images/pieces/white/Wrook.png')
-w_queen = image.load('resources/chess-images/pieces/white/Wqueen.png')
-w_king = image.load('resources/chess-images/pieces/white/Wking.png')
-white_pieces = [w_pawn, w_knight, w_bishop, w_rook, w_rook, w_queen, w_king]
+w_pawn = image.load('resources/chess-images/pieces/white/w_pawn.png')
+w_knight = image.load('resources/chess-images/pieces/white/w_knight.png')
+w_bishop = image.load('resources/chess-images/pieces/white/w_bishop.png')
+w_rook = image.load('resources/chess-images/pieces/white/w_rook.png')
+w_queen = image.load('resources/chess-images/pieces/white/w_queen.png')
+w_king = image.load('resources/chess-images/pieces/white/w_king.png')
+white_pieces = [w_pawn, w_knight, w_bishop, w_rook, w_rook, w_queen, w_king, w_rook]
 
-b_pawn = image.load('resources/chess-images/pieces/black/Bpawn.png')
-b_knight = image.load('resources/chess-images/pieces/black/Bknight.png')
-b_bishop = image.load('resources/chess-images/pieces/black/Bbishop.png')
-b_rook = image.load('resources/chess-images/pieces/black/Brook.png')
-b_queen = image.load('resources/chess-images/pieces/black/Bqueen.png')
-b_king = image.load('resources/chess-images/pieces/black/Bking.png')
-black_pieces = [b_pawn, b_knight, b_bishop, b_rook, b_rook, b_queen, b_king]
+b_pawn = image.load('resources/chess-images/pieces/black/b_pawn.png')
+b_knight = image.load('resources/chess-images/pieces/black/b_knight.png')
+b_bishop = image.load('resources/chess-images/pieces/black/b_bishop.png')
+b_rook = image.load('resources/chess-images/pieces/black/b_rook.png')
+b_queen = image.load('resources/chess-images/pieces/black/b_queen.png')
+b_king = image.load('resources/chess-images/pieces/black/b_king.png')
+black_pieces = [b_pawn, b_knight, b_bishop, b_rook, b_rook, b_queen, b_king, b_rook]
+
+w_promotion_queen = image.load('resources/chess-images/promotion_pieces/white/w_queen.png')
+w_promotion_rook = image.load('resources/chess-images/promotion_pieces/white/w_rook.png')
+w_promotion_bishop = image.load('resources/chess-images/promotion_pieces/white/w_bishop.png')
+w_promotion_knight = image.load('resources/chess-images/promotion_pieces/white/w_knight.png')
+b_promotion_queen = image.load('resources/chess-images/promotion_pieces/black/b_queen.png')
+b_promotion_rook = image.load('resources/chess-images/promotion_pieces/black/b_rook.png')
+b_promotion_bishop = image.load('resources/chess-images/promotion_pieces/black/b_bishop.png')
+b_promotion_knight = image.load('resources/chess-images/promotion_pieces/black/b_knight.png')
 
 king_moves = [[0, 1], [0, -1], [1, 0], [1, -1], [1, 1], [-1, 0], [-1, -1], [-1, 1]]
 square_coordinates = [50, 125, 200, 275, 350, 425, 500, 575]
@@ -64,6 +76,48 @@ def draw_chess_menu(screen, mouse) :
 	mode1_string  = 'PLAY'
 	draw_button2(screen, 330, 330, mode1_string, mouse)
 
+def draw_pawn_promotion_menu(screen, mouse, turn):
+	pawn_promotion_menu_border = pygame.Rect(50, 670, 600, 160)
+	pawn_promotion_menu_background = pygame.Rect(53, 673, 594, 154)
+
+	pygame.draw.rect(screen, bone_color, pawn_promotion_menu_border)
+	pygame.draw.rect(screen, green, pawn_promotion_menu_background)
+
+	if turn == 1 :
+		queen = w_promotion_queen
+		rook = w_promotion_rook
+		bishop = w_promotion_bishop
+		knight = w_promotion_knight
+	else:
+		queen = b_promotion_queen
+		rook = b_promotion_rook
+		bishop = b_promotion_bishop
+		knight = b_promotion_knight
+
+	queen_button_coordinates = [695, 70]
+	rook_button_coordinates = [695, 220]
+	bishop_button_coordinates = [695, 370]
+	knight_button_coordinates = [695, 520]
+
+	draw_piece_button(screen, mouse, queen, queen_button_coordinates)
+	draw_piece_button(screen, mouse, rook, rook_button_coordinates)
+	draw_piece_button(screen, mouse, bishop, bishop_button_coordinates)
+	draw_piece_button(screen, mouse, knight, knight_button_coordinates)
+
+def draw_piece_button(screen, mouse, piece, coordinates):
+	piece_button_size = 110
+	button_border = pygame.Rect(coordinates[1], coordinates[0], piece_button_size, piece_button_size)
+	button_background = pygame.Rect(coordinates[1]+5, coordinates[0]+5, piece_button_size-10, piece_button_size-10)
+
+	if (coordinates[1] < mouse[0] < coordinates[1] + piece_button_size) and (coordinates[0] < mouse[1] < coordinates[0] + piece_button_size):
+		color = bone_color
+	else:
+		color = dark_grey
+
+	pygame.draw.rect(screen, color, button_border)
+	pygame.draw.rect(screen, green, button_background)
+
+	screen.blit(piece, (coordinates[1]+10, coordinates[0]+10))
 
 def draw_pieces(screen, board_piece_positions):
 	piece_coordinates = [65, 140, 215, 290, 365, 440, 515, 590]
@@ -72,12 +126,13 @@ def draw_pieces(screen, board_piece_positions):
 	for x in zip(board_piece_positions, positions):
 		for y in zip(x[0], positions):
 
-			if y[0] < 0 and y[0] > -8:
+			if y[0] < 0 and y[0] > -9:
 				screen.blit(black_pieces[(y[0]*-1)-1], (piece_coordinates[y[1]], piece_coordinates[x[1]]))
-			elif y[0] > 0 and y[0] < 8:
+			elif y[0] > 0 and y[0] < 9:
 				screen.blit(white_pieces[(y[0])-1], (piece_coordinates[y[1]], piece_coordinates[x[1]]))
 			else:
 				pass
+
 
 def selected_square(x_coordinate, y_coordinate, board):
 	selected_square_x = None
@@ -209,8 +264,6 @@ def available_squares(piece, piece_square, board_piece_positions, attacked_squar
 								backup_board[y+turn][x] = 0
 								if  not is_king_on_check_after_move(backup_board, turn, [y+turn, x-1], [y, x], piece):
 									available_squares['coordinates'].append((square_coordinates[y],square_coordinates[x]))
-
-			# PROMOTION
 
 
 		# WHITE KNIGHT
@@ -359,7 +412,7 @@ def available_squares(piece, piece_square, board_piece_positions, attacked_squar
 		
 
 		# WHITE ROOK + WHITE QUEEN
-		if piece in [4, 5, 6]:
+		if piece in [4, 5, 6, 8]:
 			
 			for index in range(1,8):
 				if (0 > x+index) or (x+index > 7) : break
@@ -402,7 +455,7 @@ def available_squares(piece, piece_square, board_piece_positions, attacked_squar
 		
 
 		# BLACK ROOK + BLACK QUEEN
-		if piece in [-4, -5, -6]:
+		if piece in [-4, -5, -6, -8]:
 			
 			for index in range(1,8):
 				if (x+index > 7) : break
@@ -518,7 +571,7 @@ def available_squares(piece, piece_square, board_piece_positions, attacked_squar
 					available_squares['coordinates'].append((square_coordinates[y+index], square_coordinates[x+index]))
 		
 		# ROOK / QUEEN
-		if piece in [4, -4, 5, -5, 6, -6]:
+		if piece in [4, -4, 5, -5, 8, -8, 6, -6]:
 
 			for index in range(1,8):
 				if (x+index > 7) : break
@@ -572,7 +625,6 @@ def available_squares(piece, piece_square, board_piece_positions, attacked_squar
 	return available_squares
 
 
-
 # Function that shows what squares are being attacked by the opponent
 def get_attacked_squares(board, turn):
 
@@ -598,6 +650,7 @@ def get_attacked_squares(board, turn):
 						attacked_squares_list['coordinates'].append(attacked_square[1])
 
 	return attacked_squares_list
+
 
 # Function that shows what squares are available in the current turn
 def get_available_squares(board, turn, on_peasant_square):
@@ -700,6 +753,7 @@ def king_available_squares(piece, king_square, board_piece_positions, attacked_s
 
 	return available_squares
 
+
 def search_king_square(board, turn):
 	for line in board:
 		for piece in line:
@@ -707,12 +761,14 @@ def search_king_square(board, turn):
 				king_square = [line.index(7*turn), board.index(line)]
 				return king_square
 
+
 def is_king_on_check(king_square, attacked_squares):
 	if king_square in attacked_squares['indexes']:
 		return True
 	else:
 		return False	
-		
+
+
 def is_king_on_check_after_move(board, turn, piece_square, piece_square_after_move, piece):
 	# We have to make sure that after the move that we are about to make our king is not in check,
 	# otherwise this would be an illegal move.

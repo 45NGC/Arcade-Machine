@@ -3,7 +3,7 @@ from game_scripts.utilities import draw_button1, draw_button2, draw_text_input, 
 from game_scripts.tetris import draw_ui_pieces, draw_tetris_panels, draw_tetris_board, draw_tetris_menu, draw_tetris_pause, draw_tetris_game_over
 from game_scripts.tetris import PIECES, get_piece, get_empty_board, is_valid_position, add_piece_to_board, draw_board_blocks, draw_piece, remove_complete_lines
 from game_scripts.pong import draw_pong_menu
-from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, available_squares, get_attacked_squares, king_available_squares, search_king_square, is_king_on_check, get_available_squares
+from game_scripts.chess import draw_chess_menu, draw_pieces, selected_square, available_squares, get_attacked_squares, king_available_squares, search_king_square, is_king_on_check, get_available_squares, draw_pawn_promotion_menu
 from game_scripts.data import *
 import sys
 import time
@@ -895,7 +895,6 @@ def chess_menu():
 		pygame.display.flip()
 
 
-
 def chess_game():
 	game_clock = pygame.time.Clock()
 	board_image = image.load('resources/chess-images/medium-green-board.png')
@@ -920,7 +919,7 @@ def chess_game():
 	# Pawn 				= 1 / -1
 	# Knight 			= 2 / -2
 	# Bishop 			= 3 / -3
-	# Rook 				= 4 / -4	5 / -5	(short-castle	long-castle)
+	# Rook 				= 4 / -4	5 / -5	(short-castle	long-castle)  8/-8 (promoted rook)
 	# Queen				= 6 / -6
 	# King 				= 7 / -7
 	# Attacked squares 	= 10 / -10
@@ -934,14 +933,14 @@ def chess_game():
 			[1, 1, 1, 1, 1, 1, 1, 1],
 			[5, 2, 3, 6, 7, 3, 2, 4]]
 	
-	# board = [[0, 0, 0, 0, 0, 0, 0, 0],
+	# board = [[-7, 0, 0, 0, 0, 0, 0, -8],
+	# 		[0, 0, 0, 0, 0, 0, 1, 0],
+	# 		[0, 6, 0, 0, 0, -1, 0, 0],
 	# 		[0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[0, 0, 0, -7, 0, 0, 0, 0],
-	# 		[0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[0, 0, 0, 0, 0, 0, 0, 0],
-	# 		[7, 0, 0, 3, 0, 0, 0, 0],
-	# 		[0, 0, 0, 5, 0, 0, 0, 4]]
+	# 		[0, 0, 0, 0, 0, 1, 0, 0],
+	# 		[0, 0, 0, 8, 0, 0, 0, 0],
+	# 		[7, 0, 0, 0, 0, 0, -1, 0],
+	# 		[0, 0, 0, 0, 0, 0, 0, 0]]
 	
 
 	# CASTLE :
@@ -1122,7 +1121,7 @@ def chess_game():
 						# Make the move
 						board[clicked_available_square.y_index][clicked_available_square.x_index] = clicked_square.value
 						board[clicked_square.y_index][clicked_square.x_index] = 0
-
+						# If on peasant was available in this turn we disable it
 						if on_peasant_active:
 							on_peasant_available_square = []
 							on_peasant_active = False
@@ -1134,13 +1133,25 @@ def chess_game():
 						if board[clicked_available_square.y_index][clicked_available_square.x_index] == -7:
 							castling['black-king-moved'] = True
 
-						#If the piece that we just moved was a pawn and we moved it 2 squares we change the variable 'on_peasant_available_square' to the square behind the pawn
+						# If the piece that we just moved was a pawn and we moved it 2 squares we change the variable 'on_peasant_available_square' to the square behind the pawn
 						if clicked_square.value in [1, -1] and (clicked_available_square.y_index - clicked_square.y_index) in [2, -2]:
 							on_peasant_available_square = [[clicked_available_square.y_index+clicked_square.value, clicked_available_square.x_index], turn*-1]
 							on_peasant_active = True
+
+
+						# PAWN PROMOTION
+						# If the piece that we just moved was a pawn and is the last row of the board we have to promote it
 							
+						# White
+						if clicked_square.value == 1 and clicked_available_square.y_index == 0:
+							selected_promotion = chess_pawn_promotion_menu(turn)
+							board[clicked_available_square.y_index][clicked_available_square.x_index] = selected_promotion							
 
-
+						# Black
+						if clicked_square.value == -1 and clicked_available_square.y_index == 7:
+							selected_promotion = chess_pawn_promotion_menu(turn)
+							board[clicked_available_square.y_index][clicked_available_square.x_index] = selected_promotion		
+							
 						available_squares_showed = False
 						clicked_square = None
 						clicked_available_square = None
@@ -1157,4 +1168,47 @@ def chess_game():
 	
 		pygame.display.flip()
 
+
+def chess_pawn_promotion_menu(turn) :
+	promotion_menu_clock = pygame.time.Clock()
+
+	piece_button_size = 110
+	
+	button_Y = 695
+	queen_button_X = 70
+	rook_button_X = 220
+	bishop_button_X = 370
+	knight_button_X = 520
+
+	run = True
+
+	while run:
+		promotion_menu_clock.tick(30)
+		mouse = pygame.mouse.get_pos()
+		for event in pygame.event.get():
+
+				if event.type == pygame.QUIT:
+					sys.exit()
+
+				#MOUSECONTROLS
+				if (queen_button_X <= mouse[0] <= queen_button_X+piece_button_size) and (button_Y <= mouse[1] <= button_Y+piece_button_size) :
+							if event.type == pygame.MOUSEBUTTONDOWN :
+								return 6 * turn
+				
+				if (rook_button_X <= mouse[0] <= rook_button_X+piece_button_size) and (button_Y <= mouse[1] <= button_Y+piece_button_size) :
+							if event.type == pygame.MOUSEBUTTONDOWN :
+								return 8 * turn
+							
+				if (bishop_button_X <= mouse[0] <= bishop_button_X+piece_button_size) and (button_Y <= mouse[1] <= button_Y+piece_button_size) :
+							if event.type == pygame.MOUSEBUTTONDOWN :
+								return 3 * turn
+				
+				if (knight_button_X <= mouse[0] <= knight_button_X+piece_button_size) and (button_Y <= mouse[1] <= button_Y+piece_button_size) :
+							if event.type == pygame.MOUSEBUTTONDOWN :
+								return 2 * turn
+				
+
+		draw_pawn_promotion_menu(screen, mouse, turn)
+
+		pygame.display.flip()
 ############################################################## </CHESS> ################################################################

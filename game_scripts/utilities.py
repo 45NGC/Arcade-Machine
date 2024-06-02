@@ -55,8 +55,6 @@ def draw_button2(screen, x_axis, y_axis, text, mouse) :
 		button = button2_font.render(text, True, white)
 		screen.blit(button, (x_axis, y_axis+20))
 
-
-
 def draw_text_input(screen, x_axis, y_axis, active):
 
 	if active :
