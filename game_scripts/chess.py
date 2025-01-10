@@ -211,7 +211,7 @@ def available_squares(piece, piece_square, board_piece_positions, attacked_squar
 					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x+1], piece):
 						available_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x+1]))
 				if board_piece_positions[y-piece][x-1] > 0 and piece == -1:
-					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x], piece):
+					if  not is_king_on_check_after_move(board_piece_positions, turn, [y, x], [y-piece, x-1], piece):
 						available_squares['coordinates'].append((square_coordinates[y-piece],square_coordinates[x-1]))
 
 			else:
